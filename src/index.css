@@ -1,0 +1,56 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600&family=Poppins:wght@300;400;600&family=Roboto:wght@300;400;500&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-size: 0.8rem;
+    @media screen(sm) {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+.svg-icon {
+  @apply max-w-[2rem] px-1;
+}
+
+/* Navbar */
+/* nav */
+.link {
+  @apply uppercase tracking-widest block py-1.5 hover:bg-neutral-50 rounded lg:hover:bg-transparent lg:p-0;
+}
+
+/* nav__old */
+/* .link {
+  @apply uppercase tracking-widest px-4 py-5.5;
+} */
+
+.label-neutral {
+  @apply text-white bg-neutral-400 rounded-[3px] px-2.5 py-1;
+}
+
+.navbar-icon {
+  @apply w-11 p-2 rounded-md hover:bg-neutral-200 outline-none focus:bg-neutral-200;
+}
+
+.navbar-icon-notification {
+  @apply absolute top-1 right-1 rounded-full w-0.8 h-0.8 bg-neutral-400 border-2 border-white group-hover:border-neutral-200;
+}
+
+/* Counter */
+.counter-icon {
+  @apply fill-neutral-400 hover:fill-neutral-600 svg-icon;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Tabel */
+.tabel-width {
+  @apply w-[88%] lg:w-3/4;
+}
