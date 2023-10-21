@@ -28,7 +28,7 @@ const Cart = () => {
       label: "Products",
       render: (item) => (
         <Link to={`/products/${item.id}`}>
-          <img src={item.thumbnail} alt={item.title} className="w-[7rem]" />
+          <img src={item.thumbnailURL} alt={item.title} className="w-[7rem]" />
         </Link>
       ),
       class: "text-left w-[7rem]",

@@ -11,36 +11,27 @@ export const links = [
   //   label: "FAQ",
   //   path: "/faq",
   // },
-  // {
-  //   label: "Items",
-  //   path: "/",
-  // },
   {
     label: "Category",
     path: "",
   },
 ];
 
-// database: 可於後台新增
 export const categories = [
   {
     id: 1,
-    label: "smartphones",
+    label: "Stickers",
   },
   {
     id: 2,
-    label: "laptops",
+    label: "Keychains",
   },
   {
     id: 3,
-    label: "fragrances",
+    label: "Figurine",
   },
   {
     id: 4,
-    label: "skincare",
-  },
-  {
-    id: 5,
-    label: "groceries",
+    label: "Pins",
   },
 ];

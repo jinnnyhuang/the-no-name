@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const base_url = "http://localhost:3001/";
+const base_url = process.env.REACT_APP_API_URL || "http://localhost:3001/";
 
 export const fetchProducts = createAsyncThunk("prodcuts/fetchProducts", async () => {
   const data = await axios.get(`${base_url}products`).then((res) => res.data);

@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Icons from "../components/Icons";
 import Button from "../components/Button";
-import Logo from "../image/logo-1.png";
+import Logo from "../image/logo.png";
 import { links, categories } from "../data";
 
 const Navbar = () => {
@@ -23,40 +23,22 @@ const Navbar = () => {
     setActive(false);
   };
 
-  ////// category
-  // const categoryRef = useRef();
-  // const [isOpen, setIsOpen] = useState(false);
-
-  // useEffect(() => {
-  //   const handleMovein = (event) => {
-  //     if (!categoryRef.current) return;
-  //     if (categoryRef.current.contains(event.target)) setIsOpen(true);
-  //   };
-  //   const handleMoveOut = (event) => {
-  //     if (!categoryRef.current) return;
-  //     if (categoryRef.current.contains(event.target)) setIsOpen(false);
-  //   };
-  //   document.addEventListener("mouseover", handleMovein);
-  //   document.addEventListener("mouseout", handleMoveOut);
-  //   return () => {
-  //     document.removeEventListener("mouseover", handleMovein);
-  //     document.removeEventListener("mouseout", handleMoveOut);
-  //   };
-  // }, []);
+  useEffect(() => {
+    active && document.body.classList.add("overflow-hidden");
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [active]);
 
   const category = (
-    // <ul className="absolute top-14 left-4 z-10 border p-2 shadow-md">
-    // <ul
-    //   className={`${
-    //     isOpen ? `lg:inline-block` : `lg:hidden`
-    //   } absolute top-9 left-0 lg:top-[1.6rem] lg:border lg:shadow-md w-full lg:w-[11.5rem] uppercase z-10 p-2`}
-    // >
     <ul
-      className={`absolute top-9 left-0 lg:top-[1.6rem] lg:hidden group-hover:inline-block lg:border lg:shadow-md w-full lg:w-[11.5rem] uppercase z-10 p-2`}
+      className={`absolute top-9 left-0 lg:top-[1.6rem] bg-white lg:hidden group-hover:inline-block lg:border lg:shadow-md w-full lg:w-[11.5rem] uppercase z-10 p-2`}
     >
       {categories.map((category) => (
         <li key={category.id} className="cursor-pointer w-full px-2 py-1.5 hover:bg-neutral-50 tracking-wider">
-          <Link to={`/category/${category.label}`}>{category.label}</Link>
+          <Link to={`/category/${category.label}`} className="inline-block w-full">
+            {category.label}
+          </Link>
         </li>
       ))}
     </ul>
@@ -80,27 +62,6 @@ const Navbar = () => {
     );
   });
 
-  /*
-  const list1 =
-    // <div className="flex mr-auto">
-    links.map((link) => {
-      if (link.label !== "Category") {
-        return (
-          <Link key={link.label} to={link.path} className="link">
-            {link.label}
-          </Link>
-        );
-      }
-      return (
-        <li key={link.label} ref={categoryRef} className="relative link">
-          <div>{link.label}</div>
-          {category}
-        </li>
-      );
-    });
-  // </div>
-  */
-
   const cartItems = useSelector((state) => state.cart.cartItems);
 
   const inputClass =
@@ -111,15 +72,12 @@ const Navbar = () => {
         type="text"
         name="q"
         id="search"
-        // className="peer cursor-pointer relative w-12 h-12 pl-12 z-10 bg-transparent rounded-md outline-none transition-opacity tracking-wide text-neutral-500
-        //  border-neutral-300 focus:border focus:w-full focus:cursor-text focus:pl-4 focus:pr-11"
-        // className="peer relative rounded-md tracking-wide text-neutral-500 border-neutral-300 border w-full h-12 cursor-text pl-4 pr-11"
-        className={`peer relative rounded-md tracking-wide text-neutral-500 border-neutral-300 outline-none ${
-          active ? `cursor-text w-full h-12 pl-4 pr-11 border` : inputClass
+        className={`peer relative rounded-md tracking-wide text-neutral-500 border-neutral-300 outline-none placeholder:tracking-wide ${
+          active ? `cursor-text w-full h-12 pl-4 pr-11 border focus:border-2` : inputClass
         } `}
         placeholder="Search"
       />
-      <Icons.Search className="cursor-pointer absolute inset-y-0 my-auto right-0 peer-focus:fill-neutral-500 m-2" />
+      <Icons.Search className="cursor-pointer absolute inset-y-0 my-auto right-0 peer-focus:fill-neutral-600 m-2" />
     </div>
   );
 
@@ -152,7 +110,10 @@ const Navbar = () => {
           <Link to="/" className="mr-auto text-2xl font-bold leading-none">
             The No Name Yet
           </Link>
-          <button className="navbar-close text-4xl font-thin text-neutral-300 cursor-pointer hover:text-neutral-500" onClick={handleClose}>
+          <button
+            className="navbar-close text-4xl font-thin text-gray-300 cursor-pointer hover:text-gray-500 outline-none focus:text-gray-500"
+            onClick={handleClose}
+          >
             &times;
           </button>
         </div>
@@ -180,54 +141,6 @@ const Navbar = () => {
       </nav>
     </div>
   );
-
-  /*
-  const nav__old = (
-    <div className="flex items-center px-4">
-      <div
-        className="cursor-pointer navbar-icon"
-        title="Mobile Menu"
-      >
-        <Icons.Menu />
-      </div> 
-      <div className="flex mr-auto">
-        {links.map((link) => {
-          if (link.label !== "Category") {
-            return (
-              <Link key={link.label} to={link.path} className="link">
-                {link.label}
-              </Link>
-            );
-          }
-          return (
-            <div key={link.label} ref={categoryRef} className="relative link">
-              <div>{link.label}</div>
-              {isOpen && category}
-            </div>
-          );
-        })}
-      </div>
-      <form method="get" action="/search" className="relative w-max">
-        <input
-          type="text"
-          name="q"
-          id="search"
-          className="peer cursor-pointer relative w-12 h-12 pl-12 z-10 bg-transparent rounded-md outline-none transition-opacity tracking-wide text-neutral-500
-               border-neutral-300 focus:border focus:w-full focus:cursor-text focus:pl-4 focus:pr-11"
-          placeholder="Search"
-        />
-        <Icons.Search className="cursor-pointer absolute inset-y-0 my-auto right-0 peer-focus:fill-neutral-500 m-2" />
-      </form>
-      <Link to="/cart" className="navbar-icon group relative">
-        <Icons.Cart />
-        {cartItems.length > 0 && <div className="navbar-icon-notification"></div>}
-      </Link>
-      <div className="navbar-icon">
-        <Icons.User />
-      </div>
-    </div>
-  );
-  */
 
   return (
     <div>

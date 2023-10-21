@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart, useGetProductsQuery } from "../store";
 import Button from "../components/Button";
 import Accordion from "../components/Accordion";
 import Silder from "../components/Slider";
 import Modal from "../components/Modal";
+import Icons from "../components/Icons";
 
 const Product = () => {
   const { id } = useParams();
@@ -48,17 +49,44 @@ const Product = () => {
 
   ////// content
   let content;
+  let breadcrumb;
   if (error) {
     content = <div className="text-center">Error Loading Product.</div>;
   } else if (!isFetching) {
     const product = data[0];
     document.title = `${product.title} | 還沒有名字`;
 
+    let thumbnailURL;
+    if (!product.thumbnail) {
+      thumbnailURL = product.images.filter((image, index) => index === 0)[0];
+    } else {
+      thumbnailURL = product.thumbnail;
+    }
+
+    breadcrumb = (
+      <div className="mx-6 mb-8 lg:mx-24 lg:grid lg:grid-cols-2">
+        <div className="flex gap-x-3 justify-center items-center">
+          <Link to="/" className="text-neutral-400 tracking-wide uppercase">
+            Home
+          </Link>
+          <Icons.Next className="fill-neutral-400 max-w-[1.5rem]" />
+          <Link to={`/category/${product.category}`} className="text-neutral-400 tracking-wide uppercase">
+            {product.category}
+          </Link>
+          <Icons.Next className="fill-neutral-400 max-w-[1.5rem]" />
+          <span className="text-neutral-700 truncate">{product.title}</span>
+        </div>
+      </div>
+    );
+
     const items = [
       {
-        id,
         heading: "Detail",
         content: product.description,
+      },
+      {
+        heading: "Size",
+        content: product.size,
       },
     ];
 
@@ -73,7 +101,7 @@ const Product = () => {
         {product.stock === 0 ? (
           <Button className="cursor-not-allowed w-button mt-4 tracking-wider">Sold Out</Button>
         ) : (
-          <Button primary className="w-button mt-7.5" onClick={() => handleClick(product)}>
+          <Button primary className="w-button mt-7.5" onClick={() => handleClick({ ...product, thumbnailURL })}>
             Add To Cart
           </Button>
         )}
@@ -82,7 +110,7 @@ const Product = () => {
     );
 
     content = (
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-14 lg:mx-24">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-14 items-start lg:mx-24 lg:min-h-[60vh]">
         <Silder items={product.images} />
         {info}
       </div>
@@ -91,6 +119,7 @@ const Product = () => {
 
   return (
     <div className="container m-auto">
+      {breadcrumb}
       {content}
       {showModal && modal}
     </div>

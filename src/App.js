@@ -25,8 +25,8 @@ function App() {
           <Route exact path="/search" element={<Search />} />
           <Route path="*" element={<Notfound />}></Route>
         </Routes>
+        <Footer />
       </BrowserRouter>
-      <Footer />
     </div>
   );
 }
