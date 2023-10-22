@@ -96,8 +96,12 @@ const Product = () => {
         <div className="mt-3.5">
           <span>NT$ {product.price.toLocaleString()}</span>
         </div>
-        {product.stock < 5 && product.stock !== 0 && <span className="text-sm label-neutral">剩餘庫存 {product.stock} 個</span>}
-        <p className="mt-3.5">{product.description}</p>
+        {product.stock < 5 && product.stock !== 0 && (
+          <div>
+            <span className="text-sm label-neutral">剩餘庫存 {product.stock} 個</span>
+          </div>
+        )}
+        {/* <p className="mt-3.5">{product.description}</p> */}
         {product.stock === 0 ? (
           <Button className="cursor-not-allowed w-button mt-4 tracking-wider">Sold Out</Button>
         ) : (

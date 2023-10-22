@@ -4,14 +4,13 @@ const cartSlice = createSlice({
   name: "cart",
   initialState: {
     cartItems: JSON.parse(localStorage.getItem("cartItems")) || [],
-    // cartTotalAmount: 0,
   },
   reducers: {
     // 自動產生 action type: 'slice.name' + '/' + 'reducers' = 'cart/addToCart'
     addToCart(state, aciton) {
       // 可能會在不同商品頁加入購物車，因此從 localStorage 取得最新狀態
       const cartItems = JSON.parse(localStorage.getItem("cartItems"));
-      state.cartItems = cartItems;
+      state.cartItems = cartItems || [];
 
       const itemsIndex = state.cartItems.findIndex((item) => item.id === aciton.payload.id);
       if (itemsIndex >= 0) {
@@ -36,8 +35,6 @@ const cartSlice = createSlice({
           state.cartItems[itemsIndex].quantity--;
           localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
         } else {
-          // 移除前確認?
-
           // 數量等於 1 & 數量減少時從購物車移除
           const updateProduct = state.cartItems.filter((item) => item.id !== aciton.payload.item.id);
           state.cartItems = updateProduct;
