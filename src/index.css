@@ -12,6 +12,11 @@
   }
 }
 
+/* Home Category Search*/
+.products {
+  @apply grid grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-16 justify-items-center mx-5 lg:mx-24;
+}
+
 .svg-icon {
   @apply max-w-[2rem] px-1;
 }
@@ -50,7 +55,12 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-/* Tabel */
-.tabel-width {
+/* Tabel, Account */
+.caption-content-width {
   @apply w-[88%] lg:w-3/4;
+}
+
+/* Cart, Account */
+.caption-content {
+  @apply mt-10 sm:mx-24 lg:min-h-[60vh];
 }

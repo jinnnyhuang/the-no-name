@@ -25,7 +25,7 @@ const Modal = ({ children, onClose, actionBar, className }) => {
       {onClose && <div className="z-10 fixed inset-0 bg-black opacity-20" onClick={onClose}></div>}
       <div className={classes}>
         {onClose && (
-          <div onClick={onClose} className="absolute top-3 right-5 text-xl cursor-pointer">
+          <div onClick={onClose} className="cursor-pointer absolute top-3 right-5 text-xl">
             &times;
           </div>
         )}

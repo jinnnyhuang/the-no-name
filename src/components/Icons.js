@@ -8,6 +8,7 @@ import { ReactComponent as Facebook } from "../image/facebook.svg";
 import { ReactComponent as Instagram } from "../image/instagram.svg";
 import { ReactComponent as Prev } from "../image/prev.svg";
 import { ReactComponent as Next } from "../image/next.svg";
+import { ReactComponent as Collection } from "../image/collection.svg";
 
 const Icons = {
   Menu,
@@ -20,6 +21,7 @@ const Icons = {
   Instagram,
   Prev,
   Next,
+  Collection,
 };
 
 export default Icons;

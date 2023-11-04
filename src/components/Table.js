@@ -20,7 +20,7 @@ const Table = ({ data, config, keyValue }) => {
   });
 
   return (
-    <table className="tabel-width text-neutral-500">
+    <table className="caption-content-width text-neutral-500">
       <thead>
         <tr>{renderedTableHeaders}</tr>
       </thead>

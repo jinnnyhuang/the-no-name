@@ -10,12 +10,13 @@ const Notfound = () => {
   }, []);
 
   return (
-    <div className="font-display h-[70vh] text-center pt-32">
+    <div className="font-display h-[65vh] text-center pt-32">
       <div className="text-5.4 font-bold">404</div>
       <div className="uppercase mt-2 mb-12">Oops! Page Not Found.</div>
 
       <Button
         primary
+        transition
         rounded
         className="w-button"
         onClick={() => {

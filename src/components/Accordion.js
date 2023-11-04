@@ -13,7 +13,7 @@ const Accordion = ({ items, className }) => {
 
     return (
       <div key={index}>
-        <div onClick={() => handleClick(index)} className="flex items-center border-b border-black p-3 cursor-pointer">
+        <div onClick={() => handleClick(index)} className="cursor-pointer flex items-center border-b border-black p-3">
           {item.heading}
           {icon}
         </div>

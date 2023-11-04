@@ -1,16 +1,21 @@
 import { Link } from "react-router-dom";
+import Button from "../components/Button";
+import Icons from "../components/Icons";
+import useCollection from "../utils/useCollection";
 
-const Products = ({ data, error, isFetching }) => {
-  let content;
-
-  if (error) {
-    content = <div>Error Loading Products.</div>;
-  } else if (!isFetching) {
-    content = data.map((product) => {
-      const hover = product.images.length > 1;
-
-      return (
-        <Link to={`/products/${product.id}`} key={product.id}>
+const Products = ({ product, handleAddToCart }) => {
+  let thumbnailURL;
+  if (!product.thumbnail) {
+    thumbnailURL = product.images.filter((image, index) => index === 0)[0];
+  } else {
+    thumbnailURL = product.thumbnail;
+  }
+  const { collectionIndex, handleCollection, handleRemoveCollection } = useCollection(product);
+  const hover = product.images.length > 1;
+  const content = (
+    <div>
+      {!handleAddToCart ? (
+        <Link to={`/products/${product.id}`}>
           <div className="group overflow-hidden relative">
             <img
               className={`${hover && `group-hover:opacity-0 transition-opacity duration-300 ease-in-out absolute`}`}
@@ -25,17 +30,48 @@ const Products = ({ data, error, isFetching }) => {
               ></img>
             )}
           </div>
-          <div className="info">
-            <h3 className="mt-4">{product.title}</h3>
-            {product.stock !== 0 && <div className="text-neutral-400">NT$ {product.price.toLocaleString()}</div>}
-            {product.stock === 0 && <span className="text-xs tracking-wider label-neutral">SOLD OUT</span>}
-          </div>
         </Link>
-      );
-    });
-  }
-
-  return <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-16 justify-items-center mx-5 lg:mx-24">{content}</div>;
+      ) : (
+        <div className="relative group">
+          <Link to={`/products/${product.id}`}>
+            <img className="group-hover:brightness-[0.6]" src={product.images[0]} alt={product.title} />
+          </Link>
+          <div
+            className="cursor-pointer hidden group-hover:block absolute top-2.5 right-2.5 px-2 text-xl text-white"
+            onClick={handleRemoveCollection}
+          >
+            &times;
+          </div>
+        </div>
+      )}
+      <div className="flex justify-between items-start mt-4">
+        <div className="info">
+          <Link to={`/products/${product.id}`} className="block">
+            {product.title}
+          </Link>
+          {product.stock !== 0 && <div className="inline-block text-neutral-400">NT$ {product.price.toLocaleString()}</div>}
+          {product.stock === 0 && <div className="inline-block text-xs tracking-wider label-neutral">SOLD OUT</div>}
+        </div>
+        {handleAddToCart ? (
+          <Button
+            primaryReverse={product.stock !== 0}
+            className={`p-1.5 ${product.stock === 0 ? "cursor-not-allowed fill-neutral-400" : ""}`}
+            onClick={() => product.stock !== 0 && handleAddToCart({ ...product, thumbnailURL })}
+          >
+            <Icons.Cart className="h-6" />
+          </Button>
+        ) : (
+          <Icons.Collection
+            className={`cursor-pointer stroke-[5rem] ${
+              collectionIndex >= 0 ? "fill-neutral-700 stroke-transparent" : "fill-white stroke-neutral-700"
+            }`}
+            onClick={handleCollection}
+          />
+        )}
+      </div>
+    </div>
+  );
+  return <div>{content}</div>;
 };
 
 export default Products;

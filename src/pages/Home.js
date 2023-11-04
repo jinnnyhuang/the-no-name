@@ -9,9 +9,18 @@ const Home = () => {
     document.title = "The No Name Yet | 還沒有名字";
   }, []);
 
+  let content;
+  if (error) {
+    content = <div>Error Loading Products.</div>;
+  } else if (!isFetching) {
+    content = data?.map((product) => {
+      return <Products product={product} key={product.id} />;
+    });
+  }
+
   return (
     <div className="container m-auto">
-      <Products data={data} error={error} isFetching={isFetching} />
+      <div className="products">{content}</div>
     </div>
   );
 };

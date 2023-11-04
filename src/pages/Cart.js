@@ -64,32 +64,36 @@ const Cart = () => {
   const keyValue = (item) => item.id;
 
   const content = (
-    <div className="flex flex-col items-center mt-10 sm:mx-24">
+    <>
       <h2 className="text-2xl tracking-wider mb-14">Your Cart</h2>
       <Table data={cartItems} config={config} keyValue={keyValue} />
-      <div className="text-xl sm:text-lg tabel-width mt-7 text-right text-neutral-600">Total Price: NT$ {total.toLocaleString()}</div>
-      <div className="tabel-width flex flex-col gap-y-3 mt-7 sm:flex-row sm:justify-between sm:items-center">
-        <Button primary className="px-5">
+      <div className="text-xl sm:text-lg caption-content-width mt-7 text-right text-neutral-600">Total Price: NT$ {total.toLocaleString()}</div>
+      <div className="caption-content-width flex flex-col gap-y-3 mt-7 sm:flex-row sm:justify-between sm:items-center">
+        <Button primary transition className="px-5">
           CheckOut
         </Button>
         <Button secondary className="px-5 sm:order-first" onClick={() => navigate("/")}>
           Continue Shopping
         </Button>
       </div>
-    </div>
+    </>
   );
 
   const empty = (
-    <div className="flex flex-col items-center">
-      <p className="tracking-wide text-2xl">Your cart is empty</p>
-      <Button primary className="w-button mt-7.5 tracking-wide" onClick={() => navigate("/")}>
+    <>
+      <p className="tracking-wide text-2xl">Your cart is empty.</p>
+      <Button primary transition className="w-button mt-7.5 tracking-wide" onClick={() => navigate("/")}>
         {/* 選購產品 */}
         Start Shopping
       </Button>
-    </div>
+    </>
   );
 
-  return <div className="container m-auto">{cartItems.length > 0 ? content : empty}</div>;
+  return (
+    <div className="container m-auto">
+      <div className="flex flex-col items-center caption-content">{cartItems.length > 0 ? content : empty}</div>
+    </div>
+  );
 };
 
 export default Cart;

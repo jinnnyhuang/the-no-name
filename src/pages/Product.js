@@ -1,61 +1,31 @@
-import { useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { addToCart, useGetProductsQuery } from "../store";
+import { useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useGetProductsQuery } from "../store";
 import Button from "../components/Button";
 import Accordion from "../components/Accordion";
 import Silder from "../components/Slider";
-import Modal from "../components/Modal";
 import Icons from "../components/Icons";
+import useAddToCart from "../utils/useAddToCart";
+import useCollection from "../utils/useCollection";
 
 const Product = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
-
   const { data, error, isFetching } = useGetProductsQuery({ id });
+  const { modal, handleAddToCart } = useAddToCart();
 
-  const dispatch = useDispatch();
+  const product = !isFetching && data[0];
+  const { collectionIndex, handleCollection } = useCollection(product);
 
-  const handleClick = (product) => {
-    dispatch(addToCart(product));
-    handleModalOpen();
-    // navigate("/cart");
-  };
+  useEffect(() => {
+    document.title = `${product.title} | 還沒有名字`;
+  }, [product]);
 
-  ////// Modal
-  const [showModal, setShowModal] = useState(false);
-  const handleModalOpen = () => {
-    setShowModal(true);
-    // setTimeout(() => setShowModal(false), 1000);
-  };
-
-  const handleModalClose = () => {
-    setShowModal(false);
-  };
-
-  const actionBar = (
-    <div className="mt-3.5">
-      <Button secondary rounded className="text-sm px-5" onClick={() => navigate("/cart")}>
-        Checkout
-      </Button>
-    </div>
-  );
-
-  const modal = (
-    <Modal onClose={handleModalClose} actionBar={actionBar} className="min-w-fit rounded-md px-12 py-8 bg-white text-black">
-      <p className="mt-2">Added To Cart</p>
-    </Modal>
-  );
-
-  ////// content
   let content;
   let breadcrumb;
   if (error) {
     content = <div className="text-center">Error Loading Product.</div>;
   } else if (!isFetching) {
-    const product = data[0];
-    document.title = `${product.title} | 還沒有名字`;
-
+    // const product = data[0];
     let thumbnailURL;
     if (!product.thumbnail) {
       thumbnailURL = product.images.filter((image, index) => index === 0)[0];
@@ -81,35 +51,43 @@ const Product = () => {
 
     const items = [
       {
-        heading: "Detail",
+        heading: "DETAILS",
         content: product.description,
       },
       {
-        heading: "Size",
+        heading: "SIZE",
         content: product.size,
       },
     ];
 
     const info = (
       <div className="w-[24rem] mx-auto">
-        <h1 className="text-lg">{product.title}</h1>
+        <div className="flex justify-between">
+          <h1 className="text-lg">{product.title}</h1>
+          <Icons.Collection
+            className={`cursor-pointer stroke-[5rem] ${
+              collectionIndex >= 0 ? "fill-neutral-700 stroke-transparent" : "fill-white stroke-neutral-700"
+            }`}
+            onClick={() => handleCollection()}
+          />
+        </div>
         <div className="mt-3.5">
           <span>NT$ {product.price.toLocaleString()}</span>
         </div>
         {product.stock < 5 && product.stock !== 0 && (
           <div>
-            <span className="text-sm label-neutral">剩餘庫存 {product.stock} 個</span>
+            <span className="text-sm label-neutral">剩餘庫存 {product.stock}</span>
           </div>
         )}
         {/* <p className="mt-3.5">{product.description}</p> */}
         {product.stock === 0 ? (
           <Button className="cursor-not-allowed w-button mt-4 tracking-wider">Sold Out</Button>
         ) : (
-          <Button primary className="w-button mt-7.5" onClick={() => handleClick({ ...product, thumbnailURL })}>
+          <Button primary transition className="w-button mt-7.5" onClick={() => handleAddToCart({ ...product, thumbnailURL })}>
             Add To Cart
           </Button>
         )}
-        <Accordion items={items} className="rounded mt-12 uppercase tracking-wider text-sm w-full" />
+        <Accordion items={items} className="rounded mt-12 tracking-wider text-sm w-full" />
       </div>
     );
 
@@ -125,7 +103,7 @@ const Product = () => {
     <div className="container m-auto">
       {breadcrumb}
       {content}
-      {showModal && modal}
+      {modal}
     </div>
   );
 };

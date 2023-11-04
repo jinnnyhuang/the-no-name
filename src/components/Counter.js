@@ -24,7 +24,7 @@ const Counter = ({ value, onChange }) => {
       </button>
       <input
         type="number"
-        className="outline-none focus:outline-none text-center w-full text-neutral-500 hover:text-neutral-600 focus:text-neutral-600 cursor-default flex items-center"
+        className="cursor-default outline-none focus:outline-none text-center w-full text-neutral-500 hover:text-neutral-600 focus:text-neutral-600 flex items-center"
         name="custom-input-number"
         onChange={handleChange}
         value={value ? value.quantity : counterValue}

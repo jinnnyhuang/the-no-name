@@ -10,7 +10,6 @@ const Search = () => {
 
   const [searchParams] = useSearchParams();
   const term = searchParams.get("q");
-
   const { data, error, isFetching } = useGetProductsQuery({ q: term });
 
   const empty = (
@@ -21,14 +20,20 @@ const Search = () => {
   );
 
   let content;
-  if (!error && !isFetching) {
-    content = (data.length > 0 && <div className="mx-5 mb-1.5 lg:mx-24 text-lg tracking-base">{`${data.length} Results for ${term}`}</div>) || empty;
+  let heading;
+  if (error) {
+    content = <div>Error Loading Products.</div>;
+  } else if (!isFetching) {
+    content = data?.map((product) => {
+      return <Products product={product} key={product.id} />;
+    });
+    heading = (data.length > 0 && <div className="mx-5 mb-1.5 lg:mx-24 text-lg tracking-base">{`${data.length} Results for ${term}`}</div>) || empty;
   }
 
   return (
     <div className="container m-auto">
-      {content}
-      <Products data={data} error={error} isFetching={isFetching} />
+      {heading}
+      <div className="products">{content}</div>
     </div>
   );
 };
