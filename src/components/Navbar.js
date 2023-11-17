@@ -4,9 +4,12 @@ import { useSelector } from "react-redux";
 import Icons from "../components/Icons";
 import Button from "../components/Button";
 import Logo from "../image/logo.png";
-import { links, categories } from "../data";
+import axios from "axios";
 
 const Navbar = () => {
+  const [categories, setCategories] = useState(null);
+  const [active, setActive] = useState(false);
+
   // Cart Page, Notfound Page 不顯示 Logo
   const location = useLocation();
   let showLogo = location.pathname === "/";
@@ -17,7 +20,27 @@ const Navbar = () => {
     showLogo = !isMatch ? false : true;
   }
 
-  const [active, setActive] = useState(false);
+  const links = [
+    {
+      label: "Home",
+      path: "/",
+    },
+    {
+      label: "Category",
+      path: "",
+    },
+  ];
+
+  const getCategory = async () => {
+    const baseURL = process.env.REACT_APP_API_URL || "http://localhost:3001";
+    const response = await axios.get(baseURL + "/category");
+    setCategories(response.data);
+  };
+
+  useEffect(() => {
+    getCategory();
+  }, []);
+
   const handleOpen = () => {
     setActive(true);
   };
@@ -36,13 +59,14 @@ const Navbar = () => {
     <ul
       className={`absolute top-9 left-0 lg:top-[1.6rem] bg-white lg:hidden group-hover:inline-block lg:border lg:shadow-md w-full lg:w-[11.5rem] uppercase z-10 p-2`}
     >
-      {categories.map((category) => (
-        <li key={category.id} className="cursor-pointer w-full px-2 py-1.5 hover:bg-neutral-50 tracking-wider">
-          <Link to={`/category/${category.label}`} className="inline-block w-full">
-            {category.label}
-          </Link>
-        </li>
-      ))}
+      {categories &&
+        categories.map((category) => (
+          <li key={category.id} className="cursor-pointer w-full px-2 py-1.5 hover:bg-neutral-50 tracking-wider">
+            <Link to={`/category/${category.label}`} className="inline-block w-full">
+              {category.label}
+            </Link>
+          </li>
+        ))}
     </ul>
   );
 

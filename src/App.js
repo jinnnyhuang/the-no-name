@@ -2,6 +2,7 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 import Notfound from "./pages/Notfound";
+import ProductNotFound from "./pages/ProductNotFound";
 import Product from "./pages/Product";
 import Search from "./pages/Search";
 import Account from "./pages/Account";
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products/:id" element={<Product />} />
+          <Route path="/product-not-found" element={<ProductNotFound />} />
           <Route path="/category/:category" element={<Category />} />
           <Route path="/cart" element={<Cart />} />
           <Route exact path="/search" element={<Search />} />

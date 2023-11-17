@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useGetProductsQuery } from "../store";
 import Button from "../components/Button";
 import Accordion from "../components/Accordion";
@@ -10,6 +10,7 @@ import useCollection from "../utils/useCollection";
 
 const Product = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { data, error, isFetching } = useGetProductsQuery({ id });
   const { modal, handleAddToCart } = useAddToCart();
 
@@ -17,14 +18,15 @@ const Product = () => {
   const { collectionIndex, handleCollection } = useCollection(product);
 
   useEffect(() => {
-    document.title = `${product.title} | 還沒有名字`;
-  }, [product]);
+    !isFetching && !product && navigate("/product-not-found");
+    document.title = product && `${product.title} | 還沒有名字`;
+  }, [isFetching, navigate, product]);
 
   let content;
   let breadcrumb;
   if (error) {
     content = <div className="text-center">Error Loading Product.</div>;
-  } else if (!isFetching) {
+  } else if (!isFetching && data.length !== 0) {
     // const product = data[0];
     let thumbnailURL;
     if (!product.thumbnail) {

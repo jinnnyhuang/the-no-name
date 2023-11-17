@@ -1,15 +1,25 @@
 import { useEffect } from "react";
 import { useGetProductsQuery } from "../store";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Products from "../components/Products";
+// import { categories } from "../data";
 
 const Category = () => {
   const { category } = useParams();
+  const navigate = useNavigate();
   const { data, error, isFetching } = useGetProductsQuery({ category });
+  const noData = !isFetching && data.length === 0;
 
   useEffect(() => {
+    noData && navigate("/");
     document.title = `${category} | 還沒有名字`;
-  }, [category]);
+    // let isMatch = false;
+    // for (let i = 0; i < categories.length; i++) {
+    //   if (isMatch) break;
+    //   isMatch = category === categories[i].label;
+    //   i === categories.length - 1 && !isMatch && navigate("/");
+    // }
+  }, [noData, navigate, category]);
 
   let content;
   if (error) {
