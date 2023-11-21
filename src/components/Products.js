@@ -62,7 +62,7 @@ const Products = ({ product, handleAddToCart }) => {
           </Button>
         ) : (
           <Icons.Collection
-            className={`cursor-pointer stroke-[5rem] ${
+            className={`cursor-pointer stroke-[5rem] shrink-0 ${
               collectionIndex >= 0 ? "fill-neutral-700 stroke-transparent" : "fill-white stroke-neutral-700"
             }`}
             onClick={handleCollection}

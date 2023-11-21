@@ -9,6 +9,7 @@ import axios from "axios";
 const Navbar = () => {
   const [categories, setCategories] = useState(null);
   const [active, setActive] = useState(false);
+  const [term, setTerm] = useState("");
 
   // Cart Page, Notfound Page 不顯示 Logo
   const location = useLocation();
@@ -45,7 +46,7 @@ const Navbar = () => {
     setActive(true);
   };
   const handleClose = () => {
-    setActive(false);
+    active && setActive(false);
   };
 
   useEffect(() => {
@@ -57,11 +58,11 @@ const Navbar = () => {
 
   const category = (
     <ul
-      className={`absolute top-9 left-0 lg:top-[1.6rem] bg-white lg:hidden group-hover:inline-block lg:border lg:shadow-md w-full lg:w-[11.5rem] uppercase z-10 p-2`}
+      className={`bg-white z-10 w-full p-2 uppercase group-hover:inline-block hover-hover:absolute hover-hover:top-[1.6rem] hover-hover:hidden hover-hover:border hover-hover:shadow-md hover-hover:w-[11.5rem]`}
     >
       {categories &&
         categories.map((category) => (
-          <li key={category.id} className="cursor-pointer w-full px-2 py-1.5 hover:bg-neutral-50 tracking-wider">
+          <li key={category.id} className="cursor-pointer w-full px-2 py-1.5 hover:bg-neutral-50 tracking-wider" onClick={handleClose}>
             <Link to={`/category/${category.label}`} className="inline-block w-full">
               {category.label}
             </Link>
@@ -73,58 +74,69 @@ const Navbar = () => {
   const list = links.map((link) => {
     if (link.label !== "Category") {
       return (
-        <li key={link.label} className="mb-1 lg:mb-0">
-          <Link to={link.path} className="link">
+        <li key={link.label} className="mb-1 hover-hover:mb-0">
+          <Link to={link.path} className="link" onClick={handleClose}>
             {link.label}
           </Link>
         </li>
       );
     }
     return (
-      <li key={link.label} className="group mb-1 lg:mb-0 relative">
+      <li key={link.label} className="group mb-1 hover-hover:mb-0 relative">
         <div className="category link">{link.label}</div>
         {category}
       </li>
     );
   });
 
-  const cartItems = useSelector((state) => state.cart.cartItems);
+  const handleFormSubmit = (event) => {
+    !term && event.preventDefault();
+  };
+  const handleChange = (event) => {
+    setTerm(event.target.value);
+  };
 
+  // 20231121 fix search button not working
   const inputClass =
-    "cursor-pointer w-12 h-12 pl-12 z-10 bg-transparent transition-opacity focus:cursor-text focus:border focus:w-full focus:pl-4 focus:pr-11";
+    "absolute right-10.5 transition-all w-12 pl-1 bg-transparent border-neutral-700 focus:pl-4 hover:pl-4 peer-hover:pl-4 focus:border-b hover:border-b peer-hover:border-b focus:w-full hover:w-full peer-hover:w-full";
   const searchInput = (id) => {
     return (
-      <div>
+      <div className={`h-12 ${active ? "w-full" : "w-[211.5px]"}`}>
+        <button className="peer absolute right-0 cursor-pointer rounded-md w-12 h-12" onClick={handleFormSubmit}>
+          <Icons.Search className="mx-auto" />
+        </button>
         <input
           type="text"
           name="q"
           id={id}
-          className={`peer relative rounded-md tracking-wide text-neutral-500 border-neutral-300 outline-none placeholder:tracking-wide ${
-            active ? `cursor-text w-full h-12 pl-4 pr-11 border focus:border-2` : inputClass
+          className={`cursor-text h-12 pr-11 tracking-wide placeholder:tracking-wide text-neutral-500 outline-none  ${
+            active ? `rounded-md w-full pl-4 border focus:border-2 border-neutral-300` : inputClass
           } `}
           placeholder="Search"
+          onChange={handleChange}
         />
-        <Icons.Search className="cursor-pointer absolute inset-y-0 my-auto right-0 peer-focus:fill-neutral-600 m-2" />
       </div>
     );
   };
 
+  const cartItems = useSelector((state) => state.cart.cartItems);
+
   const nav = (
     <nav className="relative px-6 py-4 flex justify-between items-center bg-white">
-      <div className="lg:hidden" onClick={handleOpen}>
+      <div className="hover-hover:hidden" onClick={handleOpen}>
         <button className="navbar-burger cursor-pointer navbar-icon" title="Mobile Menu">
           <Icons.Menu />
         </button>
       </div>
-      <ul className="hidden lg:flex lg:mr-auto lg:gap-x-5">{list}</ul>
-      <form method="get" action="/search" className="hidden lg:block relative w-max" id="search-product" name="search-product">
+      <ul className="hidden hover-hover:flex hover-hover:mr-auto hover-hover:gap-x-5">{list}</ul>
+      <form method="get" action="/search" className="hidden hover-hover:block relative w-max" id="search-product" name="search-product">
         {searchInput("nav_search")}
       </form>
       <Link to="/cart" className="navbar-icon transition duration-200 group relative">
         <Icons.Cart />
         {cartItems.length > 0 && <div className="navbar-icon-notification"></div>}
       </Link>
-      <Link to="/account" className="hidden lg:inline-block navbar-icon transition duration-200">
+      <Link to="/account" className="hidden hover-hover:inline-block navbar-icon transition duration-200">
         <Icons.User />
       </Link>
     </nav>
@@ -135,7 +147,7 @@ const Navbar = () => {
       <div className="navbar-backdrop fixed inset-0 bg-gray-800 opacity-20" onClick={handleClose}></div>
       <nav className="fixed top-0 left-0 bottom-0 flex flex-col w-[70%] max-w-sm py-7 px-7 bg-white border-r overflow-y-auto">
         <div className="flex items-center mb-4">
-          <Link to="/" className="mr-auto text-2xl font-bold leading-none">
+          <Link to="/" className="mr-auto text-2xl font-bold leading-none" onClick={handleClose}>
             The No Name Yet
           </Link>
           <button
@@ -154,12 +166,12 @@ const Navbar = () => {
         <div className="mt-auto">
           <div className="pt-6">
             <Link to="/account">
-              <Button secondary className="w-full normal-case my-1.5 focus:outline-none">
+              <Button secondary className="w-full normal-case my-1.5 focus:outline-none" onClick={handleClose}>
                 Account
               </Button>
             </Link>
             <Link href="#">
-              <Button primary className="w-full normal-case my-1.5 focus:outline-none">
+              <Button primary className="w-full normal-case my-1.5 focus:outline-none" onClick={handleClose}>
                 Sign Out
               </Button>
             </Link>
@@ -176,7 +188,7 @@ const Navbar = () => {
       {sideNav}
       {showLogo && (
         <Link to="/" className="m-auto mb-19 block max-w-fit">
-          <img src={Logo} alt="還沒有名字" className="m-auto w-3/5  lg:w-auto" />
+          <img src={Logo} alt="還沒有名字" className="m-auto w-3/5 hover-hover:w-auto" />
         </Link>
       )}
     </div>

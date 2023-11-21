@@ -30,6 +30,8 @@ module.exports = {
         // ml: "820px",
         // xxl: "1366px",
         // "3xl": "1920px",
+        "hover-none": { raw: "(hover: none)" },
+        "hover-hover": { raw: "(hover: hover)" },
       },
       letterSpacing: {
         base: "0.0125em",
