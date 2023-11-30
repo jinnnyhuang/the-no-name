@@ -14,26 +14,26 @@ const useAddToCart = () => {
     // navigate("/cart");
   };
 
-  const [showModal, setShowModal] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const handleModalOpen = () => {
-    setShowModal(true);
-    // setTimeout(() => setShowModal(false), 1000);
+    setIsOpen(true);
+    // setTimeout(() => setIsOpen(false), 1000);
   };
   const handleModalClose = () => {
-    setShowModal(false);
+    setIsOpen(false);
   };
 
   const actionBar = (
-    <div className="mt-3.5">
-      <Button secondary rounded className="text-sm px-5" onClick={() => navigate("/cart")}>
+    <div className="mt-5">
+      <Button tertiary className="rounded-md px-4.5 py-1.5 w-[9.7rem]" onClick={() => navigate("/cart")}>
         Checkout
       </Button>
     </div>
   );
 
-  const modal = showModal && (
-    <Modal onClose={handleModalClose} actionBar={actionBar} className="min-w-fit rounded-md px-12 py-8 bg-white text-black">
-      <p className="mt-2">Added To Cart</p>
+  const modal = isOpen && (
+    <Modal onClose={handleModalClose} actionBar={actionBar} className="min-w-fit rounded-lg px-8 py-8 bg-white">
+      <p className="text-lg">Added To Cart</p>
     </Modal>
   );
 

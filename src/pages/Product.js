@@ -46,7 +46,7 @@ const Product = () => {
             {product.category}
           </Link>
           <Icons.Next className="fill-neutral-400 max-w-[1.5rem]" />
-          <span className="text-neutral-700 truncate">{product.title}</span>
+          <span className="text-primary truncate">{product.title}</span>
         </div>
       </div>
     );
@@ -67,9 +67,7 @@ const Product = () => {
         <div className="flex justify-between">
           <h1 className="text-lg">{product.title}</h1>
           <Icons.Collection
-            className={`cursor-pointer stroke-[5rem] ${
-              collectionIndex >= 0 ? "fill-neutral-700 stroke-transparent" : "fill-white stroke-neutral-700"
-            }`}
+            className={`cursor-pointer stroke-[5rem] ${collectionIndex >= 0 ? "fill-primary stroke-transparent" : "fill-white stroke-primary"}`}
             onClick={() => handleCollection()}
           />
         </div>

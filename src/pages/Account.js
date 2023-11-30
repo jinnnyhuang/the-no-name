@@ -1,23 +1,51 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import useAddToCart from "../utils/useAddToCart";
 import Products from "../components/Products";
 import Button from "../components/Button";
 
-const Account = () => {
+const Account = ({ currentUser, handleLogout, handleUpdateUser }) => {
+  const navigate = useNavigate();
+
   useEffect(() => {
     document.title = "Account | 還沒有名字";
   }, []);
 
+  useEffect(() => {
+    !currentUser && navigate("/login");
+  }, [currentUser, navigate]);
+
   const { modal, handleAddToCart } = useAddToCart();
   const [activeTabIndex, setActiveTabIndex] = useState(0);
-  const [showEdit, setShowEdit] = useState(false);
+
+  // Edit
+  const [isEditing, setIsEditing] = useState(false);
+  const [name, setName] = useState(currentUser?.name || "");
+  const [phone, setPhone] = useState(currentUser?.phone || "");
   const handleTab = (index) => {
     setActiveTabIndex(index);
   };
-  const handleEdit = () => {
-    setShowEdit(!showEdit);
+  const handleName = (event) => {
+    setName(event.target.value);
   };
+  const handlePhone = (event) => {
+    setPhone(event.target.value);
+  };
+  const handleEdit = (event) => {
+    event.preventDefault();
+    handleUpdateUser(currentUser._id, { name, phone });
+    setIsEditing(false);
+  };
+
+  // [Esc] Cancel Edit
+  useEffect(() => {
+    const handleKeydown = (event) => event.keyCode === 27 && setIsEditing(false);
+    window.addEventListener("keydown", handleKeydown);
+    return () => {
+      window.removeEventListener("keydown", handleKeydown);
+    };
+  }, [isEditing]);
 
   const collectionItems = useSelector((state) => state.collection.collectionItems);
   const wishList = collectionItems?.map((product) => {
@@ -25,39 +53,43 @@ const Account = () => {
   });
 
   const settingData = [
-    { label: "Name", type: "text", value: "Jane Doe" },
-    { label: "Birthday", type: "date", value: "1996-02-03" },
-    { label: "Phone Number", type: "text", value: "0912345678" },
-    { label: "E-mail", type: "email", value: "Jane@noname.com" },
-    { label: "Password", type: "password", value: 12345678 },
+    { label: "E-mail", type: "email", id: "email", value: currentUser?.email || "", readonly: true },
+    { label: "Name", type: "text", id: "name", value: currentUser?.name || "", readonly: false, onChange: handleName },
+    { label: "Phone Number", type: "text", id: "phone", value: currentUser?.phone || "", readonly: false, onChange: handlePhone },
   ];
+
   const setting = (
-    <div className="flex flex-col items-center">
-      <div className="w-full">
-        {/* <h3 className="text-md font-medium text-neutral-700 mb-6">Personal Information</h3> */}
-        <form method="put" action="" id="account-settings" name="account-settings">
-          {settingData.map((input, index) => {
-            return (
-              <label key={index} className="block mb-5">
-                <span className="block text-xs font-medium text-neutral-500 mb-1 uppercase tracking-wider">{input.label}</span>
-                <input
-                  type={input.type}
-                  name={input.type}
-                  defaultValue={input.value}
-                  readOnly={!showEdit}
-                  autoComplete="off"
-                  className={`mt-1 px-3 py-2 border shadow-sm border-neutral-300 placeholder-neutral-400 block w-full rounded focus:outline-none
-                ${showEdit ? `bg-white focus:border-sky-500 focus:ring-sky-500 focus:ring-1` : `bg-neutral-200`}`}
-                />
-              </label>
-            );
-          })}
-        </form>
-      </div>
-      <Button primary className="text-sm rounded mt-4 w-16" onClick={() => handleEdit()}>
-        {showEdit ? "Save" : "Edit"}
-      </Button>
-    </div>
+    <form id="account-settings" name="account-settings" autoComplete="off" onSubmit={handleEdit}>
+      {settingData.map((input, index) => {
+        return (
+          <div key={index} className="block mb-5 last-of-type:mb-10">
+            <label htmlFor={input.id} className="block text-xs font-medium text-neutral-500 mb-1 uppercase tracking-wider">
+              {input.label}
+            </label>
+            <input
+              type={input.type}
+              id={input.id}
+              className={`px-3 py-2 border shadow-sm border-neutral-300 placeholder-neutral-400 block w-full rounded focus:outline-none ${
+                input.readonly || !isEditing ? `bg-neutral-200` : `bg-white focus:border-sky-500 focus:ring-sky-500 focus:ring-1`
+              }`}
+              readOnly={input.readonly || !isEditing}
+              defaultValue={input.value}
+              onChange={input?.onChange}
+            />
+          </div>
+        );
+      })}
+      {!isEditing && (
+        <Button secondary className="block mx-auto text-sm rounded" onClick={() => setIsEditing(true)}>
+          Edit
+        </Button>
+      )}
+      {isEditing && (
+        <Button primary className="block mx-auto text-sm rounded">
+          Update
+        </Button>
+      )}
+    </form>
   );
 
   const tabs = [
@@ -79,9 +111,7 @@ const Account = () => {
     return (
       <li
         key={index}
-        className={`cursor-pointer inline-block text-neutral-700 rounded py-1.5 px-3 ${
-          index === activeTabIndex ? "font-medium text-neutral-800" : ""
-        }`}
+        className={`cursor-pointer inline-block rounded py-1.5 px-3 text-neutral-700 ${index === activeTabIndex ? "font-medium" : ""}`}
         onClick={() => handleTab(index)}
       >
         {item.label}
@@ -91,10 +121,15 @@ const Account = () => {
 
   const content = (
     <div className="flex flex-col items-center caption-content">
-      <h1 className="text-2xl tracking-wider text-center mb-14">Your Account</h1>
-      <div className="flex flex-col xl:flex-row justify-between gap-x-7 min-h-[55vh] caption-content-width">
-        <ul className="flex flex-row mb-2.5 xl:flex-col xl:w-[9.5rem]">{list}</ul>
-        <div className="flex-1 bg-neutral-50 text-neutral-700 rounded p-7">
+      <h1 className="caption">Your Account</h1>
+      <div className="flex flex-col xl:flex-row justify-between gap-x-7 min-h-[42vh] caption-content-width">
+        <ul className="flex flex-row mb-2.5 xl:flex-col xl:w-[9.5rem]">
+          {list}
+          <li className="hover-none:hidden cursor-pointer inline-block rounded py-1.5 px-3 hover:underline" onClick={handleLogout}>
+            Log out
+          </li>
+        </ul>
+        <div className="flex-1 bg-neutral-50 rounded p-7">
           <div>
             <h2 className="text-xl font-medium mb-8">{tabs[activeTabIndex].label}</h2>
             <div>{tabs[activeTabIndex].content}</div>

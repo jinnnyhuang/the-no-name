@@ -13,12 +13,6 @@ const Category = () => {
   useEffect(() => {
     noData && navigate("/");
     document.title = `${category} | 還沒有名字`;
-    // let isMatch = false;
-    // for (let i = 0; i < categories.length; i++) {
-    //   if (isMatch) break;
-    //   isMatch = category === categories[i].label;
-    //   i === categories.length - 1 && !isMatch && navigate("/");
-    // }
   }, [noData, navigate, category]);
 
   let content;

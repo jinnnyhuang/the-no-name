@@ -7,7 +7,7 @@ const Footer = () => {
         <Icons.Facebook className="cursor-pointer fill-neutral-400 hover:fill-neutral-500" />
         <Icons.Instagram className="cursor-pointer fill-neutral-400 hover:fill-neutral-500" />
       </div>
-      <div className="text-center text-sm">Copyright &copy; 2023 Jinny Huang</div>
+      <div className="text-center text-sm text-neutral-400">Copyright &copy; 2023 Jinny Huang</div>
     </div>
   );
 };

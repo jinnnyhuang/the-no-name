@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Icons from "../components/Icons";
 import Button from "../components/Button";
 import Logo from "../image/logo.png";
-import axios from "axios";
+import Axios from "axios";
 
-const Navbar = () => {
+const Navbar = ({ currentUser, handleLogout }) => {
   const [categories, setCategories] = useState(null);
   const [active, setActive] = useState(false);
   const [term, setTerm] = useState("");
 
+  const navigate = useNavigate();
   // Cart Page, Notfound Page 不顯示 Logo
   const location = useLocation();
   let showLogo = location.pathname === "/";
@@ -34,7 +35,7 @@ const Navbar = () => {
 
   const getCategory = async () => {
     const baseURL = process.env.REACT_APP_API_URL || "http://localhost:3001";
-    const response = await axios.get(baseURL + "/category");
+    const response = await Axios.get(baseURL + "/category");
     setCategories(response.data);
   };
 
@@ -47,6 +48,10 @@ const Navbar = () => {
   };
   const handleClose = () => {
     active && setActive(false);
+  };
+  const handleClick = () => {
+    handleClose();
+    currentUser ? handleLogout() : navigate("/signup");
   };
 
   useEffect(() => {
@@ -98,7 +103,7 @@ const Navbar = () => {
 
   // 20231121 fix search button not working
   const inputClass =
-    "absolute right-10.5 transition-all w-12 pl-1 bg-transparent border-neutral-700 focus:pl-4 hover:pl-4 peer-hover:pl-4 focus:border-b hover:border-b peer-hover:border-b focus:w-full hover:w-full peer-hover:w-full";
+    "absolute right-10.5 transition-all w-12 pl-1 bg-transparent border-neutral-400 focus:pl-4 hover:pl-4 peer-hover:pl-4 focus:border-b hover:border-b peer-hover:border-b focus:w-full hover:w-full peer-hover:w-full";
   const searchInput = (id) => {
     return (
       <div className={`h-12 ${active ? "w-full" : "w-[211.5px]"}`}>
@@ -166,15 +171,13 @@ const Navbar = () => {
         <div className="mt-auto">
           <div className="pt-6">
             <Link to="/account">
-              <Button secondary className="w-full normal-case my-1.5 focus:outline-none" onClick={handleClose}>
-                Account
-              </Button>
-            </Link>
-            <Link href="#">
               <Button primary className="w-full normal-case my-1.5 focus:outline-none" onClick={handleClose}>
-                Sign Out
+                {currentUser ? "Account" : "Log in"}
               </Button>
             </Link>
+            <Button secondary className="w-full normal-case my-1.5 focus:outline-none" onClick={handleClick}>
+              {currentUser ? "Log out" : "Sign up"}
+            </Button>
           </div>
           <p className="my-4 text-sm text-center text-neutral-400">The NoName Yet &copy; 2023</p>
         </div>

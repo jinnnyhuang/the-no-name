@@ -65,9 +65,9 @@ const Cart = () => {
 
   const content = (
     <>
-      <h2 className="text-2xl tracking-wider mb-14">Your Cart</h2>
+      <h1 className="caption">Your Cart</h1>
       <Table data={cartItems} config={config} keyValue={keyValue} />
-      <div className="text-xl sm:text-lg caption-content-width mt-7 text-right text-neutral-600">Total Price: NT$ {total.toLocaleString()}</div>
+      <div className="text-xl sm:text-lg caption-content-width mt-7 text-right text-neutral-500">Total Price: NT$ {total.toLocaleString()}</div>
       <div className="caption-content-width flex flex-col gap-y-3 mt-7 sm:flex-row sm:justify-between sm:items-center">
         <Button primary transition className="px-5">
           CheckOut

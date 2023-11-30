@@ -13,6 +13,12 @@ module.exports = {
         Noto: "Noto Sans TC, sans-serif",
         display: "Poppins, sans-serif", // Add a new `font-display` class
       },
+      colors: {
+        primary: "var(--color-primary)",
+      },
+      letterSpacing: {
+        base: "0.0125em",
+      },
       spacing: {
         0.8: "0.8rem",
         3.75: "0.9375rem",
@@ -33,10 +39,21 @@ module.exports = {
         "hover-none": { raw: "(hover: none)" },
         "hover-hover": { raw: "(hover: hover)" },
       },
-      letterSpacing: {
-        base: "0.0125em",
+      animation: {
+        fadeIn: "fadeIn 0.25s cubic-bezier(0.5, 1, 0.89, 1)",
+      },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: 0 },
+          "100%": { opacity: 1 },
+        },
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addVariant }) {
+      addVariant("child", "& > *");
+      addVariant("child-hover", "& > *:hover");
+    },
+  ],
 };
