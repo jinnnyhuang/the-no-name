@@ -25,7 +25,7 @@ const Search = () => {
     content = <div>Error Loading Products.</div>;
   } else if (!isFetching) {
     content = data?.map((product) => {
-      return <Products product={product} key={product.id} />;
+      return <Products product={product} key={product._id} />;
     });
     heading = (data.length > 0 && <div className="mx-5 mb-1.5 lg:mx-24 text-lg tracking-base">{`${data.length} Results for ${term}`}</div>) || empty;
   }

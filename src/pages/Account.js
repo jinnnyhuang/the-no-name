@@ -49,7 +49,7 @@ const Account = ({ currentUser, handleLogout, handleUpdateUser }) => {
 
   const collectionItems = useSelector((state) => state.collection.collectionItems);
   const wishList = collectionItems?.map((product) => {
-    return <Products product={product} handleAddToCart={handleAddToCart} key={product.id} />;
+    return <Products product={product} handleAddToCart={handleAddToCart} key={product._id} />;
   });
 
   const settingData = [

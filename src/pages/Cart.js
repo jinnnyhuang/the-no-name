@@ -15,7 +15,7 @@ const Cart = () => {
   const dispatch = useDispatch();
 
   const cartItems = useSelector((state) => state.cart.cartItems);
-  const total = cartItems.filter((item) => item.id).reduce((prev, curr) => prev + curr.price * curr.quantity, 0);
+  const total = cartItems.filter((item) => item._id).reduce((prev, curr) => prev + curr.price * curr.quantity, 0);
   const handleRemove = (item) => {
     dispatch(removeItem(item));
   };
@@ -27,7 +27,7 @@ const Cart = () => {
     {
       label: "Products",
       render: (item) => (
-        <Link to={`/products/${item.id}`}>
+        <Link to={`/products/${item._id}`}>
           <img src={item.thumbnailURL} alt={item.title} className="w-[7rem]" />
         </Link>
       ),
@@ -61,7 +61,7 @@ const Cart = () => {
       class: "text-right hidden sm:table-cell",
     },
   ];
-  const keyValue = (item) => item.id;
+  const keyValue = (item) => item._id;
 
   const content = (
     <>

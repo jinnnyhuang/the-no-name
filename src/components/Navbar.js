@@ -34,7 +34,8 @@ const Navbar = ({ currentUser, handleLogout }) => {
   ];
 
   const getCategory = async () => {
-    const baseURL = process.env.REACT_APP_API_URL || "http://localhost:3001";
+    // const baseURL = process.env.REACT_APP_API_URL || "http://localhost:3001";
+    const baseURL = process.env.REACT_APP_API_URL || "http://localhost:8080";
     const response = await Axios.get(baseURL + "/category");
     setCategories(response.data);
   };
@@ -67,7 +68,7 @@ const Navbar = ({ currentUser, handleLogout }) => {
     >
       {categories &&
         categories.map((category) => (
-          <li key={category.id} className="cursor-pointer w-full px-2 py-1.5 hover:bg-neutral-50 tracking-wider" onClick={handleClose}>
+          <li key={category._id} className="cursor-pointer w-full px-2 py-1.5 hover:bg-neutral-50 tracking-wider" onClick={handleClose}>
             <Link to={`/category/${category.label}`} className="inline-block w-full">
               {category.label}
             </Link>

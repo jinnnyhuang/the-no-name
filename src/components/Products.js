@@ -15,7 +15,7 @@ const Products = ({ product, handleAddToCart }) => {
   const content = (
     <div>
       {!handleAddToCart ? (
-        <Link to={`/products/${product.id}`}>
+        <Link to={`/products/${product._id}`}>
           <div className="group overflow-hidden relative">
             <img
               className={`${hover && `group-hover:opacity-0 transition-opacity duration-300 ease-in-out absolute`}`}
@@ -33,7 +33,7 @@ const Products = ({ product, handleAddToCart }) => {
         </Link>
       ) : (
         <div className="relative group">
-          <Link to={`/products/${product.id}`}>
+          <Link to={`/products/${product._id}`}>
             <img className="group-hover:brightness-[0.6]" src={product.images[0]} alt={product.title} />
           </Link>
           <div
@@ -46,7 +46,7 @@ const Products = ({ product, handleAddToCart }) => {
       )}
       <div className="flex justify-between items-start mt-4">
         <div className="info">
-          <Link to={`/products/${product.id}`} className="block">
+          <Link to={`/products/${product._id}`} className="block">
             {product.title}
           </Link>
           {product.stock !== 0 && <div className="inline-block text-neutral-400">NT$ {product.price.toLocaleString()}</div>}

@@ -7,11 +7,11 @@ const collectionSlice = createSlice({
   },
   reducers: {
     addCollection(state, aciton) {
-      const itemsIndex = state.collectionItems.findIndex((item) => item.id === aciton.payload.id);
+      const itemsIndex = state.collectionItems.findIndex((item) => item._id === aciton.payload._id);
       itemsIndex === -1 && state.collectionItems.push(aciton.payload);
     },
     removeCollection(state, aciton) {
-      state.collectionItems = state.collectionItems.filter((item) => item.id !== aciton.payload.id);
+      state.collectionItems = state.collectionItems.filter((item) => item._id !== aciton.payload._id);
     },
   },
 });

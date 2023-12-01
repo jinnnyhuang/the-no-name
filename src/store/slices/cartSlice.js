@@ -12,7 +12,7 @@ const cartSlice = createSlice({
       const cartItems = JSON.parse(localStorage.getItem("cartItems"));
       state.cartItems = cartItems || [];
 
-      const itemsIndex = state.cartItems.findIndex((item) => item.id === aciton.payload.id);
+      const itemsIndex = state.cartItems.findIndex((item) => item._id === aciton.payload._id);
       if (itemsIndex >= 0) {
         // 若已在購物車，並且庫存大於數量時，數量 +1
         state.cartItems[itemsIndex].stock > state.cartItems[itemsIndex].quantity && state.cartItems[itemsIndex].quantity++;
@@ -24,19 +24,19 @@ const cartSlice = createSlice({
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
     },
     removeItem(state, aciton) {
-      const updateProduct = state.cartItems.filter((item) => item.id !== aciton.payload.id);
+      const updateProduct = state.cartItems.filter((item) => item._id !== aciton.payload._id);
       state.cartItems = updateProduct;
       localStorage.setItem("cartItems", JSON.stringify(updateProduct));
     },
     updateQuantity(state, aciton) {
-      const itemsIndex = state.cartItems.findIndex((item) => item.id === aciton.payload.item.id);
+      const itemsIndex = state.cartItems.findIndex((item) => item._id === aciton.payload.item._id);
       if (aciton.payload.operation === "decrease") {
         if (state.cartItems[itemsIndex].quantity > 1) {
           state.cartItems[itemsIndex].quantity--;
           localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
         } else {
           // 數量等於 1 & 數量減少時從購物車移除
-          const updateProduct = state.cartItems.filter((item) => item.id !== aciton.payload.item.id);
+          const updateProduct = state.cartItems.filter((item) => item._id !== aciton.payload.item._id);
           state.cartItems = updateProduct;
           localStorage.setItem("cartItems", JSON.stringify(updateProduct));
         }

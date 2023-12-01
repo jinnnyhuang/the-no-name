@@ -4,7 +4,7 @@ import { addCollection, removeCollection } from "../store";
 const useCollection = (product) => {
   const dispatch = useDispatch();
   const collectionItems = useSelector((state) => state.collection.collectionItems);
-  const collectionIndex = collectionItems.findIndex((item) => item.id === product.id);
+  const collectionIndex = collectionItems.findIndex((item) => item._id === product._id);
 
   const handleAddCollection = () => {
     dispatch(addCollection(product));

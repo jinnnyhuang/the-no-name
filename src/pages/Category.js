@@ -20,7 +20,7 @@ const Category = () => {
     content = <div>Error Loading Products.</div>;
   } else if (!isFetching) {
     content = data?.map((product) => {
-      return <Products product={product} key={product.id} />;
+      return <Products product={product} key={product._id} />;
     });
   }
 
