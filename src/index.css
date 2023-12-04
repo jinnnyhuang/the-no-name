@@ -80,3 +80,12 @@ input[type="number"]::-webkit-outer-spin-button {
 .caption {
   @apply text-2xl tracking-wider text-center mb-14;
 }
+
+/* Pagination */
+.pagination {
+  @apply cursor-pointer min-w-[32px] flex justify-center py-[5.5px] rounded-md hover:bg-primary hover:text-white transition-all duration-300;
+}
+
+.pagination-icon {
+  @apply cursor-pointer fill-neutral-400 hover:fill-primary max-w-[1.5rem];
+}

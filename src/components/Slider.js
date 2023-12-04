@@ -30,8 +30,8 @@ const Slider = ({ items }) => {
     <swiper-container
       style={{
         maxWidth: "31.25rem",
-        "--swiper-pagination-color": "#000",
-        "--swiper-pagination-bullet-inactive-color": "#d6d6d6",
+        "--swiper-pagination-color": "rgba(255, 255, 255, 1)",
+        "--swiper-pagination-bullet-inactive-color": "rgba(255, 255, 255, 0.6)",
         "--swiper-pagination-bullet-inactive-opacity": "1",
         "--swiper-pagination-bullet-size": "8px",
         "--swiper-pagination-bullet-horizontal-gap": "4px",

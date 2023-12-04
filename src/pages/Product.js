@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { useGetProductsQuery } from "../store";
+import { useGetProductByIdQuery } from "../store";
 import Button from "../components/Button";
 import Accordion from "../components/Accordion";
 import Silder from "../components/Slider";
@@ -11,7 +11,7 @@ import useCollection from "../utils/useCollection";
 const Product = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { data, error, isFetching } = useGetProductsQuery({ id });
+  const { data, error, isFetching } = useGetProductByIdQuery(id);
   const { modal, handleAddToCart } = useAddToCart();
 
   const product = !isFetching && data[0];

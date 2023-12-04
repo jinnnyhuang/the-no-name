@@ -19,6 +19,6 @@ export const store = configureStore({
 
 setupListeners(store.dispatch);
 
-export { useGetAllProductsQuery, useGetProductsQuery } from "./apis/productsApi";
+export { useGetAllProductsQuery, useGetProductsQuery, useGetProductByIdQuery } from "./apis/productsApi";
 export { addToCart, updateQuantity, removeItem } from "./slices/cartSlice";
 export { addCollection, removeCollection } from "./slices/collectionSlice";
