@@ -19,7 +19,3 @@ export const createUser = (email, password, name, phone) => {
     phone,
   });
 };
-
-export const getUserInfo = () => {
-  return JSON.parse(localStorage.getItem("userInfo"));
-};

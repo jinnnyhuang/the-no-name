@@ -49,54 +49,6 @@ const Signup = ({ handleSignup }) => {
 
   const form = (
     <form className="flex flex-col pt-3 md:pt-8" onSubmit={handleSubmit}>
-      {/* <div className="pt-4">
-        <label htmlFor="name" className="font-medium after:content-['*'] after:ml-0.5 after:text-red-500">
-          Name
-        </label>
-        <input
-          type="text"
-          id="name"
-          autoComplete="name"
-          className="shadow-sm appearance-none border rounded w-full py-2.5 px-4.5 mt-1 focus:outline-none focus:shadow-outline"
-          onChange={handleName}
-        />
-      </div>
-      <div className="pt-4">
-        <label htmlFor="email" className="font-medium after:content-['*'] after:ml-0.5 after:text-red-500">
-          E-mail
-        </label>
-        <input
-          type="email"
-          id="email"
-          autoComplete="email"
-          className="shadow-sm appearance-none border rounded w-full py-2.5 px-4.5 mt-1 focus:outline-none focus:shadow-outline"
-          onChange={handleEmail}
-        />
-      </div>
-      <div className="pt-4">
-        <label htmlFor="password" className="font-medium after:content-['*'] after:ml-0.5 after:text-red-500">
-          Password
-        </label>
-        <input
-          type="password"
-          id="password"
-          autoComplete="password"
-          className="shadow-sm appearance-none border rounded w-full py-2.5 px-4.5 mt-1 focus:outline-none focus:shadow-outline"
-          onChange={handlePassword}
-        />
-      </div>
-      <div className="pt-4">
-        <label htmlFor="phone" className="font-medium">
-          Phone Number
-        </label>
-        <input
-          type="text"
-          id="phone"
-          autoComplete="tel"
-          className="shadow-sm appearance-none border rounded w-full py-2.5 px-4.5 mt-1 focus:outline-none focus:shadow-outline"
-          onChange={handlePhone}
-        />
-      </div> */}
       <Input id="name" type="text" autoComplete="name" onChange={handleName} required>
         Name
       </Input>
@@ -115,15 +67,14 @@ const Signup = ({ handleSignup }) => {
     </form>
   );
 
-  const actionBar = (
-    <div className="mt-5">
-      <Button tertiary className="rounded-md px-4.5 py-1.5 w-72" onClick={() => navigate("/login")}>
-        Log in
-      </Button>
-    </div>
+  // Modal
+  const actionButton = (
+    <Button tertiary className="action-button w-72" onClick={() => navigate("/login")}>
+      Log in
+    </Button>
   );
   const modal = isOpen && (
-    <Modal onClose={() => setIsOpen(false)} actionBar={actionBar} className="min-w-fit rounded-lg px-12 py-8 bg-white">
+    <Modal onClose={() => setIsOpen(false)} actionButton={actionButton} className="min-w-fit rounded-lg px-12 py-8 bg-white">
       <div className="flex flex-col items-center gap-1.5">
         <p className="text-xl font-medium">Sign Up Complete!</p>
         <p>Please login to access the website.</p>

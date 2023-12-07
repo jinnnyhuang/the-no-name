@@ -1,39 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../store";
+import { useAddToCartMutation } from "../store";
 import Modal from "../components/Modal";
 import Button from "../components/Button";
 
 const useAddToCart = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const handleAddToCart = (product) => {
-    dispatch(addToCart(product));
-    handleModalOpen();
-    // navigate("/cart");
-  };
-
   const [isOpen, setIsOpen] = useState(false);
-  const handleModalOpen = () => {
-    setIsOpen(true);
-    // setTimeout(() => setIsOpen(false), 1000);
-  };
-  const handleModalClose = () => {
-    setIsOpen(false);
+  const [message, setMessage] = useState(null);
+  const currentUser = localStorage.getItem("userInfo");
+  const [addToCart, results] = useAddToCartMutation(); // addToCart(_id) // productId
+
+  useEffect(() => {
+    results?.data?.message && setMessage(results?.data?.message);
+    results.status === "fulfilled" && setIsOpen(true);
+  }, [results]);
+
+  const handleAddToCart = (product) => {
+    currentUser ? addToCart(product._id) : setIsOpen(true);
   };
 
-  const actionBar = (
-    <div className="mt-5">
-      <Button tertiary className="rounded-md px-4.5 py-1.5 w-[9.7rem]" onClick={() => navigate("/cart")}>
-        Checkout
-      </Button>
-    </div>
+  // Modal
+  const handleClick = () => {
+    !currentUser || message ? setIsOpen(false) : navigate("/cart");
+  };
+  const actionButton = (
+    <Button
+      tertiary={!(!currentUser || message)}
+      secondary={!currentUser || message}
+      transition={!currentUser || message}
+      className="action-button w-[9.7rem]"
+      onClick={handleClick}
+    >
+      {!currentUser || message ? "OK" : "Checkout"}
+    </Button>
   );
-
   const modal = isOpen && (
-    <Modal onClose={handleModalClose} actionBar={actionBar} className="min-w-fit rounded-lg px-8 py-8 bg-white">
-      <p className="text-lg">Added To Cart</p>
+    <Modal onClose={() => setIsOpen(false)} actionButton={actionButton} className="modal">
+      <p className="text-lg">{!currentUser ? "Please log in first" : message ? message : "Added To Cart"}</p>
     </Modal>
   );
 

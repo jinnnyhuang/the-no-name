@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import Icons from "../components/Icons";
 import Button from "../components/Button";
 import Logo from "../image/logo.png";
 import Axios from "axios";
+import { useFetchCartQuery } from "../store";
 
 const Navbar = ({ currentUser, handleLogout }) => {
   const [categories, setCategories] = useState(null);
@@ -68,7 +68,11 @@ const Navbar = ({ currentUser, handleLogout }) => {
     >
       {categories &&
         categories.map((category) => (
-          <li key={category._id} className="cursor-pointer w-full px-2 py-1.5 hover:bg-neutral-50 tracking-wider" onClick={handleClose}>
+          <li
+            key={category._id}
+            className="cursor-pointer w-full px-2 py-1.5 hover:bg-neutral-50 tracking-wider transition-colors"
+            onClick={handleClose}
+          >
             <Link to={`/category/${category.label}`} className="inline-block w-full">
               {category.label}
             </Link>
@@ -125,7 +129,8 @@ const Navbar = ({ currentUser, handleLogout }) => {
     );
   };
 
-  const cartItems = useSelector((state) => state.cart.cartItems);
+  const { currentData, data, error, isFetching } = useFetchCartQuery(undefined, { skip: !currentUser });
+  const cartItems = currentUser && !error ? (isFetching ? currentData || [] : data) : [];
 
   const nav = (
     <nav className="relative px-6 py-4 flex justify-between items-center bg-white">
@@ -140,7 +145,7 @@ const Navbar = ({ currentUser, handleLogout }) => {
       </form>
       <Link to="/cart" className="navbar-icon transition duration-200 group relative">
         <Icons.Cart />
-        {cartItems.length > 0 && <div className="navbar-icon-notification"></div>}
+        {cartItems?.length > 0 && <div className="navbar-icon-notification"></div>}
       </Link>
       <Link to="/account" className="hidden hover-hover:inline-block navbar-icon transition duration-200">
         <Icons.User />
@@ -156,11 +161,8 @@ const Navbar = ({ currentUser, handleLogout }) => {
           <Link to="/" className="mr-auto text-2xl font-bold leading-none" onClick={handleClose}>
             The No Name Yet
           </Link>
-          <button
-            className="cursor-pointer navbar-close text-4xl font-thin text-gray-300 hover:text-gray-500 outline-none focus:text-gray-500"
-            onClick={handleClose}
-          >
-            &times;
+          <button className="navbar-close outline-none" onClick={handleClose}>
+            <Icons.Close className="fill-gray-300" />
           </button>
         </div>
         <form method="get" action="/search" className="relative mb-4">
@@ -180,7 +182,7 @@ const Navbar = ({ currentUser, handleLogout }) => {
               {currentUser ? "Log out" : "Sign up"}
             </Button>
           </div>
-          <p className="my-4 text-sm text-center text-neutral-400">The NoName Yet &copy; 2023</p>
+          <p className="my-4 text-sm text-center text-neutral-400">The No Name Yet &copy; 2023</p>
         </div>
       </nav>
     </div>

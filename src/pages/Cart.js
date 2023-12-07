@@ -1,34 +1,43 @@
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import Table from "../components/Table";
 import Counter from "../components/Counter";
-import { removeItem, updateQuantity } from "../store";
+import { useFetchCartQuery, useUpdateQuantityMutation, useRemoveItemMutation } from "../store";
+import Modal from "../components/Modal";
 
-const Cart = () => {
+const Cart = ({ currentUser }) => {
   useEffect(() => {
     document.title = "Cart | 還沒有名字";
   }, []);
 
+  const [isOpen, setIsOpen] = useState(false);
+  const [message, setMessage] = useState(null);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const { currentData, data, error, isFetching } = useFetchCartQuery(undefined, { skip: !currentUser });
+  const [updateQuantity, results] = useUpdateQuantityMutation(); // updateQuantity(item, operation, value)
+  const [removeItem] = useRemoveItemMutation(); // removeItem(item)
 
-  const cartItems = useSelector((state) => state.cart.cartItems);
-  const total = cartItems.filter((item) => item._id).reduce((prev, curr) => prev + curr.price * curr.quantity, 0);
   const handleRemove = (item) => {
-    dispatch(removeItem(item));
+    removeItem(item);
   };
-  const handleUpdateQuantity = (item, operation, optional) => {
-    dispatch(updateQuantity({ item: item, operation, value: optional }));
+  const handleUpdateQuantity = (item, operation, optionalValue) => {
+    updateQuantity({ item, operation, optionalValue });
   };
 
-  const config = [
+  useEffect(() => {
+    if (results?.data?.message) {
+      setMessage(results?.data?.message);
+      setIsOpen(true);
+    }
+  }, [results]);
+
+  const tableConfig = [
     {
       label: "Products",
       render: (item) => (
-        <Link to={`/products/${item._id}`}>
-          <img src={item.thumbnailURL} alt={item.title} className="w-[7rem]" />
+        <Link to={`/products/${item.productId._id}`}>
+          <img src={item.productId.thumbnail} alt={item.productId.title} className="w-[7rem]" />
         </Link>
       ),
       class: "text-left w-[7rem]",
@@ -37,8 +46,8 @@ const Cart = () => {
       label: "",
       render: (item) => (
         <div className="pl-6 text-left">
-          <p>{item.title}</p>
-          <p>NT$ {item.price}</p>
+          <p>{item.productId.title}</p>
+          <p>NT$ {item.productId.price}</p>
         </div>
       ),
       class: "",
@@ -57,41 +66,63 @@ const Cart = () => {
     },
     {
       label: "Subtotal",
-      render: (item) => <div className="text-right hidden sm:block">NT$ {(item.quantity * item.price).toLocaleString()}</div>,
-      class: "text-right hidden sm:table-cell",
+      render: (item) => (
+        <div className="text-right hidden md:block md:min-w-[5rem]">NT$ {(item.quantity * item.productId.price).toLocaleString()}</div>
+      ),
+      class: "text-right hidden md:table-cell",
     },
   ];
-  const keyValue = (item) => item._id;
 
-  const content = (
-    <>
-      <h1 className="caption">Your Cart</h1>
-      <Table data={cartItems} config={config} keyValue={keyValue} />
-      <div className="text-xl sm:text-lg caption-content-width mt-7 text-right text-neutral-500">Total Price: NT$ {total.toLocaleString()}</div>
-      <div className="caption-content-width flex flex-col gap-y-3 mt-7 sm:flex-row sm:justify-between sm:items-center">
-        <Button primary transition className="px-5">
-          CheckOut
-        </Button>
-        <Button secondary className="px-5 sm:order-first" onClick={() => navigate("/")}>
-          Continue Shopping
-        </Button>
-      </div>
-    </>
+  let content;
+  if (error) {
+    content = <div>Error Loading Cart.</div>;
+  } else {
+    const cartItems = currentUser ? (isFetching ? currentData || [] : data) : [];
+    if (cartItems?.length > 0) {
+      const total = cartItems.filter((item) => item.productId._id).reduce((prev, curr) => prev + curr.productId.price * curr.quantity, 0);
+      content = (
+        <>
+          <h1 className="caption">Your Cart</h1>
+          <Table data={cartItems} config={tableConfig} keyValue={(item) => item._id} />
+          <div className="text-xl sm:text-lg caption-content-width mt-7 text-right text-neutral-500">Total Price: NT$ {total.toLocaleString()}</div>
+          <div className="caption-content-width flex flex-col gap-y-3 mt-7 sm:flex-row sm:justify-between sm:items-center">
+            <Button primary transition className="px-5">
+              CheckOut
+            </Button>
+            <Button secondary className="px-5 sm:order-first" onClick={() => navigate("/")}>
+              Continue Shopping
+            </Button>
+          </div>
+        </>
+      );
+    } else {
+      content = (
+        <>
+          <p className="tracking-wide text-2xl">Your cart is empty.</p>
+          <Button primary transition className="w-button mt-7.5 tracking-wide" onClick={() => navigate("/")}>
+            Start Shopping
+          </Button>
+        </>
+      );
+    }
+  }
+
+  // Modal
+  const actionButton = (
+    <Button secondary transition className="action-button w-[9.7rem]" onClick={() => setIsOpen(false)}>
+      OK
+    </Button>
   );
-
-  const empty = (
-    <>
-      <p className="tracking-wide text-2xl">Your cart is empty.</p>
-      <Button primary transition className="w-button mt-7.5 tracking-wide" onClick={() => navigate("/")}>
-        {/* 選購產品 */}
-        Start Shopping
-      </Button>
-    </>
+  const modal = isOpen && (
+    <Modal onClose={() => setIsOpen(false)} actionButton={actionButton} className="modal">
+      <p className="text-lg">{message}</p>
+    </Modal>
   );
 
   return (
     <div className="container m-auto">
-      <div className="flex flex-col items-center caption-content">{cartItems.length > 0 ? content : empty}</div>
+      <div className="flex flex-col items-center caption-content">{content}</div>
+      {modal}
     </div>
   );
 };

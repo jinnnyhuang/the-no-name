@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useAddToCart from "../utils/useAddToCart";
 import Products from "../components/Products";
 import Button from "../components/Button";
+import useCollection from "../utils/useCollection";
 
 const Account = ({ currentUser, handleLogout, handleUpdateUser }) => {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ const Account = ({ currentUser, handleLogout, handleUpdateUser }) => {
     };
   }, [isEditing]);
 
-  const collectionItems = useSelector((state) => state.collection.collectionItems);
+  const { collectionItems } = useCollection();
   const wishList = collectionItems?.map((product) => {
     return <Products product={product} handleAddToCart={handleAddToCart} key={product._id} />;
   });

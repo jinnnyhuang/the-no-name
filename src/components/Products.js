@@ -4,13 +4,7 @@ import Icons from "../components/Icons";
 import useCollection from "../utils/useCollection";
 
 const Products = ({ product, handleAddToCart }) => {
-  let thumbnailURL;
-  if (!product.thumbnail) {
-    thumbnailURL = product.images.filter((image, index) => index === 0)[0];
-  } else {
-    thumbnailURL = product.thumbnail;
-  }
-  const { collectionIndex, handleCollection, handleRemoveCollection } = useCollection(product);
+  const { collectionModal, collectionIndex, handleCollection, handleRemoveCollection } = useCollection(product);
   const hover = product.images.length > 1;
   const content = (
     <div>
@@ -34,10 +28,10 @@ const Products = ({ product, handleAddToCart }) => {
       ) : (
         <div className="relative group">
           <Link to={`/products/${product._id}`}>
-            <img className="group-hover:brightness-[0.6]" src={product.images[0]} alt={product.title} />
+            <img className="group-hover:brightness-[0.6] transition" src={product.images[0]} alt={product.title} />
           </Link>
           <div
-            className="cursor-pointer hidden group-hover:block absolute top-2.5 right-2.5 px-2 text-xl text-white"
+            className="cursor-pointer hidden group-hover:block hover-none:block transition absolute top-2.5 right-2.5 px-2 text-xl text-white"
             onClick={handleRemoveCollection}
           >
             &times;
@@ -55,14 +49,14 @@ const Products = ({ product, handleAddToCart }) => {
         {handleAddToCart ? (
           <Button
             primaryReverse={product.stock !== 0}
-            className={`p-1.5 ${product.stock === 0 ? "cursor-not-allowed fill-neutral-400" : ""}`}
-            onClick={() => product.stock !== 0 && handleAddToCart({ ...product, thumbnailURL })}
+            className={`p-1.5 rounded-md ${product.stock === 0 ? "cursor-not-allowed fill-neutral-400" : ""}`}
+            onClick={() => product.stock !== 0 && handleAddToCart(product)}
           >
             <Icons.Cart className="h-6" />
           </Button>
         ) : (
           <Icons.Collection
-            className={`cursor-pointer stroke-[5rem] shrink-0 ${
+            className={`cursor-pointer stroke-[5rem] shrink-0 transition-colors ${
               collectionIndex >= 0 ? "fill-primary stroke-transparent" : "fill-white stroke-primary"
             }`}
             onClick={handleCollection}
@@ -71,7 +65,12 @@ const Products = ({ product, handleAddToCart }) => {
       </div>
     </div>
   );
-  return <div>{content}</div>;
+  return (
+    <div>
+      {content}
+      {collectionModal}
+    </div>
+  );
 };
 
 export default Products;

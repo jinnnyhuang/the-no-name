@@ -11,9 +11,9 @@ const Button = ({ children, transition, primary, primaryReverse, secondary, tert
         "transition hover:bg-white hover:text-primary": primary && transition,
         "border-primary bg-white text-primary": primaryReverse,
         "transition hover:bg-primary hover:text-white": primaryReverse && transition,
-        "text-neutral-600 border-neutral-300 hover:border-neutral-600 hover:text-neutral-700 transition": secondary,
-        "hover:border-[#C8C8C8] hover:bg-[#F2F2F2]": secondary && transition,
-        "border-[#C8C8C8] bg-neutral-200 text-primary hover:bg-[#C8C8C8] hover:text-neutral-900 transition": tertiary,
+        "text-neutral-600 hover:border-neutral-600 hover:text-neutral-700 transition": secondary,
+        "text-neutral-800 hover:text-neutral-800 hover:border-[#C8C8C8] hover:bg-[#F2F2F2]": secondary && transition,
+        "border-[#C8C8C8] bg-neutral-200 text-primary hover:bg-neutral-300 hover:border-[#b6b6b6] hover:text-neutral-900 transition": tertiary,
         "rounded-full": rounded,
       },
       rest.className

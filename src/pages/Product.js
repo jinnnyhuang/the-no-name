@@ -14,8 +14,8 @@ const Product = () => {
   const { data, error, isFetching } = useGetProductByIdQuery(id);
   const { modal, handleAddToCart } = useAddToCart();
 
-  const product = !isFetching && data[0];
-  const { collectionIndex, handleCollection } = useCollection(product);
+  const product = !error && !isFetching && data[0];
+  const { collectionModal, collectionIndex, handleCollection } = useCollection(product);
 
   useEffect(() => {
     !isFetching && !product && navigate("/product-not-found");
@@ -27,14 +27,6 @@ const Product = () => {
   if (error) {
     content = <div className="text-center">Error Loading Product.</div>;
   } else if (!isFetching && data.length !== 0) {
-    // const product = data[0];
-    let thumbnailURL;
-    if (!product.thumbnail) {
-      thumbnailURL = product.images.filter((image, index) => index === 0)[0];
-    } else {
-      thumbnailURL = product.thumbnail;
-    }
-
     breadcrumb = (
       <div className="mx-6 mb-8 lg:mx-24 lg:grid lg:grid-cols-2">
         <div className="flex gap-x-3 justify-center items-center">
@@ -67,7 +59,9 @@ const Product = () => {
         <div className="flex justify-between">
           <h1 className="text-lg">{product.title}</h1>
           <Icons.Collection
-            className={`cursor-pointer stroke-[5rem] ${collectionIndex >= 0 ? "fill-primary stroke-transparent" : "fill-white stroke-primary"}`}
+            className={`cursor-pointer stroke-[5rem] transition-colors ${
+              collectionIndex >= 0 ? "fill-primary stroke-transparent" : "fill-white stroke-primary"
+            }`}
             onClick={() => handleCollection()}
           />
         </div>
@@ -83,7 +77,7 @@ const Product = () => {
         {product.stock === 0 ? (
           <Button className="cursor-not-allowed w-button mt-4 tracking-wider">Sold Out</Button>
         ) : (
-          <Button primary transition className="w-button mt-7.5" onClick={() => handleAddToCart({ ...product, thumbnailURL })}>
+          <Button primary transition className="w-button mt-7.5" onClick={() => handleAddToCart(product)}>
             Add To Cart
           </Button>
         )}
@@ -104,6 +98,7 @@ const Product = () => {
       {breadcrumb}
       {content}
       {modal}
+      {collectionModal}
     </div>
   );
 };

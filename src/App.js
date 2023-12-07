@@ -12,11 +12,11 @@ import Account from "./pages/Account";
 import Category from "./pages/Category";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import { createUser, loginUser, logoutUser, getUserInfo } from "./services/authAPI";
+import { createUser, loginUser, logoutUser } from "./services/authAPI";
 import { updateUser } from "./services/userAPI";
 
 function App() {
-  const [currentUser, setCurrentUser] = useState(getUserInfo());
+  const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem("userInfo")));
 
   const handleLogout = async () => {
     try {
@@ -60,8 +60,6 @@ function App() {
     }
   };
 
-  console.log(currentUser);
-
   return (
     <div>
       <BrowserRouter>
@@ -71,7 +69,7 @@ function App() {
           <Route path="/products/:id" element={<Product />} />
           <Route path="/product-not-found" element={<ProductNotFound />} />
           <Route path="/category/:category" element={<Category />} />
-          <Route path="/cart" element={<Cart />} />
+          <Route path="/cart" element={<Cart currentUser={currentUser} />} />
           <Route exact path="/search" element={<Search />} />
           <Route path="/signup" element={<Signup handleSignup={handleSignup} />} />
           <Route path="/login" element={<Login currentUser={currentUser} handleLogin={handleLogin} />} />

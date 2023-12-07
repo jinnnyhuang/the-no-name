@@ -9,6 +9,7 @@ import { ReactComponent as Instagram } from "../image/instagram.svg";
 import { ReactComponent as Prev } from "../image/prev.svg";
 import { ReactComponent as Next } from "../image/next.svg";
 import { ReactComponent as Collection } from "../image/collection.svg";
+import { ReactComponent as Close } from "../image/close.svg";
 
 const Icons = {
   Menu,
@@ -22,7 +23,7 @@ const Icons = {
   Prev,
   Next,
   Collection,
+  Close,
 };
 
 export default Icons;
-export { Cart, Plus, Minus, Search, Facebook, Instagram };

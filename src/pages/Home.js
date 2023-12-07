@@ -5,7 +5,7 @@ import Pagination from "../components/Pagination";
 
 const Home = () => {
   const [page, setPage] = useState(1);
-  const { data, error, isFetching } = useGetProductsQuery({ _page: page, _limit: process.env.REACT_APP_DEFAULT_PER_PAGE });
+  let { data, error, isFetching } = useGetProductsQuery({ _page: page, _limit: process.env.REACT_APP_DEFAULT_PER_PAGE });
 
   useEffect(() => {
     document.title = "The No Name Yet | 還沒有名字";

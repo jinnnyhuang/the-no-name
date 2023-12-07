@@ -38,11 +38,6 @@
   @apply uppercase tracking-widest block py-1.5 hover:bg-neutral-50 rounded hover-hover:hover:bg-transparent hover-hover:p-0;
 }
 
-/* nav__old */
-/* .link {
-  @apply uppercase tracking-widest px-4 py-5.5;
-} */
-
 .label-neutral {
   @apply text-white bg-neutral-400 rounded-[3px] px-2.5 py-1;
 }
@@ -52,12 +47,12 @@
 }
 
 .navbar-icon-notification {
-  @apply absolute top-1 right-1 rounded-full w-0.8 h-0.8 bg-neutral-400 border-2 border-white group-hover:border-neutral-200;
+  @apply absolute top-1 right-1 rounded-full w-0.8 h-0.8 bg-neutral-400 border-2 border-white group-focus:border-neutral-200 group-hover:border-neutral-200 transition;
 }
 
 /* Counter */
 .counter-icon {
-  @apply fill-neutral-400 hover:fill-neutral-600 svg-icon;
+  @apply fill-neutral-400 hover:fill-neutral-600 svg-icon transition-colors;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -87,5 +82,14 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .pagination-icon {
-  @apply cursor-pointer fill-neutral-400 hover:fill-primary max-w-[1.5rem];
+  @apply cursor-pointer fill-neutral-400 hover:fill-primary max-w-[1.5rem] transition-colors;
+}
+
+/* Modal */
+.action-button {
+  @apply rounded-md px-4.5 py-1.5;
+}
+
+.modal {
+  @apply min-w-fit rounded-lg pl-10.5 pr-9.5 pb-7.5 pt-12 bg-white;
 }

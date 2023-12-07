@@ -3,14 +3,13 @@ import { useGetProductsQuery } from "../store";
 import { useParams, useNavigate } from "react-router-dom";
 import Products from "../components/Products";
 import Pagination from "../components/Pagination";
-// import { categories } from "../data";
 
 const Category = () => {
   const [page, setPage] = useState(1);
   const { category } = useParams();
   const navigate = useNavigate();
   const { data, error, isFetching } = useGetProductsQuery({ category, _page: page, _limit: process.env.REACT_APP_DEFAULT_PER_PAGE });
-  const noData = !isFetching && data?.total === 0;
+  const noData = !error && !isFetching && data?.total === 0;
 
   useEffect(() => {
     noData && navigate("/");
