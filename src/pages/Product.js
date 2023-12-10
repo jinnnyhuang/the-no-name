@@ -12,10 +12,10 @@ const Product = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data, error, isFetching } = useGetProductByIdQuery(id);
-  const { modal, handleAddToCart } = useAddToCart();
 
   const product = !error && !isFetching && data[0];
-  const { collectionModal, collectionIndex, handleCollection } = useCollection(product);
+  const { modal, handleAddToCart } = useAddToCart();
+  const { modal: collectionModal, collectionIndex, handleCollection } = useCollection(product);
 
   useEffect(() => {
     !isFetching && !product && navigate("/product-not-found");

@@ -1,21 +1,21 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { useFetchCollectionQuery, useAddToCollectionMutation, useRemoveCollectionMutation } from "../store";
 import Modal from "../components/Modal";
-import Button from "../components/Button";
 
 const useCollection = (product) => {
   const [isOpen, setIsOpen] = useState(false); // Modal
-  const currentUser = localStorage.getItem("userInfo");
+  const { userInfo } = useSelector((state) => state.auth);
   const [addToCollection] = useAddToCollectionMutation(); // addToCollection(product)
   const [removeCollection] = useRemoveCollectionMutation(); // removeCollection(product)
-  const { currentData, data, error, isFetching } = useFetchCollectionQuery(undefined, { skip: !currentUser });
-  const collectionItems = currentUser && !error ? (isFetching ? currentData || [] : data) : [];
+  const { currentData, data, error, isFetching } = useFetchCollectionQuery(undefined, { skip: !userInfo });
+  const collectionItems = userInfo && !error ? (isFetching ? currentData || [] : data) : [];
 
   if (!product) return { collectionItems };
 
   const collectionIndex = collectionItems?.findIndex((item) => item._id === product._id);
   const handleAddCollection = () => {
-    currentUser ? addToCollection(product) : setIsOpen(true);
+    userInfo ? addToCollection(product) : setIsOpen(true);
   };
   const handleRemoveCollection = () => {
     removeCollection(product);
@@ -25,18 +25,13 @@ const useCollection = (product) => {
   };
 
   // Modal
-  const actionButton = (
-    <Button secondary transition className="action-button w-[9.7rem]" onClick={() => setIsOpen(false)}>
-      OK
-    </Button>
-  );
-  const collectionModal = isOpen && (
-    <Modal onClose={() => setIsOpen(false)} actionButton={actionButton} className="modal">
+  const modal = isOpen && (
+    <Modal onClose={() => setIsOpen(false)} action className="modal">
       <p className="text-lg">Please log in first</p>
     </Modal>
   );
 
-  return { collectionItems, collectionModal, collectionIndex, handleCollection, handleRemoveCollection };
+  return { collectionItems, modal, collectionIndex, handleCollection, handleRemoveCollection };
 };
 
 export default useCollection;

@@ -31,7 +31,6 @@ const cartApi = createApi({
         invalidatesTags: ["Cart"],
         query: (arg) => {
           const { item, operation, optionalValue } = arg;
-
           return {
             url: `/cart/${item._id}`,
             method: "PATCH",
@@ -61,5 +60,5 @@ export { cartApi };
 
 // const { data, error, isFetching } = useFetchCartQuery();
 // const [addToCart, results] = useAddToCartMutation(); // addToCart(_id) // productId
-// const [updateQuantity, results] = useUpdateQuantityMutation(); // updateQuantity(item, operation, value)
+// const [updateQuantity, results] = useUpdateQuantityMutation(); // updateQuantity({ item, operation, optionalValue })
 // const [removeItem, results] = useRemoveItemMutation(); // removeItem(item)

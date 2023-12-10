@@ -4,7 +4,7 @@ import Icons from "../components/Icons";
 import useCollection from "../utils/useCollection";
 
 const Products = ({ product, handleAddToCart }) => {
-  const { collectionModal, collectionIndex, handleCollection, handleRemoveCollection } = useCollection(product);
+  const { modal, collectionIndex, handleCollection, handleRemoveCollection } = useCollection(product);
   const hover = product.images.length > 1;
   const content = (
     <div>
@@ -68,7 +68,7 @@ const Products = ({ product, handleAddToCart }) => {
   return (
     <div>
       {content}
-      {collectionModal}
+      {modal}
     </div>
   );
 };

@@ -4,14 +4,19 @@ import Icons from "../components/Icons";
 import Button from "../components/Button";
 import Logo from "../image/logo.png";
 import Axios from "axios";
+import { useSelector } from "react-redux";
 import { useFetchCartQuery } from "../store";
+import useAuth from "../utils/useAuth";
 
-const Navbar = ({ currentUser, handleLogout }) => {
+const Navbar = () => {
   const [categories, setCategories] = useState(null);
   const [active, setActive] = useState(false);
   const [term, setTerm] = useState("");
 
   const navigate = useNavigate();
+  const { userInfo } = useSelector((state) => state.auth);
+  const { modal, handleLogout } = useAuth();
+
   // Cart Page, Notfound Page 不顯示 Logo
   const location = useLocation();
   let showLogo = location.pathname === "/";
@@ -52,7 +57,7 @@ const Navbar = ({ currentUser, handleLogout }) => {
   };
   const handleClick = () => {
     handleClose();
-    currentUser ? handleLogout() : navigate("/signup");
+    userInfo ? handleLogout() : navigate("/signup");
   };
 
   useEffect(() => {
@@ -108,7 +113,7 @@ const Navbar = ({ currentUser, handleLogout }) => {
 
   // 20231121 fix search button not working
   const inputClass =
-    "absolute right-10.5 transition-all w-12 pl-1 bg-transparent border-neutral-400 focus:pl-4 hover:pl-4 peer-hover:pl-4 focus:border-b hover:border-b peer-hover:border-b focus:w-full hover:w-full peer-hover:w-full";
+    "absolute right-10.5 transition-all w-12 pl-1 pr-11 bg-transparent border-neutral-400 focus:px-4 hover:px-4 peer-hover:px-4 focus:border-b hover:border-b peer-hover:border-b focus:w-full hover:w-full peer-hover:w-full";
   const searchInput = (id) => {
     return (
       <div className={`h-12 ${active ? "w-full" : "w-[211.5px]"}`}>
@@ -119,8 +124,8 @@ const Navbar = ({ currentUser, handleLogout }) => {
           type="text"
           name="q"
           id={id}
-          className={`cursor-text h-12 pr-11 tracking-wide placeholder:tracking-wide text-neutral-500 outline-none  ${
-            active ? `rounded-md w-full pl-4 border focus:border-2 border-neutral-300` : inputClass
+          className={`cursor-text h-12 tracking-wide placeholder:tracking-wide text-neutral-500 outline-none  ${
+            active ? `rounded-md w-full pl-4 pr-11 border focus:border-2 border-neutral-300` : inputClass
           } `}
           placeholder="Search"
           onChange={handleChange}
@@ -129,8 +134,16 @@ const Navbar = ({ currentUser, handleLogout }) => {
     );
   };
 
-  const { currentData, data, error, isFetching } = useFetchCartQuery(undefined, { skip: !currentUser });
-  const cartItems = currentUser && !error ? (isFetching ? currentData || [] : data) : [];
+  const { currentData, data, error, isFetching } = useFetchCartQuery(undefined, { skip: !userInfo });
+  const cartItems = userInfo && !error ? (isFetching ? currentData || [] : data) : [];
+
+  const logout = (
+    <ul className={`hidden bg-white p-2 group-hover:inline-block hover:inline-block absolute top-12 right-0 border shadow-sm w-[8.5rem]`}>
+      <li className="cursor-pointer px-2 py-1 hover:bg-neutral-50 tracking-wider transition-colors" onClick={handleLogout}>
+        Log out
+      </li>
+    </ul>
+  );
 
   const nav = (
     <nav className="relative px-6 py-4 flex justify-between items-center bg-white">
@@ -143,13 +156,16 @@ const Navbar = ({ currentUser, handleLogout }) => {
       <form method="get" action="/search" className="hidden hover-hover:block relative w-max" id="search-product" name="search-product">
         {searchInput("nav_search")}
       </form>
-      <Link to="/cart" className="navbar-icon transition duration-200 group relative">
+      <Link to="/cart" className="navbar-icon transition duration-200 group relative mx-0.5">
         <Icons.Cart />
         {cartItems?.length > 0 && <div className="navbar-icon-notification"></div>}
       </Link>
-      <Link to="/account" className="hidden hover-hover:inline-block navbar-icon transition duration-200">
-        <Icons.User />
-      </Link>
+      <div className="group hidden hover-hover:block relative">
+        <Link to="/account" className="hidden hover-hover:block navbar-icon transition duration-200">
+          <Icons.User />
+        </Link>
+        {userInfo && logout}
+      </div>
     </nav>
   );
 
@@ -175,11 +191,11 @@ const Navbar = ({ currentUser, handleLogout }) => {
           <div className="pt-6">
             <Link to="/account">
               <Button primary className="w-full normal-case my-1.5 focus:outline-none" onClick={handleClose}>
-                {currentUser ? "Account" : "Log in"}
+                {userInfo ? "Account" : "Log in"}
               </Button>
             </Link>
             <Button secondary className="w-full normal-case my-1.5 focus:outline-none" onClick={handleClick}>
-              {currentUser ? "Log out" : "Sign up"}
+              {userInfo ? "Log out" : "Sign up"}
             </Button>
           </div>
           <p className="my-4 text-sm text-center text-neutral-400">The No Name Yet &copy; 2023</p>
@@ -197,6 +213,7 @@ const Navbar = ({ currentUser, handleLogout }) => {
           <img src={Logo} alt="還沒有名字" className="m-auto w-3/5 hover-hover:w-auto" />
         </Link>
       )}
+      {modal}
     </div>
   );
 };

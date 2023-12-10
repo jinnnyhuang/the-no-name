@@ -3,15 +3,17 @@ import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import Modal from "../components/Modal";
+import { useCreateUserMutation } from "../store";
 
-const Signup = ({ handleSignup }) => {
+const Signup = () => {
   const navigate = useNavigate();
+  const [createUser] = useCreateUserMutation(); // createUser(email, password, name, phone)
 
   useEffect(() => {
     document.title = "Register | 還沒有名字";
   }, []);
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // Modal
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [name, setName] = useState(null);
@@ -34,17 +36,12 @@ const Signup = ({ handleSignup }) => {
     setPhone(event.target.value);
     error && event.target.id === error?.field && setError(null);
   };
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    const result = await handleSignup(email, password, name, phone || "");
-    console.log(result);
-    if (result.status === 200) {
-      // alert(result.data.message);
-      // navigate("/login");
-      setIsOpen(true);
-    } else {
-      setError({ field: result?.response?.data?.field, message: result?.response?.data?.message || result?.message });
-    }
+    createUser({ email, password, name, phone: phone || "" })
+      .unwrap()
+      .then(() => setIsOpen(true))
+      .catch((err) => setError({ field: err.data?.field, message: err.data?.message }));
   };
 
   const form = (
@@ -74,10 +71,10 @@ const Signup = ({ handleSignup }) => {
     </Button>
   );
   const modal = isOpen && (
-    <Modal onClose={() => setIsOpen(false)} actionButton={actionButton} className="min-w-fit rounded-lg px-12 py-8 bg-white">
+    <Modal onClose={() => setIsOpen(false)} action actionButton={actionButton} className="min-w-fit rounded-lg px-12 py-8 bg-white">
       <div className="flex flex-col items-center gap-1.5">
         <p className="text-xl font-medium">Sign Up Complete!</p>
-        <p>Please login to access the website.</p>
+        <p>Please log in to access the website.</p>
       </div>
     </Modal>
   );

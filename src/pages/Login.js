@@ -1,38 +1,37 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Button from "../components/Button";
 import Input from "../components/Input";
+import useAuth from "../utils/useAuth";
 
-const Login = ({ currentUser, handleLogin }) => {
+const Login = () => {
   const navigate = useNavigate();
+  const { userInfo } = useSelector((state) => state.auth);
+  const { error, setError, handleLogin } = useAuth();
+
   useEffect(() => {
     document.title = "Login | 還沒有名字";
   }, []);
 
   useEffect(() => {
-    // currentUser && navigate("/account");
-    currentUser && navigate("/");
-  }, [currentUser, navigate]);
+    userInfo && navigate("/");
+  }, [userInfo, navigate]);
 
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
-  const [error, setError] = useState(null);
 
   const handleEmail = (event) => {
     setEmail(event.target.value);
-    // setError(null);
     event.target.id === error?.field && setError(null);
   };
   const handlePassword = (event) => {
     setPassword(event.target.value);
-    // setError(null);
     event.target.id === error?.field && setError(null);
   };
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    const result = await handleLogin(email, password);
-    // setError({ field: err?.field, message: err?.message || err });
-    result.status !== 200 && setError({ field: result?.response?.data?.field, message: result?.response?.data?.message || result?.message });
+    handleLogin(email, password);
   };
 
   const form = (
@@ -43,31 +42,6 @@ const Login = ({ currentUser, handleLogin }) => {
       <Input id="password" type="password" autoComplete="password" onChange={handlePassword}>
         Password
       </Input>
-      {/* 
-      <div className="pt-4">
-        <label htmlFor="email" className="font-medium">
-          E-mail
-        </label>
-        <input
-          type="email"
-          id="email"
-          autoComplete="email"
-          className="shadow-sm appearance-none border rounded w-full py-2.5 px-4.5 mt-1 focus:outline-none focus:shadow-outline"
-          onChange={handleEmail}
-        />
-      </div>
-      <div className="pt-4">
-        <label htmlFor="password" className="font-medium">
-          Password
-        </label>
-        <input
-          type="password"
-          id="password"
-          autoComplete="password"
-          className="shadow-sm appearance-none border rounded w-full py-2.5 px-4.5 mt-1 focus:outline-none focus:shadow-outline"
-          onChange={handlePassword}
-        />
-      </div> */}
       <Button primary className="mt-8 normal-case rounded">
         Log in
       </Button>

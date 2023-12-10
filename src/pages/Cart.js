@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useFetchCartQuery, useUpdateQuantityMutation, useRemoveItemMutation } from "../store";
 import Button from "../components/Button";
 import Table from "../components/Table";
 import Counter from "../components/Counter";
-import { useFetchCartQuery, useUpdateQuantityMutation, useRemoveItemMutation } from "../store";
 import Modal from "../components/Modal";
 
-const Cart = ({ currentUser }) => {
+const Cart = () => {
   useEffect(() => {
     document.title = "Cart | 還沒有名字";
   }, []);
@@ -14,7 +15,9 @@ const Cart = ({ currentUser }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState(null);
   const navigate = useNavigate();
-  const { currentData, data, error, isFetching } = useFetchCartQuery(undefined, { skip: !currentUser });
+  const { userInfo } = useSelector((state) => state.auth);
+
+  const { currentData, data, error, isFetching } = useFetchCartQuery(undefined, { skip: !userInfo });
   const [updateQuantity, results] = useUpdateQuantityMutation(); // updateQuantity(item, operation, value)
   const [removeItem] = useRemoveItemMutation(); // removeItem(item)
 
@@ -22,15 +25,15 @@ const Cart = ({ currentUser }) => {
     removeItem(item);
   };
   const handleUpdateQuantity = (item, operation, optionalValue) => {
-    updateQuantity({ item, operation, optionalValue });
+    updateQuantity({ item, operation, optionalValue })
+      .unwrap()
+      .then((res) => {
+        if (res?.message) {
+          setMessage(res?.message);
+          setIsOpen(true);
+        }
+      });
   };
-
-  useEffect(() => {
-    if (results?.data?.message) {
-      setMessage(results?.data?.message);
-      setIsOpen(true);
-    }
-  }, [results]);
 
   const tableConfig = [
     {
@@ -56,7 +59,7 @@ const Cart = ({ currentUser }) => {
       label: "Quantity",
       render: (item) => (
         <div className="flex flex-col items-center">
-          <Counter value={item} onChange={handleUpdateQuantity} />
+          <Counter value={item} onChange={handleUpdateQuantity} isLoading={results.isLoading} isUpdated={results.isSuccess && !isFetching} />
           <div className="cursor-pointer text-xs mt-3 text-neutral-400 underline-offset-4 hover:underline" onClick={() => handleRemove(item)}>
             Remove
           </div>
@@ -77,7 +80,7 @@ const Cart = ({ currentUser }) => {
   if (error) {
     content = <div>Error Loading Cart.</div>;
   } else {
-    const cartItems = currentUser ? (isFetching ? currentData || [] : data) : [];
+    const cartItems = userInfo ? (isFetching ? currentData || [] : data) : [];
     if (cartItems?.length > 0) {
       const total = cartItems.filter((item) => item.productId._id).reduce((prev, curr) => prev + curr.productId.price * curr.quantity, 0);
       content = (
@@ -108,13 +111,8 @@ const Cart = ({ currentUser }) => {
   }
 
   // Modal
-  const actionButton = (
-    <Button secondary transition className="action-button w-[9.7rem]" onClick={() => setIsOpen(false)}>
-      OK
-    </Button>
-  );
   const modal = isOpen && (
-    <Modal onClose={() => setIsOpen(false)} actionButton={actionButton} className="modal">
+    <Modal onClose={() => setIsOpen(false)} action className="modal">
       <p className="text-lg">{message}</p>
     </Modal>
   );
