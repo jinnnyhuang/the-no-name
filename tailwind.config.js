@@ -9,8 +9,8 @@ module.exports = {
       },
       fontFamily: {
         // 預設字體
-        sans: ["Roboto, sans-serif", ...defaultTheme.fontFamily.sans],
-        Noto: "Noto Sans TC, sans-serif",
+        sans: ["Roboto, Noto Sans TC, sans-serif", ...defaultTheme.fontFamily.sans],
+        noto: "Noto Sans TC, sans-serif",
         display: "Poppins, sans-serif", // Add a new `font-display` class
       },
       colors: {

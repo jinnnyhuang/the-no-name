@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
@@ -13,6 +14,13 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
 function App() {
+  // Fix Safari/iOS textbox auto zoom
+  useEffect(() => {
+    if (navigator.userAgent.indexOf("Safari") > -1 && navigator.userAgent.indexOf("Chrome") <= -1) {
+      document.querySelector("[name=viewport]").setAttribute("content", "width=device-width, initial-scale=1, maximum-scale=1");
+    }
+  }, []);
+
   return (
     <div>
       <BrowserRouter>

@@ -41,8 +41,7 @@ const Navbar = () => {
   const getCategory = async () => {
     // const baseURL = process.env.REACT_APP_API_URL || "http://localhost:3001";
     const baseURL = process.env.REACT_APP_API_URL || "http://localhost:8080";
-    const response = await Axios.get(baseURL + "/category");
-    setCategories(response.data);
+    await Axios.get(baseURL + "/category").then((res) => setCategories(res.data));
   };
 
   useEffect(() => {
