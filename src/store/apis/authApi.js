@@ -22,6 +22,7 @@ const authApi = createApi({
           return {
             url: "/auth/logout",
             method: "POST",
+            credentials: "include",
           };
         },
       }),
