@@ -27,7 +27,7 @@ const useCollection = (product) => {
   // Modal
   const modal = isOpen && (
     <Modal onClose={() => setIsOpen(false)} action className="modal">
-      <p className="text-lg">Please log in first</p>
+      <p className="text-lg">請先登入</p>
     </Modal>
   );
 

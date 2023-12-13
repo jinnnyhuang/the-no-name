@@ -37,13 +37,13 @@ const Login = () => {
   const form = (
     <form className="flex flex-col pt-3 md:pt-8" onSubmit={handleSubmit}>
       <Input id="email" type="email" autoComplete="email" onChange={handleEmail}>
-        E-mail
+        電子信箱
       </Input>
       <Input id="password" type="password" autoComplete="password" onChange={handlePassword}>
-        Password
+        密碼
       </Input>
       <Button primary className="mt-8 normal-case rounded">
-        Log in
+        登入
       </Button>
     </form>
   );
@@ -57,9 +57,9 @@ const Login = () => {
           <div className="mt-7 flex flex-col items-center gap-3.5">
             {error && <p className="text-red-400">{error.message}</p>}
             <p className="text-neutral-500">
-              Don't have an account? &nbsp;
+              還沒有帳號嗎？
               <Link to="/signup" className="font-medium text-primary hover:underline">
-                Sign up.
+                立即註冊
               </Link>
             </p>
           </div>

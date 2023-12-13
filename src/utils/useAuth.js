@@ -33,7 +33,7 @@ const useAuth = () => {
   // Modal
   const modal = isOpen && (
     <Modal onClose={() => setIsOpen(false)} action className="modal">
-      <p className="text-lg">Logged Out</p>
+      <p className="text-lg">已登出</p>
     </Modal>
   );
 

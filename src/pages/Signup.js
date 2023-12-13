@@ -47,34 +47,34 @@ const Signup = () => {
   const form = (
     <form className="flex flex-col pt-3 md:pt-8" onSubmit={handleSubmit}>
       <Input id="name" type="text" autoComplete="name" onChange={handleName} required>
-        Name
+        姓名
       </Input>
       <Input id="email" type="email" autoComplete="email" onChange={handleEmail} required>
-        E-mail
+        電子信箱
       </Input>
       <Input id="password" type="password" autoComplete="password" onChange={handlePassword} required>
-        Password
+        密碼
       </Input>
       <Input id="phone" type="text" autoComplete="tel" onChange={handlePhone}>
-        Phone Number
+        電話號碼
       </Input>
       <Button primary className="mt-8 normal-case rounded">
-        Sign up
+        註冊
       </Button>
     </form>
   );
 
   // Modal
   const actionButton = (
-    <Button tertiary className="action-button w-72" onClick={() => navigate("/login")}>
-      Log in
+    <Button tertiary className="action-button w-80" onClick={() => navigate("/login")}>
+      登入
     </Button>
   );
   const modal = isOpen && (
     <Modal onClose={() => setIsOpen(false)} action actionButton={actionButton} className="min-w-fit rounded-lg px-12 py-8 bg-white">
-      <div className="flex flex-col items-center gap-1.5">
-        <p className="text-xl font-medium">Sign Up Complete!</p>
-        <p>Please log in to access the website.</p>
+      <div className="flex flex-col items-center gap-2">
+        <p className="text-xl font-medium">註冊成功</p>
+        <p>感謝您加入會員，請登入開始選購喜歡的商品</p>
       </div>
     </Modal>
   );
@@ -83,14 +83,14 @@ const Signup = () => {
     <div className="container m-auto">
       <div className="flex flex-col items-center caption-content">
         <div className="w-[20.5rem] md:w-[32rem]">
-          <h1 className="caption">Create Account</h1>
+          <h1 className="caption">建立帳號</h1>
           {form}
           <div className="mt-7 flex flex-col items-center gap-3.5">
             {error && <p className="text-red-400">{error.message}</p>}
             <p className="text-neutral-500">
-              Already have an account? &nbsp;
+              已經有帳號了嗎？
               <Link to="/login" className="font-medium text-primary hover:underline">
-                Log in.
+                登入
               </Link>
             </p>
           </div>

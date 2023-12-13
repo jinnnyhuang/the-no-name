@@ -65,7 +65,7 @@ const Product = () => {
             onClick={() => handleCollection()}
           />
         </div>
-        <div className="mt-3.5">
+        <div className="mt-3.5 text-lg">
           <span>NT$ {product.price.toLocaleString()}</span>
         </div>
         {product.stock < 5 && product.stock !== 0 && (
@@ -78,7 +78,7 @@ const Product = () => {
           <Button className="cursor-not-allowed w-button mt-4 tracking-wider">Sold Out</Button>
         ) : (
           <Button primary transition className="w-button mt-7.5" onClick={() => handleAddToCart(product)}>
-            Add To Cart
+            加入購物車
           </Button>
         )}
         <Accordion items={items} className="rounded mt-12 tracking-wider text-sm w-full" />

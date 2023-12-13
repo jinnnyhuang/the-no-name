@@ -16,7 +16,7 @@ const Search = () => {
 
   const empty = (
     <div className="flex flex-col items-center tracking-base">
-      <div className="text-xl mb-1.5">No Products Found.</div>
+      <div className="text-xl mb-1.5">抱歉，找不到任何結果</div>
       <div>{`0 Results for ${term}`}</div>
     </div>
   );

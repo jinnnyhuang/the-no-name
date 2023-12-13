@@ -28,22 +28,16 @@ const useAddToCart = () => {
 
   // Modal
   const handleClick = () => {
-    !userInfo || message ? setIsOpen(false) : navigate("/cart");
+    message !== "已加入購物車" ? setIsOpen(false) : navigate("/cart");
   };
   const actionButton = (
-    <Button
-      tertiary={!(!userInfo || message)}
-      secondary={!userInfo || message}
-      transition={!userInfo || message}
-      className="action-button w-[9.7rem]"
-      onClick={handleClick}
-    >
-      {!userInfo || message ? "OK" : "Checkout"}
+    <Button tertiary={userInfo} secondary={!userInfo} transition={!userInfo} className="action-button w-[9.7rem]" onClick={handleClick}>
+      {message !== "已加入購物車" ? "OK" : "Checkout"}
     </Button>
   );
   const modal = isOpen && (
     <Modal onClose={() => setIsOpen(false)} action actionButton={actionButton} className="modal">
-      <p className="text-lg">{!userInfo ? "Please log in first" : message ? message : "Added To Cart"}</p>
+      <p className="text-lg">{!userInfo ? "請先登入" : message}</p>
     </Modal>
   );
 

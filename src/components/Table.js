@@ -13,7 +13,7 @@ const Table = ({ data, config, keyValue }) => {
 
   const renderedTableHeaders = config.map((column) => {
     return (
-      <th key={column.label} className={`py-1 ${column.class}`}>
+      <th key={column.label} className={`py-1 font-normal ${column.class}`}>
         {column.label}
       </th>
     );

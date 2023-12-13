@@ -91,7 +91,7 @@ const Account = () => {
   // Modal
   const updateUserModal = isOpen && (
     <Modal onClose={() => setIsOpen(false)} action className="min-w-fit rounded-lg px-12 py-8 bg-white">
-      <p className="text-lg">Update Successful</p>
+      <p className="text-lg">修改成功</p>
     </Modal>
   );
 
@@ -101,9 +101,9 @@ const Account = () => {
   });
 
   const settingData = [
-    { label: "E-mail", type: "email", id: "email", value: userInfo?.email || "", readonly: true },
-    { label: "Name", type: "text", id: "name", value: name, readonly: false, onChange: handleName },
-    { label: "Phone Number", type: "text", id: "phone", value: phone, readonly: false, onChange: handlePhone },
+    { label: "帳號", type: "email", id: "email", value: userInfo?.email || "", readonly: true },
+    { label: "姓名", type: "text", id: "name", value: name, readonly: false, onChange: handleName },
+    { label: "電話號碼", type: "text", id: "phone", value: phone, readonly: false, onChange: handlePhone },
   ];
 
   const setting = (
@@ -111,7 +111,7 @@ const Account = () => {
       {settingData.map((input, index) => {
         return (
           <div key={index} className="block mb-5 last-of-type:mb-10">
-            <label htmlFor={input.id} className="block text-xs font-medium text-neutral-500 mb-1 uppercase tracking-wider">
+            <label htmlFor={input.id} className="block text-sm font-medium text-neutral-500 mb-1 uppercase tracking-wider">
               {input.label}
             </label>
             <input
@@ -143,15 +143,15 @@ const Account = () => {
 
   const tabs = [
     {
-      label: "Account Settings",
+      label: ["帳戶設定", "Account Settings"],
       content: setting,
     },
     {
-      label: "Orders",
-      content: "You have placed no orders.",
+      label: ["訂單查詢", "Orders"],
+      content: "尚無訂單",
     },
     {
-      label: "Wish List",
+      label: ["願望清單", "Wish List"],
       content: <div className="grid grid-cols-2 lg:grid-cols-3 gap-7">{wishList}</div>,
     },
   ];
@@ -163,19 +163,19 @@ const Account = () => {
         className={`cursor-pointer inline-block rounded py-1.5 px-3 text-neutral-700 ${index === activeTabIndex ? "font-medium" : ""}`}
         onClick={() => handleTab(index)}
       >
-        {item.label}
+        {item.label[0]}
       </li>
     );
   });
 
   const content = (
     <div className="flex flex-col items-center caption-content">
-      <h1 className="caption">Your Account</h1>
+      <h1 className="caption">會員專區</h1>
       <div className="flex flex-col xl:flex-row justify-between gap-x-7 min-h-[42vh] caption-content-width">
         <ul className="flex flex-row mb-2.5 xl:flex-col xl:w-[9.5rem]">{list}</ul>
         <div className="flex-1 bg-neutral-50 rounded p-7">
           <div>
-            <h2 className="text-xl font-medium mb-8">{tabs[activeTabIndex].label}</h2>
+            <h2 className="text-xl font-medium mb-8 font-display">{tabs[activeTabIndex].label[1]}</h2>
             <div>{tabs[activeTabIndex].content}</div>
           </div>
         </div>

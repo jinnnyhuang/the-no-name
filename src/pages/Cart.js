@@ -37,7 +37,7 @@ const Cart = () => {
 
   const tableConfig = [
     {
-      label: "Products",
+      label: "產品",
       render: (item) => (
         <Link to={`/products/${item.productId._id}`}>
           <img src={item.productId.thumbnail} alt={item.productId.title} className="w-[7rem]" />
@@ -56,19 +56,19 @@ const Cart = () => {
       class: "",
     },
     {
-      label: "Quantity",
+      label: "數量",
       render: (item) => (
         <div className="flex flex-col items-center">
           <Counter value={item} onChange={handleUpdateQuantity} isLoading={results.isLoading} isUpdated={results.isSuccess && !isFetching} />
           <div className="cursor-pointer text-xs mt-3 text-neutral-400 underline-offset-4 hover:underline" onClick={() => handleRemove(item)}>
-            Remove
+            移除
           </div>
         </div>
       ),
       class: "text-center",
     },
     {
-      label: "Subtotal",
+      label: "小計",
       render: (item) => (
         <div className="text-right hidden md:block md:min-w-[5rem]">NT$ {(item.quantity * item.productId.price).toLocaleString()}</div>
       ),
@@ -85,15 +85,15 @@ const Cart = () => {
       const total = cartItems.filter((item) => item.productId._id).reduce((prev, curr) => prev + curr.productId.price * curr.quantity, 0);
       content = (
         <>
-          <h1 className="caption">Your Cart</h1>
+          <h1 className="caption">購物車</h1>
           <Table data={cartItems} config={tableConfig} keyValue={(item) => item._id} />
-          <div className="text-xl sm:text-lg caption-content-width mt-7 text-right text-neutral-500">Total Price: NT$ {total.toLocaleString()}</div>
+          <div className="text-xl sm:text-lg caption-content-width mt-7 text-right text-neutral-500">總額: NT$ {total.toLocaleString()}</div>
           <div className="caption-content-width flex flex-col gap-y-3 mt-7 sm:flex-row sm:justify-between sm:items-center">
             <Button primary transition className="px-5">
-              CheckOut
+              前往結帳
             </Button>
             <Button secondary className="px-5 sm:order-first" onClick={() => navigate("/")}>
-              Continue Shopping
+              繼續選購
             </Button>
           </div>
         </>
@@ -101,9 +101,9 @@ const Cart = () => {
     } else {
       content = (
         <>
-          <p className="tracking-wide text-2xl">Your cart is empty.</p>
-          <Button primary transition className="w-button mt-7.5 tracking-wide" onClick={() => navigate("/")}>
-            Start Shopping
+          <p className="tracking-wide text-2xl">購物車內尚無商品</p>
+          <Button primary transition className="w-button mt-7.5" onClick={() => navigate("/")}>
+            開始選購
           </Button>
         </>
       );

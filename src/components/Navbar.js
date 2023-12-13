@@ -139,7 +139,7 @@ const Navbar = () => {
   const logout = (
     <ul className={`hidden bg-white p-2 group-hover:inline-block hover:inline-block absolute top-12 right-0 border shadow-sm w-[8.5rem]`}>
       <li className="cursor-pointer px-2 py-1 hover:bg-neutral-50 tracking-wider transition-colors" onClick={handleLogout}>
-        Log out
+        登出
       </li>
     </ul>
   );
@@ -190,11 +190,11 @@ const Navbar = () => {
           <div className="pt-6">
             <Link to="/account">
               <Button primary className="w-full normal-case my-1.5 focus:outline-none" onClick={handleClose}>
-                {userInfo ? "Account" : "Log in"}
+                {userInfo ? "會員專區" : "登入"}
               </Button>
             </Link>
             <Button secondary className="w-full normal-case my-1.5 focus:outline-none" onClick={handleClick}>
-              {userInfo ? "Log out" : "Sign up"}
+              {userInfo ? "登出" : "註冊"}
             </Button>
           </div>
           <p className="my-4 text-sm text-center text-neutral-400">The No Name Yet &copy; 2023</p>
