@@ -6,13 +6,14 @@ import useCollection from "../utils/useCollection";
 const Products = ({ product, handleAddToCart }) => {
   const { modal, collectionIndex, handleCollection, handleRemoveCollection } = useCollection(product);
   const hover = product.images.length > 1;
+  const inStock = product.stock !== 0;
   const content = (
     <div>
       {!handleAddToCart ? (
         <Link to={`/products/${product._id}`}>
           <div className="group overflow-hidden relative">
             <img
-              className={`${hover && `group-hover:opacity-0 transition-opacity duration-300 ease-in-out absolute`}`}
+              className={hover ? "group-hover:opacity-0 transition-opacity duration-300 ease-in-out absolute" : null}
               src={product.images[0]}
               alt={product.title}
             />
@@ -43,14 +44,14 @@ const Products = ({ product, handleAddToCart }) => {
           <Link to={`/products/${product._id}`} className="block">
             {product.title}
           </Link>
-          {product.stock !== 0 && <div className="inline-block text-neutral-400">NT$ {product.price.toLocaleString()}</div>}
-          {product.stock === 0 && <div className="inline-block text-xs tracking-wider label-neutral">SOLD OUT</div>}
+          {inStock && <div className="inline-block text-neutral-400">NT$ {product.price.toLocaleString()}</div>}
+          {!inStock && <div className="inline-block text-xs tracking-wider label-neutral">SOLD OUT</div>}
         </div>
         {handleAddToCart ? (
           <Button
-            primaryReverse={product.stock !== 0}
-            className={`p-1.5 rounded-md ${product.stock === 0 ? "cursor-not-allowed fill-neutral-400" : ""}`}
-            onClick={() => product.stock !== 0 && handleAddToCart(product)}
+            primaryReverse={inStock}
+            className={`p-1.5 rounded-md ${!inStock ? "cursor-not-allowed fill-neutral-400" : null}`}
+            onClick={() => inStock && handleAddToCart(product)}
           >
             <Icons.Cart className="h-6" />
           </Button>

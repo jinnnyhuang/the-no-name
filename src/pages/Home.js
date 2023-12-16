@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { useGetProductsQuery } from "../store";
 import Products from "../components/Products";
 import Pagination from "../components/Pagination";
+import Skeleton from "../components/Skeleton";
 
 const Home = () => {
   const [page, setPage] = useState(1);
-  let { data, error, isFetching } = useGetProductsQuery({ _page: page, _limit: process.env.REACT_APP_DEFAULT_PER_PAGE });
+  const { data, error, isFetching } = useGetProductsQuery({ _page: page, _limit: process.env.REACT_APP_DEFAULT_PER_PAGE });
 
   useEffect(() => {
     document.title = "The No Name Yet | 還沒有名字";
@@ -14,6 +15,8 @@ const Home = () => {
   let content;
   if (error) {
     content = <div>Error Loading Products.</div>;
+  } else if (isFetching) {
+    content = <Skeleton times={+process.env.REACT_APP_DEFAULT_PER_PAGE}></Skeleton>;
   } else if (!isFetching) {
     content = data?.products?.map((product) => {
       return <Products product={product} key={product._id} />;

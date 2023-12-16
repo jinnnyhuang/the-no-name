@@ -66,7 +66,7 @@ const Product = () => {
           />
         </div>
         <div className="mt-3.5 text-lg">
-          <span>NT$ {product.price.toLocaleString()}</span>
+          <span className={product.stock === 0 ? "line-through" : null}>NT$ {product.price.toLocaleString()}</span>
         </div>
         {product.stock < 5 && product.stock !== 0 && (
           <div>

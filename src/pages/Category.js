@@ -3,6 +3,7 @@ import { useGetProductsQuery } from "../store";
 import { useParams, useNavigate } from "react-router-dom";
 import Products from "../components/Products";
 import Pagination from "../components/Pagination";
+import Skeleton from "../components/Skeleton";
 
 const Category = () => {
   const [page, setPage] = useState(1);
@@ -20,6 +21,8 @@ const Category = () => {
   let content;
   if (error) {
     content = <div>Error Loading Products.</div>;
+  } else if (isFetching) {
+    content = <Skeleton times={4}></Skeleton>;
   } else if (!isFetching) {
     content = data?.products?.map((product) => {
       return <Products product={product} key={product._id} />;
