@@ -12,18 +12,26 @@ const Pagination = ({ currentPages, total, onClick }) => {
     .map((_, i) => {
       i++;
       return (
-        <div key={i} className={`pagination ${currentPages === i && `text-white bg-primary`}`} onClick={() => onClick(i)}>
+        <button key={i} className={`pagination ${currentPages === i && `text-white bg-primary`}`} onClick={() => onClick(i)}>
           {i}
-        </div>
+        </button>
       );
     });
 
   return (
     pageCount > 1 && (
       <div className="flex justify-center items-center gap-x-4 mx-5 mt-16 lg:mx-24">
-        {currentPages !== 1 && <Icons.Prev className="pagination-icon" onClick={() => onClick(currentPages - 1)} />}
+        {currentPages !== 1 && (
+          <button onClick={() => onClick(currentPages - 1)}>
+            <Icons.Prev className="pagination-icon" />
+          </button>
+        )}
         {pages}
-        {currentPages < pageCount && <Icons.Next className="pagination-icon" onClick={() => onClick(currentPages + 1)} />}
+        {currentPages < pageCount && (
+          <button onClick={() => onClick(currentPages + 1)}>
+            <Icons.Next className="pagination-icon" />
+          </button>
+        )}
       </div>
     )
   );

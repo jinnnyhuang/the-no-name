@@ -39,7 +39,7 @@ const Cart = () => {
     {
       label: "產品",
       render: (item) => (
-        <Link to={`/products/${item.productId._id}`}>
+        <Link to={`/products/${item.productId._id}`} className="block">
           <img src={item.productId.thumbnail} alt={item.productId.title} className="w-[7rem]" />
         </Link>
       ),
@@ -48,7 +48,7 @@ const Cart = () => {
     {
       label: "",
       render: (item) => (
-        <div className="pl-6 text-left">
+        <div className="pl-3 pr-2 sm:pl-6 text-left">
           <p>{item.productId.title}</p>
           <p>NT$ {item.productId.price}</p>
         </div>
@@ -60,9 +60,9 @@ const Cart = () => {
       render: (item) => (
         <div className="flex flex-col items-center">
           <Counter value={item} onChange={handleUpdateQuantity} isLoading={results.isLoading} isUpdated={results.isSuccess && !isFetching} />
-          <div className="cursor-pointer text-xs mt-3 text-neutral-400 underline-offset-4 hover:underline" onClick={() => handleRemove(item)}>
+          <button className="cursor-pointer text-xs mt-3 text-neutral-400 underline-offset-4 hover:underline" onClick={() => handleRemove(item)}>
             移除
-          </div>
+          </button>
         </div>
       ),
       class: "text-center",
@@ -111,8 +111,8 @@ const Cart = () => {
   }
 
   // Modal
-  const modal = isOpen && (
-    <Modal onClose={() => setIsOpen(false)} action className="modal">
+  const modal = (
+    <Modal isOpen={isOpen} setIsOpen={setIsOpen} action className="modal-content">
       <p className="text-lg">{message}</p>
     </Modal>
   );

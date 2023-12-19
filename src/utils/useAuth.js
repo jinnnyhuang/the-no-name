@@ -31,8 +31,8 @@ const useAuth = () => {
   };
 
   // Modal
-  const modal = isOpen && (
-    <Modal onClose={() => setIsOpen(false)} action className="modal">
+  const modal = (
+    <Modal isOpen={isOpen} setIsOpen={setIsOpen} action className="modal-content">
       <p className="text-lg">已登出</p>
     </Modal>
   );

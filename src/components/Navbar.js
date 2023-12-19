@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Icons from "../components/Icons";
 import Button from "../components/Button";
@@ -54,30 +54,63 @@ const Navbar = () => {
   const handleClose = () => {
     active && setActive(false);
   };
-  const handleClick = () => {
+  const handlePrimary = () => {
+    handleClose();
+    navigate("/account");
+  };
+  const handleSecondary = () => {
     handleClose();
     userInfo ? handleLogout() : navigate("/signup");
   };
 
+  // tab
+  const sideNavRef = useRef(null);
   useEffect(() => {
-    active && document.body.classList.add("overflow-hidden");
-    return () => {
-      document.body.classList.remove("overflow-hidden");
-    };
-  }, [active]);
+    if (active) {
+      const sideNavElement = sideNavRef.current;
+      const focusableElements = sideNavElement.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+      // 側邊欄 Open 時 Focus First Element
+      focusableElements.length > 0 && firstElement.focus();
+
+      const handleTabKey = (event) => {
+        if (event.keyCode === 9) {
+          if (event.shiftKey && document.activeElement === firstElement) {
+            event.preventDefault();
+            lastElement.focus();
+          } else if (!event.shiftKey && document.activeElement === lastElement) {
+            event.preventDefault();
+            firstElement.focus();
+          }
+        }
+      };
+      const handleEscKey = (event) => event.keyCode === 27 && setActive(false);
+
+      document.body.classList.add("overflow-hidden");
+      sideNavElement.addEventListener("keydown", handleTabKey);
+      sideNavElement.addEventListener("keydown", handleEscKey);
+      return () => {
+        document.body.classList.remove("overflow-hidden");
+        sideNavElement.removeEventListener("keydown", handleTabKey);
+        sideNavElement.removeEventListener("keydown", handleEscKey);
+      };
+    }
+  }, [active, setActive]);
 
   const category = (
     <ul
-      className={`bg-white z-10 w-full p-2 uppercase group-hover:inline-block hover-hover:absolute hover-hover:top-[1.6rem] hover-hover:hidden hover-hover:border hover-hover:shadow-md hover-hover:w-[11.5rem]`}
+      // group hover 或 <Link> focus 時顯示 (使用 [&:has(:focus-visible)] 代替 focus-within)
+      className={`bg-white z-10 w-full p-2 uppercase hover-hover:group-hover:visually-hidden-focusable hover-hover:[&:has(:focus-visible)]:visually-hidden-focusable hover-hover:absolute hover-hover:top-[1.6rem] hover-hover:visually-hidden hover-hover:border hover-hover:shadow-md hover-hover:w-[11.5rem]`}
     >
       {categories &&
         categories.map((category) => (
           <li
             key={category._id}
-            className="cursor-pointer w-full px-2 py-1.5 hover:bg-neutral-50 tracking-wider transition-colors"
+            className="cursor-pointer w-full px-2 py-1.5 hover:bg-neutral-50 tracking-wider transition-colors [&:has(:focus-visible)]:bg-neutral-50"
             onClick={handleClose}
           >
-            <Link to={`/category/${category.label}`} className="inline-block w-full">
+            <Link to={`/category/${category.label}`} className="inline-block w-full focus-visible:shadow-none">
               {category.label}
             </Link>
           </li>
@@ -116,15 +149,17 @@ const Navbar = () => {
   const searchInput = (id) => {
     return (
       <div className={`h-12 ${active ? "w-full" : "w-[211.5px]"}`}>
-        <button className="peer absolute right-0 cursor-pointer rounded-md w-12 h-12" onClick={handleFormSubmit}>
-          <Icons.Search className="mx-auto" />
+        <button className="peer absolute right-0 cursor-pointer rounded-md w-12 h-12" onClick={handleFormSubmit} tabIndex={-1}>
+          <Icons.Search className={`mx-auto hover-none:h-[1.7rem] hover-none:w-[1.7rem] ${active ? "fill-neutral-500" : null}`} />
         </button>
         <input
           type="text"
           name="q"
           id={id}
-          className={`cursor-text h-12 tracking-wide placeholder:tracking-wide text-neutral-500 outline-none  ${
-            active ? `rounded-md w-full pl-4 pr-11 border focus:border-2 border-neutral-300` : inputClass
+          className={`cursor-text h-12 tracking-wide placeholder:tracking-wide text-neutral-500 outline-none ${
+            active
+              ? `rounded-md w-full pl-4 pr-11 bg-neutral-100 placeholder:text-neutral-500 focus:bg-neutral-200 focus:text-neutral-600 focus:placeholder:text-neutral-600`
+              : inputClass
           } `}
           placeholder="Search"
           onChange={handleChange}
@@ -137,11 +172,16 @@ const Navbar = () => {
   const cartItems = userInfo && !error ? (isFetching ? currentData || [] : data) : [];
 
   const logout = (
-    <ul className={`hidden bg-white p-2 group-hover:inline-block hover:inline-block absolute top-12 right-0 border shadow-sm w-[8.5rem]`}>
-      <li className="cursor-pointer px-2 py-1 hover:bg-neutral-50 tracking-wider transition-colors" onClick={handleLogout}>
+    <div
+      className={`logout bg-white p-2 visually-hidden group-hover:visually-hidden-focusable [&:has(:focus-visible)]:visually-hidden-focusable absolute top-12 right-0 border shadow-sm w-[8.5rem]`}
+    >
+      <button
+        className="cursor-pointer px-2 py-1 w-full text-left hover:bg-neutral-50 focus-visible:bg-neutral-50 focus-visible:shadow-none tracking-wider transition-colors"
+        onClick={handleLogout}
+      >
         登出
-      </li>
-    </ul>
+      </button>
+    </div>
   );
 
   const nav = (
@@ -169,15 +209,15 @@ const Navbar = () => {
   );
 
   const sideNav = (
-    <div className={`navbar-menu relative z-50 ${active ? `block` : `hidden`}`}>
+    <div className={`navbar-menu relative z-50 ${active ? `block` : `hidden`}`} ref={sideNavRef}>
       <div className="navbar-backdrop fixed inset-0 bg-gray-800 opacity-20" onClick={handleClose}></div>
       <nav className="fixed top-0 left-0 bottom-0 flex flex-col w-[70%] max-w-sm py-7 px-7 bg-white border-r overflow-y-auto">
         <div className="flex items-center mb-4">
           <Link to="/" className="mr-auto text-2xl font-bold leading-none" onClick={handleClose}>
             The No Name Yet
           </Link>
-          <button className="navbar-close outline-none" onClick={handleClose}>
-            <Icons.Close className="fill-gray-300" />
+          <button className="close-button group p-[5px]" onClick={handleClose}>
+            <Icons.Close className="close-button-icon" />
           </button>
         </div>
         <form method="get" action="/search" className="relative mb-4">
@@ -188,12 +228,10 @@ const Navbar = () => {
         </div>
         <div className="mt-auto">
           <div className="pt-6">
-            <Link to="/account">
-              <Button primary className="w-full normal-case my-1.5 focus:outline-none" onClick={handleClose}>
-                {userInfo ? "會員專區" : "登入"}
-              </Button>
-            </Link>
-            <Button secondary className="w-full normal-case my-1.5 focus:outline-none" onClick={handleClick}>
+            <Button primary transition className="w-full normal-case my-1.5" onClick={handlePrimary}>
+              {userInfo ? "會員專區" : "登入"}
+            </Button>
+            <Button secondary className="w-full normal-case my-1.5" onClick={handleSecondary}>
               {userInfo ? "登出" : "註冊"}
             </Button>
           </div>
@@ -208,7 +246,7 @@ const Navbar = () => {
       {nav}
       {sideNav}
       {showLogo && (
-        <Link to="/" className="m-auto mb-19 block max-w-fit">
+        <Link to="/" className="m-auto mt-0.5 mb-19 block max-w-fit">
           <img src={Logo} alt="還沒有名字" className="m-auto w-3/5 hover-hover:w-auto" />
         </Link>
       )}

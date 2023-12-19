@@ -70,8 +70,8 @@ const Signup = () => {
       登入
     </Button>
   );
-  const modal = isOpen && (
-    <Modal onClose={() => setIsOpen(false)} action actionButton={actionButton} className="min-w-fit rounded-lg px-12 py-8 bg-white">
+  const modal = (
+    <Modal isOpen={isOpen} setIsOpen={setIsOpen} action actionButton={actionButton} className="modal-content">
       <div className="flex flex-col items-center gap-2">
         <p className="text-xl font-medium">註冊成功</p>
         <p>感謝您加入會員，請登入開始選購喜歡的商品</p>

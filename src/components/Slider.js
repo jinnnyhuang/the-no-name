@@ -11,18 +11,13 @@ const Slider = ({ items }) => {
     lg && setIsOpen(true);
     setModalImage(event.target.src);
   };
-  const handleModalClose = () => {
-    lg && setIsOpen(false);
-  };
 
   const value = items.map((item, index) => (
     <swiper-slide key={index}>
       <img src={item} alt="slider" className={`${lg && `cursor-zoom-in`} object-fit max-h-[31.25rem]`} onClick={handleModalOpen} />
-      {isOpen && (
-        <Modal onClose={handleModalClose}>
-          <img src={modalImage} alt="modal" className="rounded-lg" />
-        </Modal>
-      )}
+      <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+        <img src={modalImage} alt="modal" className="rounded-lg" />
+      </Modal>
     </swiper-slide>
   ));
 

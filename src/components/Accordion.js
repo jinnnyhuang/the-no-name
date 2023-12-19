@@ -13,11 +13,14 @@ const Accordion = ({ items, className }) => {
 
     return (
       <div key={index}>
-        <div onClick={() => handleClick(index)} className="cursor-pointer flex items-center border-b border-primary p-3">
+        <button
+          onClick={() => handleClick(index)}
+          className="w-full tracking-wider cursor-pointer flex items-center border-b border-primary focus-visible:border-transparent p-3"
+        >
           {item.heading}
           {icon}
-        </div>
-        {isExpanded && <div className="border-b border-primary px-2 py-5 whitespace-pre-line">{item.content}</div>}
+        </button>
+        {isExpanded && <div className="tracking-wider border-b border-primary px-2 py-5 whitespace-pre-line">{item.content}</div>}
       </div>
     );
   });

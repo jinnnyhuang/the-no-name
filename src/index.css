@@ -20,81 +20,108 @@
     color: var(--color-primary);
     fill: var(--color-primary);
   }
+
+  a:focus-visible,
+  button:focus-visible {
+    border-radius: 0.125em; /* rounded-sm */
+    outline: none;
+    box-shadow: inset 0 0 0 2px rgb(255, 255, 255), 0 0 0 2px var(--color-primary);
+  }
 }
 
-/* Home Category Search*/
-.products {
-  @apply grid grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-16 justify-items-center mx-5 lg:mx-24;
-}
+@layer utilities {
+  /* Home Category Search*/
+  .products {
+    @apply grid grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-16 justify-items-center mx-5 lg:mx-24;
+  }
 
-.svg-icon {
-  @apply max-w-[2rem] px-1;
-}
+  .svg-icon {
+    @apply max-w-[2rem] px-1;
+  }
 
-/* Navbar */
-/* nav */
-.link {
-  /* @apply uppercase tracking-widest block py-1.5 hover:bg-neutral-50 rounded lg:hover:bg-transparent lg:p-0; */
-  /* 20231121 */
-  @apply uppercase tracking-widest block py-1.5 hover:bg-neutral-50 rounded hover-hover:hover:bg-transparent hover-hover:p-0;
-}
+  /* Navbar */
+  /* nav */
+  .link {
+    /* @apply uppercase tracking-widest block py-1.5 hover:bg-neutral-50 rounded lg:hover:bg-transparent lg:p-0; */
+    /* 20231121 */
+    @apply uppercase tracking-widest block py-1.5 hover:bg-neutral-50 hover-hover:hover:bg-transparent hover-hover:p-0;
+  }
 
-.label-neutral {
-  @apply text-white bg-neutral-400 rounded-[3px] px-2.5 py-1;
-}
+  .label-neutral {
+    @apply text-white bg-neutral-400 rounded-[3px] px-2.5 py-1;
+  }
 
-.navbar-icon {
-  @apply p-2.5 rounded-md hover:bg-neutral-200 outline-none focus:bg-neutral-200;
-}
+  .navbar-icon {
+    @apply p-2.5 !rounded-md hover:bg-neutral-200 focus-visible:bg-neutral-200 focus-visible:shadow-none;
+  }
 
-.navbar-icon-notification {
-  @apply absolute top-[5px] right-[5px] sm:top-1 sm:right-1 rounded-full w-0.8 h-0.8 bg-neutral-400 border-2 border-white group-focus:border-neutral-200 group-hover:border-neutral-200 transition;
-}
+  .navbar-icon-notification {
+    @apply absolute top-[5px] right-[5px] sm:top-1 sm:right-1 rounded-full w-0.8 h-0.8 bg-neutral-400 border-2 border-white group-focus-visible:border-neutral-200 group-hover:border-neutral-200 transition;
+  }
 
-/* Counter */
-.counter-icon {
-  @apply fill-neutral-400 hover:fill-neutral-600 svg-icon transition-colors;
-}
+  /* 隱藏元素，但可以透過聚焦 (Focus) 顯示 */
+  .visually-hidden {
+    clip-path: inset(50%);
+  }
+  .visually-hidden-focusable {
+    clip-path: none;
+  }
 
-.loading-counter-icon {
-  @apply fill-gray-200 svg-icon transition-colors;
-}
+  /* Counter */
+  .counter-icon {
+    @apply fill-neutral-400 hover:fill-neutral-600 svg-icon transition-colors;
+  }
 
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+  .loading-counter-icon {
+    @apply fill-gray-200 svg-icon transition-colors;
+  }
 
-/* Tabel, Account */
-.caption-content-width {
-  @apply w-[88%] lg:w-3/4;
-}
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 
-/* Cart, Account, Login, Signup */
-.caption-content {
-  @apply mt-10 sm:mx-24 lg:min-h-[63vh];
-}
+  /* Tabel, Account */
+  .caption-content-width {
+    @apply w-[88%] lg:w-3/4;
+  }
 
-/* Heading - Cart, Account, Login, Signup */
-.caption {
-  @apply text-2xl tracking-wider text-center mb-14;
-}
+  /* Cart, Account, Login, Signup */
+  .caption-content {
+    @apply mt-10 sm:mx-24 lg:min-h-[63vh];
+  }
 
-/* Pagination */
-.pagination {
-  @apply cursor-pointer min-w-[32px] flex justify-center py-[5.5px] rounded-md hover:bg-primary hover:text-white transition-all duration-300;
-}
+  /* Heading - Cart, Account, Login, Signup */
+  .caption {
+    @apply text-2xl tracking-wider text-center mb-14;
+  }
 
-.pagination-icon {
-  @apply cursor-pointer fill-neutral-400 hover:fill-primary max-w-[1.5rem] transition-colors;
-}
+  /* Pagination */
+  .pagination {
+    @apply cursor-pointer min-w-[32px] flex justify-center py-[5.5px] !rounded-md hover:bg-primary hover:text-white transition-all duration-300;
+  }
 
-/* Modal */
-.action-button {
-  @apply rounded-md px-4.5 py-1.5;
-}
+  .pagination-icon {
+    @apply cursor-pointer fill-neutral-400 hover:fill-primary max-w-[1.5rem] transition-colors;
+  }
 
-.modal {
-  @apply min-w-fit rounded-lg pl-10.5 pr-9.5 pb-7.5 pt-12 bg-white;
+  /* Modal */
+  .action-button {
+    @apply !rounded-md px-4.5 py-1.5;
+  }
+
+  .modal-content {
+    @apply min-w-fit rounded-lg pl-10.5 pr-9.5 pb-7.5 pt-12 bg-white;
+    /* @apply min-w-fit rounded-lg px-12 py-8 bg-white; */
+  }
+
+  .close-button {
+    /* + group */
+    @apply cursor-pointer !rounded-full hover:bg-[#F2F2F2] focus:bg-[#F2F2F2] focus-visible:shadow-none transition;
+  }
+
+  .close-button-icon {
+    @apply fill-[#C8C8C8] group-hover:fill-neutral-400 group-focus:fill-neutral-400 transition;
+  }
 }

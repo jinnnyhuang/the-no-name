@@ -7,7 +7,7 @@ const Input = ({ children, id, type, required, ...rest }) => {
       <input
         id={id}
         type={type}
-        className="shadow-sm appearance-none border rounded w-full py-2.5 px-4.5 mt-1 focus:outline-none focus:shadow-outline"
+        className="shadow-sm appearance-none border rounded w-full py-2.5 px-4.5 mt-1 focus:outline-none focus:border-primary focus:ring-primary focus:ring-1"
         {...rest}
       />
     </div>

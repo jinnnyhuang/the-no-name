@@ -58,12 +58,13 @@ const Product = () => {
       <div className="w-[24rem] mx-auto">
         <div className="flex justify-between">
           <h1 className="text-lg">{product.title}</h1>
-          <Icons.Collection
-            className={`cursor-pointer stroke-[5rem] transition-colors ${
-              collectionIndex >= 0 ? "fill-primary stroke-transparent" : "fill-white stroke-primary"
-            }`}
-            onClick={() => handleCollection()}
-          />
+          <button onClick={handleCollection} className="!rounded">
+            <Icons.Collection
+              className={`cursor-pointer stroke-[5rem] shrink-0 transition-colors ${
+                collectionIndex >= 0 ? "fill-primary stroke-transparent" : "fill-white stroke-primary"
+              }`}
+            />
+          </button>
         </div>
         <div className="mt-3.5 text-lg">
           <span className={product.stock === 0 ? "line-through" : null}>NT$ {product.price.toLocaleString()}</span>
@@ -73,15 +74,16 @@ const Product = () => {
             <span className="text-sm label-neutral">剩餘庫存 {product.stock}</span>
           </div>
         )}
-        {/* <p className="mt-3.5">{product.description}</p> */}
         {product.stock === 0 ? (
-          <Button className="cursor-not-allowed w-button mt-4 tracking-wider">Sold Out</Button>
+          <Button className="cursor-not-allowed w-button mt-4 tracking-wider" tabIndex={-1}>
+            Sold Out
+          </Button>
         ) : (
           <Button primary transition className="w-button mt-7.5" onClick={() => handleAddToCart(product)}>
             加入購物車
           </Button>
         )}
-        <Accordion items={items} className="rounded mt-12 tracking-wider text-sm w-full" />
+        <Accordion items={items} className="mt-12 text-sm w-full" />
       </div>
     );
 

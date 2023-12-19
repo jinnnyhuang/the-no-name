@@ -89,8 +89,8 @@ const Account = () => {
   }, [isEditing]);
 
   // Modal
-  const updateUserModal = isOpen && (
-    <Modal onClose={() => setIsOpen(false)} action className="min-w-fit rounded-lg px-12 py-8 bg-white">
+  const updateUserModal = (
+    <Modal isOpen={isOpen} setIsOpen={setIsOpen} action className="modal-content">
       <p className="text-lg">修改成功</p>
     </Modal>
   );
@@ -118,23 +118,24 @@ const Account = () => {
               type={input.type}
               id={input.id}
               className={`px-3 py-2 border shadow-sm border-neutral-300 placeholder-neutral-400 block w-full rounded focus:outline-none ${
-                input.readonly || !isEditing ? `bg-neutral-200` : `bg-white focus:border-sky-500 focus:ring-sky-500 focus:ring-1`
+                input.readonly || !isEditing ? `bg-neutral-200` : `bg-white focus:border-primary focus:ring-primary focus:ring-1`
               }`}
               readOnly={input.readonly || !isEditing}
               value={input.value}
               onChange={input?.onChange}
+              tabIndex={input.readonly || !isEditing ? "-1" : "0"}
             />
           </div>
         );
       })}
       {error && <p className="text-red-400 text-center mb-5">{error.message}</p>}
       {!isEditing && (
-        <Button secondary className="block mx-auto text-sm rounded" onClick={() => setIsEditing(true)}>
+        <Button secondary className="block mx-auto text-sm !rounded" onClick={() => setIsEditing(true)}>
           Edit
         </Button>
       )}
       {isEditing && (
-        <Button primary className="block mx-auto text-sm rounded">
+        <Button primary className="block mx-auto text-sm !rounded">
           Update
         </Button>
       )}
@@ -158,13 +159,13 @@ const Account = () => {
 
   const list = tabs.map((item, index) => {
     return (
-      <li
+      <button
         key={index}
-        className={`cursor-pointer inline-block rounded py-1.5 px-3 text-neutral-700 ${index === activeTabIndex ? "font-medium" : ""}`}
+        className={`cursor-pointer inline-block py-1.5 px-3 text-neutral-700 ${index === activeTabIndex ? "font-medium" : ""}`}
         onClick={() => handleTab(index)}
       >
         {item.label[0]}
-      </li>
+      </button>
     );
   });
 
@@ -172,7 +173,7 @@ const Account = () => {
     <div className="flex flex-col items-center caption-content">
       <h1 className="caption">會員專區</h1>
       <div className="flex flex-col xl:flex-row justify-between gap-x-7 min-h-[42vh] caption-content-width">
-        <ul className="flex flex-row mb-2.5 xl:flex-col xl:w-[9.5rem]">{list}</ul>
+        <div className="flex flex-row mb-2.5 xl:flex-col xl:w-[9.5rem]">{list}</div>
         <div className="flex-1 bg-neutral-50 rounded p-7">
           <div>
             <h2 className="text-xl font-medium mb-8 font-display">{tabs[activeTabIndex].label[1]}</h2>

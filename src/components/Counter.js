@@ -13,11 +13,11 @@ const Counter = ({ value, onChange, isLoading, isUpdated }) => {
   const handleDecrement = () => {
     // isLoading: 確認是否正在執行 onChange
     !isLoading && onChange(value, "decrease");
-    setCounterValue(Number(counterValue) - 1);
+    !isLoading && setCounterValue(Number(counterValue) - 1);
   };
   const handleIncrement = () => {
     value.productId.stock > value.quantity && !isLoading && onChange(value, "increase");
-    setCounterValue(Number(counterValue) + 1);
+    value.productId.stock > value.quantity && !isLoading && setCounterValue(Number(counterValue) + 1);
   };
   const handleChange = (event) => {
     setCounterValue(() => parseInt(event.target.value) || 1);
@@ -34,12 +34,12 @@ const Counter = ({ value, onChange, isLoading, isUpdated }) => {
 
   return (
     <div className="custom-number-input flex max-h-12 max-w-[3rem] min-w-[5rem] min-h-[2.15rem] border border-gray-200">
-      <button className="decrement transition-colors hover:bg-neutral-200" onClick={handleDecrement}>
+      <button className="decrement transition-colors hover:bg-neutral-200 z-10" onClick={handleDecrement}>
         <Icons.Minus className={isLoading ? "loading-counter-icon" : "counter-icon"} />
       </button>
       <input
         type="number"
-        className={`cursor-default outline-none focus:outline-none text-center w-full flex items-center transition-colors duration-300 ${
+        className={`cursor-default focus:outline-none text-center w-full flex items-center transition-colors duration-300 ${
           isLoading ? "text-gray-200" : "text-neutral-500 hover:text-neutral-600 focus:text-neutral-600"
         }`}
         name="custom-input-number"

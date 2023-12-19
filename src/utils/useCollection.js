@@ -25,8 +25,8 @@ const useCollection = (product) => {
   };
 
   // Modal
-  const modal = isOpen && (
-    <Modal onClose={() => setIsOpen(false)} action className="modal">
+  const modal = (
+    <Modal isOpen={isOpen} setIsOpen={setIsOpen} action className="modal-content">
       <p className="text-lg">請先登入</p>
     </Modal>
   );

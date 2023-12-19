@@ -23,7 +23,7 @@ module.exports = {
         0.8: "0.8rem",
         3.75: "0.9375rem",
         4.5: "1.125rem",
-        5.5: "1.375rem", // 22px
+        5.5: "1.375rem",
         6.5: "1.625rem",
         7.5: "1.875rem",
         8.5: "2.125rem",
@@ -36,8 +36,8 @@ module.exports = {
         // ml: "820px",
         // xxl: "1366px",
         // "3xl": "1920px",
-        "hover-none": { raw: "(hover: none)" },
-        "hover-hover": { raw: "(hover: hover)" },
+        "hover-none": { raw: "(hover: none)" }, // 不可使用 HOVER 的裝置
+        "hover-hover": { raw: "(hover: hover)" }, // 可使用 HOVER 的裝置
       },
       animation: {
         fadeIn: "fadeIn 0.25s cubic-bezier(0.5, 1, 0.89, 1)",
@@ -55,5 +55,8 @@ module.exports = {
       addVariant("child", "& > *");
       addVariant("child-hover", "& > *:hover");
     },
+    require("tailwindcss/plugin")(({ addVariant }) => {
+      addVariant("foo", "&:has(p)");
+    }),
   ],
 };

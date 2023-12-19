@@ -10,7 +10,7 @@ const Products = ({ product, handleAddToCart }) => {
   const content = (
     <div>
       {!handleAddToCart ? (
-        <Link to={`/products/${product._id}`}>
+        <Link to={`/products/${product._id}`} className="block">
           <div className="group overflow-hidden relative">
             <img
               className={hover ? "group-hover:opacity-0 transition-opacity duration-300 ease-in-out absolute" : null}
@@ -28,20 +28,25 @@ const Products = ({ product, handleAddToCart }) => {
         </Link>
       ) : (
         <div className="relative group">
-          <Link to={`/products/${product._id}`}>
-            <img className="group-hover:brightness-[0.6] transition" src={product.images[0]} alt={product.title} />
+          <Link to={`/products/${product._id}`} className="block">
+            <img
+              // group hover 或是 group 內有 button 聚焦時改變圖片亮度
+              className="group-hover:brightness-[0.6] group-[&:has(button:focus-visible)]:brightness-[0.6] transition"
+              src={product.images[0]}
+              alt={product.title}
+            />
           </Link>
-          <div
-            className="cursor-pointer hidden group-hover:block hover-none:block transition absolute top-2.5 right-2.5 px-2 text-xl text-white"
+          <button
+            className="cursor-default opacity-0 fill-white group-hover:opacity-100 hover-none:opacity-100 focus-visible:opacity-100 focus-visible:shadow-none transition-color absolute top-2.5 right-2.5 p-1.5"
             onClick={handleRemoveCollection}
           >
-            &times;
-          </div>
+            <Icons.Close className="w-4.5 h-4.5" />
+          </button>
         </div>
       )}
       <div className="flex justify-between items-start mt-4">
         <div className="info">
-          <Link to={`/products/${product._id}`} className="block">
+          <Link to={`/products/${product._id}`} className="block" tabIndex={-1}>
             {product.title}
           </Link>
           {inStock && <div className="inline-block text-neutral-400">NT$ {product.price.toLocaleString()}</div>}
@@ -49,19 +54,22 @@ const Products = ({ product, handleAddToCart }) => {
         </div>
         {handleAddToCart ? (
           <Button
-            primaryReverse={inStock}
-            className={`p-1.5 rounded-md ${!inStock ? "cursor-not-allowed fill-neutral-400" : null}`}
+            secondary={inStock}
+            focus={inStock}
+            className={`p-1.5 !rounded-md ${!inStock ? "cursor-not-allowed fill-neutral-400" : "border-neutral-600"}`}
             onClick={() => inStock && handleAddToCart(product)}
+            tabIndex={inStock ? "0" : "-1"}
           >
             <Icons.Cart className="h-6" />
           </Button>
         ) : (
-          <Icons.Collection
-            className={`cursor-pointer stroke-[5rem] shrink-0 transition-colors ${
-              collectionIndex >= 0 ? "fill-primary stroke-transparent" : "fill-white stroke-primary"
-            }`}
-            onClick={handleCollection}
-          />
+          <button onClick={handleCollection} className="!rounded">
+            <Icons.Collection
+              className={`cursor-pointer stroke-[5rem] shrink-0 transition-colors ${
+                collectionIndex >= 0 ? "fill-primary stroke-transparent" : "fill-white stroke-primary"
+              }`}
+            />
+          </button>
         )}
       </div>
     </div>

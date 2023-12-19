@@ -31,12 +31,18 @@ const useAddToCart = () => {
     message !== "已加入購物車" ? setIsOpen(false) : navigate("/cart");
   };
   const actionButton = (
-    <Button tertiary={userInfo} secondary={!userInfo} transition={!userInfo} className="action-button w-[9.7rem]" onClick={handleClick}>
+    <Button
+      tertiary={message === "已加入購物車"}
+      secondary={message !== "已加入購物車"}
+      transition
+      className="action-button w-[9.7rem]"
+      onClick={handleClick}
+    >
       {message !== "已加入購物車" ? "OK" : "Checkout"}
     </Button>
   );
-  const modal = isOpen && (
-    <Modal onClose={() => setIsOpen(false)} action actionButton={actionButton} className="modal">
+  const modal = (
+    <Modal isOpen={isOpen} setIsOpen={setIsOpen} action actionButton={actionButton} className="modal-content">
       <p className="text-lg">{!userInfo ? "請先登入" : message}</p>
     </Modal>
   );
