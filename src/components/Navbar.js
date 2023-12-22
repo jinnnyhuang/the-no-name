@@ -15,9 +15,9 @@ const Navbar = () => {
 
   const navigate = useNavigate();
   const { userInfo } = useSelector((state) => state.auth);
-  const { modal, handleLogout } = useAuth();
+  const { handleLogout } = useAuth();
 
-  // Cart Page, Notfound Page 不顯示 Logo
+  // Cart, Account, Login, Signup, Notfound Page 不顯示 Logo
   const location = useLocation();
   let showLogo = location.pathname === "/";
   const matchPath = ["products/", "category/", "search"];
@@ -66,6 +66,7 @@ const Navbar = () => {
   // tab
   const sideNavRef = useRef(null);
   useEffect(() => {
+    if (!sideNavRef.current) return;
     if (active) {
       const sideNavElement = sideNavRef.current;
       const focusableElements = sideNavElement.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
@@ -98,16 +99,28 @@ const Navbar = () => {
     }
   }, [active, setActive]);
 
+  // nav 滾動時增加陰影
+  const navRef = useRef(null);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!navRef.current) return;
+      window.scrollY > 0 ? navRef.current.classList.add("shadow-md") : navRef.current.classList.remove("shadow-md");
+    };
+    // passive 設為 true: 告訴瀏覽器不會呼叫 preventDefault();
+    document.addEventListener("scroll", handleScroll, { passive: true });
+    return () => document.removeEventListener("scroll", handleScroll, { passive: true });
+  }, []);
+
   const category = (
     <ul
       // group hover 或 <Link> focus 時顯示 (使用 [&:has(:focus-visible)] 代替 focus-within)
-      className={`bg-white z-10 w-full p-2 uppercase hover-hover:group-hover:visually-hidden-focusable hover-hover:[&:has(:focus-visible)]:visually-hidden-focusable hover-hover:absolute hover-hover:top-[1.6rem] hover-hover:visually-hidden hover-hover:border hover-hover:shadow-md hover-hover:w-[11.5rem]`}
+      className={`bg-white w-full p-2 uppercase hover-hover:group-hover:visually-hidden-focusable hover-hover:[&:has(:focus-visible)]:visually-hidden-focusable hover-hover:absolute hover-hover:top-[1.6rem] hover-hover:visually-hidden hover-hover:border hover-hover:shadow-md hover-hover:w-[11.5rem]`}
     >
       {categories &&
         categories.map((category) => (
           <li
             key={category._id}
-            className="cursor-pointer w-full px-2 py-1.5 hover:bg-neutral-50 tracking-wider transition-colors [&:has(:focus-visible)]:bg-neutral-50"
+            className="cursor-pointer w-full px-2 py-1.5 hover-hover:hover:bg-neutral-50 tracking-wider transition-colors [&:has(:focus-visible)]:bg-neutral-50"
             onClick={handleClose}
           >
             <Link to={`/category/${category.label}`} className="inline-block w-full focus-visible:shadow-none">
@@ -150,7 +163,7 @@ const Navbar = () => {
     return (
       <div className={`h-12 ${active ? "w-full" : "w-[211.5px]"}`}>
         <button className="peer absolute right-0 cursor-pointer rounded-md w-12 h-12" onClick={handleFormSubmit} tabIndex={-1}>
-          <Icons.Search className={`mx-auto hover-none:h-[1.7rem] hover-none:w-[1.7rem] ${active ? "fill-neutral-500" : null}`} />
+          <Icons.Search className={`mx-auto h-[1.7rem] w-[1.7rem] hover-hover:h-auto hover-hover:w-auto ${active ? "fill-neutral-500" : ""}`} />
         </button>
         <input
           type="text"
@@ -185,7 +198,7 @@ const Navbar = () => {
   );
 
   const nav = (
-    <nav className="relative px-6 py-4 flex justify-between items-center bg-white">
+    <nav className="nav z-10 h-navHeight w-full fixed top-0 px-6 py-4 flex justify-between items-center bg-white" ref={navRef}>
       <div className="hover-hover:hidden" onClick={handleOpen}>
         <button className="navbar-burger cursor-pointer navbar-icon" title="Mobile Menu">
           <Icons.Menu />
@@ -209,11 +222,11 @@ const Navbar = () => {
   );
 
   const sideNav = (
-    <div className={`navbar-menu relative z-50 ${active ? `block` : `hidden`}`} ref={sideNavRef}>
-      <div className="navbar-backdrop fixed inset-0 bg-gray-800 opacity-20" onClick={handleClose}></div>
-      <nav className="fixed top-0 left-0 bottom-0 flex flex-col w-[70%] max-w-sm py-7 px-7 bg-white border-r overflow-y-auto">
+    <div className={`sidenav relative z-30 ${active ? `block` : `hidden`}`} ref={sideNavRef}>
+      <div className="fixed inset-0 bg-gray-800 opacity-20" onClick={handleClose}></div>
+      <div className="fixed top-0 left-0 bottom-0 flex flex-col w-[70%] max-w-sm py-7 px-7 bg-white border-r overflow-y-auto">
         <div className="flex items-center mb-4">
-          <Link to="/" className="mr-auto text-2xl font-bold leading-none" onClick={handleClose}>
+          <Link to="/" className="mr-auto text-2xl font-bold leading-none hover-none:focus-visible:shadow-none" onClick={handleClose}>
             The No Name Yet
           </Link>
           <button className="close-button group p-[5px]" onClick={handleClose}>
@@ -237,21 +250,20 @@ const Navbar = () => {
           </div>
           <p className="my-4 text-sm text-center text-neutral-400">The No Name Yet &copy; 2023</p>
         </div>
-      </nav>
+      </div>
     </div>
   );
 
   return (
-    <div>
+    <header className="pt-navHeight [&:has(img)]:pb-navHeight">
       {nav}
       {sideNav}
       {showLogo && (
-        <Link to="/" className="m-auto mt-0.5 mb-19 block max-w-fit">
-          <img src={Logo} alt="還沒有名字" className="m-auto w-3/5 hover-hover:w-auto" />
+        <Link to="/" className="m-auto mt-0.5 block max-w-fit">
+          <img src={Logo} alt="還沒有名字" className="m-auto w-3/5 lg:w-auto" />
         </Link>
       )}
-      {modal}
-    </div>
+    </header>
   );
 };
 

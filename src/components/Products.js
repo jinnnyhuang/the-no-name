@@ -2,10 +2,11 @@ import { Link } from "react-router-dom";
 import Button from "../components/Button";
 import Icons from "../components/Icons";
 import useCollection from "../utils/useCollection";
+import useMediaQuery from "../utils/useMediaQuery";
 
 const Products = ({ product, handleAddToCart }) => {
-  const { modal, collectionIndex, handleCollection, handleRemoveCollection } = useCollection(product);
-  const hover = product.images.length > 1;
+  const { collectionIndex, handleCollection, handleRemoveCollection } = useCollection(product);
+  const hover = useMediaQuery("(hover: hover) and (min-width: 640px) and (pointer: fine)") && product.images.length > 1;
   const inStock = product.stock !== 0;
   const content = (
     <div>
@@ -13,7 +14,7 @@ const Products = ({ product, handleAddToCart }) => {
         <Link to={`/products/${product._id}`} className="block">
           <div className="group overflow-hidden relative">
             <img
-              className={hover ? "group-hover:opacity-0 transition-opacity duration-300 ease-in-out absolute" : null}
+              className={hover ? "group-hover:opacity-0 transition-opacity duration-300 ease-in-out absolute" : ""}
               src={product.images[0]}
               alt={product.title}
             />
@@ -74,12 +75,7 @@ const Products = ({ product, handleAddToCart }) => {
       </div>
     </div>
   );
-  return (
-    <div>
-      {content}
-      {modal}
-    </div>
-  );
+  return <div>{content}</div>;
 };
 
 export default Products;

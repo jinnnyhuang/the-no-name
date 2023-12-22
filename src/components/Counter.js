@@ -44,8 +44,6 @@ const Counter = ({ value, onChange, isLoading, isUpdated }) => {
         }`}
         name="custom-input-number"
         onChange={handleChange}
-        // defaultValue={value.quantity}
-        // key={value.productId._id + value.quantity}
         value={counterValue}
         readOnly={isLoading}
       ></input>

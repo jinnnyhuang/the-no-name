@@ -1,20 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useFetchCartQuery, useUpdateQuantityMutation, useRemoveItemMutation } from "../store";
+import { useSelector, useDispatch } from "react-redux";
+import { useFetchCartQuery, useUpdateQuantityMutation, useRemoveItemMutation, openModal } from "../store";
 import Button from "../components/Button";
 import Table from "../components/Table";
 import Counter from "../components/Counter";
-import Modal from "../components/Modal";
 
 const Cart = () => {
   useEffect(() => {
     document.title = "Cart | 還沒有名字";
   }, []);
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [message, setMessage] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
 
   const { currentData, data, error, isFetching } = useFetchCartQuery(undefined, { skip: !userInfo });
@@ -29,8 +27,7 @@ const Cart = () => {
       .unwrap()
       .then((res) => {
         if (res?.message) {
-          setMessage(res?.message);
-          setIsOpen(true);
+          dispatch(openModal({ title: res?.message }));
         }
       });
   };
@@ -110,17 +107,9 @@ const Cart = () => {
     }
   }
 
-  // Modal
-  const modal = (
-    <Modal isOpen={isOpen} setIsOpen={setIsOpen} action className="modal-content">
-      <p className="text-lg">{message}</p>
-    </Modal>
-  );
-
   return (
     <div className="container m-auto">
       <div className="flex flex-col items-center caption-content">{content}</div>
-      {modal}
     </div>
   );
 };

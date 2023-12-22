@@ -3,21 +3,18 @@ import Modal from "../components/Modal";
 import useMediaQuery from "../utils/useMediaQuery";
 
 const Slider = ({ items }) => {
-  const lg = useMediaQuery("(min-width: 1024px)");
-
+  const sm = useMediaQuery("(min-width: 640px)");
   const [isOpen, setIsOpen] = useState(false);
   const [modalImage, setModalImage] = useState(null);
   const handleModalOpen = (event) => {
-    lg && setIsOpen(true);
+    sm && setIsOpen(true);
     setModalImage(event.target.src);
   };
 
+  // 將 Modal 移至下方: Fix 多張圖片產生多個 Modal
   const value = items.map((item, index) => (
     <swiper-slide key={index}>
-      <img src={item} alt="slider" className={`${lg && `cursor-zoom-in`} object-fit max-h-[31.25rem]`} onClick={handleModalOpen} />
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-        <img src={modalImage} alt="modal" className="rounded-lg" />
-      </Modal>
+      <img src={item} alt="slider" className={`${sm && `cursor-zoom-in`} object-fit max-h-[31.25rem]`} onClick={handleModalOpen} />
     </swiper-slide>
   ));
 
@@ -38,6 +35,11 @@ const Slider = ({ items }) => {
       loop="true"
     >
       {value}
+      {isOpen && (
+        <Modal isOpen={isOpen} setIsOpen={setIsOpen} className="w-[90%] max-w-[750px]">
+          <img src={modalImage} alt="modal" className="rounded-lg" />
+        </Modal>
+      )}
     </swiper-container>
   );
 };

@@ -14,8 +14,8 @@ const Product = () => {
   const { data, error, isFetching } = useGetProductByIdQuery(id);
 
   const product = !error && !isFetching && data[0];
-  const { modal, handleAddToCart } = useAddToCart();
-  const { modal: collectionModal, collectionIndex, handleCollection } = useCollection(product);
+  const { handleAddToCart } = useAddToCart();
+  const { collectionIndex, handleCollection } = useCollection(product);
 
   useEffect(() => {
     !isFetching && !product && navigate("/product-not-found");
@@ -67,7 +67,7 @@ const Product = () => {
           </button>
         </div>
         <div className="mt-3.5 text-lg">
-          <span className={product.stock === 0 ? "line-through" : null}>NT$ {product.price.toLocaleString()}</span>
+          <span className={product.stock === 0 ? "line-through" : ""}>NT$ {product.price.toLocaleString()}</span>
         </div>
         {product.stock < 5 && product.stock !== 0 && (
           <div>
@@ -88,7 +88,7 @@ const Product = () => {
     );
 
     content = (
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-14 items-start lg:mx-24 lg:min-h-[60vh]">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-14 items-start lg:mx-24">
         <Silder items={product.images} />
         {info}
       </div>
@@ -96,11 +96,9 @@ const Product = () => {
   }
 
   return (
-    <div className="container m-auto">
+    <div className="container m-auto h-lg:min-h-contentHeight h-xl:main-height">
       {breadcrumb}
       {content}
-      {modal}
-      {collectionModal}
     </div>
   );
 };

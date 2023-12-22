@@ -6,6 +6,7 @@ import { collectionApi } from "./apis/collectionApi";
 import { authApi } from "./apis/authApi";
 import { userApi } from "./apis/userApi";
 import authReducer from "./slices/authSlice";
+import modalReducer from "./slices/modalSlice";
 
 // 透過 configureStore() 建立 Redux Store
 export const store = configureStore({
@@ -16,6 +17,7 @@ export const store = configureStore({
     [authApi.reducerPath]: authApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
     auth: authReducer,
+    modal: modalReducer,
   },
 
   middleware: (getDefaultMiddleware) => {
@@ -36,3 +38,4 @@ export { useFetchCollectionQuery, useAddToCollectionMutation, useRemoveCollectio
 export { useLoginUserMutation, useCreateUserMutation, useLogoutUserMutation } from "./apis/authApi";
 export { useFetchUserQuery, useUpdateUserMutation } from "./apis/userApi";
 export { setCredentials, logout } from "./slices/authSlice";
+export { openModal, closeModal } from "./slices/modalSlice";

@@ -1,18 +1,20 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useUpdateUserMutation, setCredentials } from "../store";
+import { useSelector, useDispatch } from "react-redux";
+import { useUpdateUserMutation, setCredentials, openModal } from "../store";
 import useAddToCart from "../utils/useAddToCart";
 import useCollection from "../utils/useCollection";
 import Products from "../components/Products";
 import Button from "../components/Button";
-import Modal from "../components/Modal";
 
 const Account = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
   const [updateUser] = useUpdateUserMutation(); // updateUser(id, update)
+  /* // isLogin
+  const { data, error, isFetching } = useFetchUserQuery(undefined, { skip: !userInfo });
+  const userInfo = userInfo && !error && !isFetching && data.response; */
 
   useEffect(() => {
     document.title = "Account | 還沒有名字";
@@ -22,42 +24,41 @@ const Account = () => {
     !userInfo && navigate("/login");
   }, [userInfo, navigate]);
 
-  const { modal, handleAddToCart } = useAddToCart();
+  const { handleAddToCart } = useAddToCart();
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
-  const [isOpen, setIsOpen] = useState(false); // Modal
   // Edit
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(userInfo?.name || "");
   const [phone, setPhone] = useState(userInfo?.phone || "");
-  const [error, setError] = useState(null);
+  const [updateError, setUpdateError] = useState(null);
   const handleTab = (index) => {
     setActiveTabIndex(index);
   };
   const handleName = (event) => {
     setName(event.target.value);
-    event.target.id === error?.field && setError(null);
+    event.target.id === updateError?.field && setUpdateError(null);
   };
   const handlePhone = (event) => {
     setPhone(event.target.value);
-    event.target.id === error?.field && setError(null);
+    event.target.id === updateError?.field && setUpdateError(null);
   };
   const handleUpdateUser = (id, update) => {
     updateUser({ id, update })
       .unwrap()
       .then((res) => {
         dispatch(setCredentials({ ...res }));
-        setIsOpen(true);
+        dispatch(openModal({ title: "修改成功" }));
       })
-      .catch((err) => setError({ field: err.data?.field, message: err.data?.message }));
+      .catch((err) => setUpdateError({ field: err.data?.field, message: err.data?.message }));
   };
 
   useEffect(() => {
-    if (error) {
+    if (updateError) {
       setName(userInfo.name);
       setPhone(userInfo.phone);
     }
-  }, [error, userInfo]);
+  }, [updateError, userInfo]);
 
   const handleEdit = (event) => {
     event.preventDefault();
@@ -87,13 +88,6 @@ const Account = () => {
       document.removeEventListener("click", handleClickOutSide);
     };
   }, [isEditing]);
-
-  // Modal
-  const updateUserModal = (
-    <Modal isOpen={isOpen} setIsOpen={setIsOpen} action className="modal-content">
-      <p className="text-lg">修改成功</p>
-    </Modal>
-  );
 
   const { collectionItems } = useCollection();
   const wishList = collectionItems?.map((product) => {
@@ -128,7 +122,7 @@ const Account = () => {
           </div>
         );
       })}
-      {error && <p className="text-red-400 text-center mb-5">{error.message}</p>}
+      {updateError && <p className="text-red-400 text-center mb-5">{updateError.message}</p>}
       {!isEditing && (
         <Button secondary className="block mx-auto text-sm !rounded" onClick={() => setIsEditing(true)}>
           Edit
@@ -184,13 +178,7 @@ const Account = () => {
     </div>
   );
 
-  return (
-    <div className="container m-auto">
-      {content}
-      {modal}
-      {updateUserModal}
-    </div>
-  );
+  return <div className="container m-auto">{content}</div>;
 };
 
 export default Account;

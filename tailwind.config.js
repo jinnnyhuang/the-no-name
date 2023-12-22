@@ -31,13 +31,22 @@ module.exports = {
         10.5: "2.625rem",
         19: "4.75rem",
         button: "11.5rem",
+        navHeight: "5rem",
+        footerHeight: "calc(24px + 15.25rem)",
+      },
+      minHeight: {
+        contentHeight: "calc(100dvh - theme(spacing.navHeight) - theme(spacing.footerHeight))",
       },
       screens: {
         // ml: "820px",
         // xxl: "1366px",
         // "3xl": "1920px",
-        "hover-none": { raw: "(hover: none)" }, // 不可使用 HOVER 的裝置
-        "hover-hover": { raw: "(hover: hover)" }, // 可使用 HOVER 的裝置
+        "hover-none": { raw: "(hover: none)" }, // 不可使用 HOVER 的 裝置
+        // 增加判斷: 裝置可使用 HOVER & 螢幕寬度 >= 640px & 裝置可精確點選 (例如滑鼠)
+        // Fix Samsung 裝置支援 @media query hover
+        "hover-hover": { raw: "(hover: hover) and (min-width: 640px) and (pointer: fine)" },
+        "h-lg": { raw: "(min-height: 1024px)" },
+        "h-xl": { raw: "(min-height: 1280px)" },
       },
       animation: {
         fadeIn: "fadeIn 0.25s cubic-bezier(0.5, 1, 0.89, 1)",

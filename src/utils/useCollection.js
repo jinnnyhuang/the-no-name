@@ -1,10 +1,8 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import { useFetchCollectionQuery, useAddToCollectionMutation, useRemoveCollectionMutation } from "../store";
-import Modal from "../components/Modal";
+import { useSelector, useDispatch } from "react-redux";
+import { useFetchCollectionQuery, useAddToCollectionMutation, useRemoveCollectionMutation, openModal } from "../store";
 
 const useCollection = (product) => {
-  const [isOpen, setIsOpen] = useState(false); // Modal
+  const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
   const [addToCollection] = useAddToCollectionMutation(); // addToCollection(product)
   const [removeCollection] = useRemoveCollectionMutation(); // removeCollection(product)
@@ -15,7 +13,7 @@ const useCollection = (product) => {
 
   const collectionIndex = collectionItems?.findIndex((item) => item._id === product._id);
   const handleAddCollection = () => {
-    userInfo ? addToCollection(product) : setIsOpen(true);
+    userInfo ? addToCollection(product) : dispatch(openModal({ title: "請先登入" }));
   };
   const handleRemoveCollection = () => {
     removeCollection(product);
@@ -24,14 +22,7 @@ const useCollection = (product) => {
     collectionIndex >= 0 ? handleRemoveCollection(product) : handleAddCollection(product);
   };
 
-  // Modal
-  const modal = (
-    <Modal isOpen={isOpen} setIsOpen={setIsOpen} action className="modal-content">
-      <p className="text-lg">請先登入</p>
-    </Modal>
-  );
-
-  return { collectionItems, modal, collectionIndex, handleCollection, handleRemoveCollection };
+  return { collectionItems, collectionIndex, handleCollection, handleRemoveCollection };
 };
 
 export default useCollection;

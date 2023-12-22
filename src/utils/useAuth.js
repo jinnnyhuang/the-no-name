@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useLogoutUserMutation, logout, useLoginUserMutation, setCredentials } from "../store";
-import Modal from "../components/Modal";
+import { useLogoutUserMutation, logout, useLoginUserMutation, setCredentials, openModal } from "../store";
 
 const useAuth = () => {
   const navigate = useNavigate();
@@ -10,7 +9,6 @@ const useAuth = () => {
   const [logoutUser] = useLogoutUserMutation(); // logoutUser()
   const [loginUser] = useLoginUserMutation(); // loginUser({ email, password })
   const [error, setError] = useState(null);
-  const [isOpen, setIsOpen] = useState(false); // Modal
 
   const handleLogin = (email, password) => {
     loginUser({ email, password })
@@ -26,18 +24,11 @@ const useAuth = () => {
     logoutUser().then(() => {
       dispatch(logout());
       navigate("/");
-      setIsOpen(true);
+      dispatch(openModal({ title: "已登出" }));
     });
   };
 
-  // Modal
-  const modal = (
-    <Modal isOpen={isOpen} setIsOpen={setIsOpen} action className="modal-content">
-      <p className="text-lg">已登出</p>
-    </Modal>
-  );
-
-  return { modal, error, setError, handleLogout, handleLogin };
+  return { error, setError, handleLogout, handleLogin };
 };
 
 export default useAuth;

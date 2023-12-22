@@ -33,7 +33,7 @@ const Search = () => {
   }
 
   return (
-    <div className="container m-auto">
+    <div className="products-container container m-auto main-height">
       {heading}
       <div className="products">{content}</div>
       <Pagination currentPages={page} total={data?.total || 0} onClick={(page) => setPage(page)} />

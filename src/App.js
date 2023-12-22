@@ -12,6 +12,7 @@ import Account from "./pages/Account";
 import Category from "./pages/Category";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import Modal from "./components/Modal";
 
 function App() {
   // Fix Safari/iOS textbox auto zoom
@@ -37,6 +38,7 @@ function App() {
           <Route path="/account" element={<Account />} />
           <Route path="*" element={<Notfound />} />
         </Routes>
+        <Modal className="modal-content" action />
         <Footer />
       </BrowserRouter>
     </div>

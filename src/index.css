@@ -10,6 +10,8 @@
 @layer base {
   html {
     font-size: 0.8rem;
+    /* Remove grey background on clicked in mobile */
+    -webkit-tap-highlight-color: transparent;
     @media screen(sm) {
       font-size: 0.875rem;
     }
@@ -21,6 +23,7 @@
     fill: var(--color-primary);
   }
 
+  /* Focus 外框 */
   a:focus-visible,
   button:focus-visible {
     border-radius: 0.125em; /* rounded-sm */
@@ -30,21 +33,25 @@
 }
 
 @layer utilities {
-  /* Home Category Search*/
+  /** Home Category Search **/
   .products {
     @apply grid grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-16 justify-items-center mx-5 lg:mx-24;
+  }
+
+  /* min-height = 100dvh - Nav Height - Footer Height - Logo! */
+  .main-height {
+    @apply min-h-[calc(100dvh-theme(spacing.navHeight)-theme(spacing.footerHeight)-(5.125rem+178.78px))] lg:min-h-[calc(100dvh-theme(spacing.navHeight)-theme(spacing.footerHeight)-(5.125rem+298px))];
+    /* @apply min-h-[calc(100dvh-(theme(spacing.navHeight)*2)-theme(spacing.footerHeight)-(0.125rem+178.78px))] lg:min-h-[calc(100dvh-(theme(spacing.navHeight)*2)-theme(spacing.footerHeight)-(0.125rem+298px))]; */
   }
 
   .svg-icon {
     @apply max-w-[2rem] px-1;
   }
 
-  /* Navbar */
+  /** Navbar **/
   /* nav */
   .link {
-    /* @apply uppercase tracking-widest block py-1.5 hover:bg-neutral-50 rounded lg:hover:bg-transparent lg:p-0; */
-    /* 20231121 */
-    @apply uppercase tracking-widest block py-1.5 hover:bg-neutral-50 hover-hover:hover:bg-transparent hover-hover:p-0;
+    @apply uppercase tracking-widest block py-1.5 hover-hover:p-0;
   }
 
   .label-neutral {
@@ -67,7 +74,7 @@
     clip-path: none;
   }
 
-  /* Counter */
+  /** Counter **/
   .counter-icon {
     @apply fill-neutral-400 hover:fill-neutral-600 svg-icon transition-colors;
   }
@@ -76,9 +83,12 @@
     @apply fill-gray-200 svg-icon transition-colors;
   }
 
+  /* Hidden spin buttons */
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
+    appearance: none;
+    -moz-appearance: none; /* Firefox */
+    -webkit-appearance: none; /* Safari and Chrome */
     margin: 0;
   }
 
@@ -89,7 +99,7 @@
 
   /* Cart, Account, Login, Signup */
   .caption-content {
-    @apply mt-10 sm:mx-24 lg:min-h-[63vh];
+    @apply pt-10 sm:px-24 min-h-contentHeight;
   }
 
   /* Heading - Cart, Account, Login, Signup */
@@ -97,7 +107,7 @@
     @apply text-2xl tracking-wider text-center mb-14;
   }
 
-  /* Pagination */
+  /** Pagination **/
   .pagination {
     @apply cursor-pointer min-w-[32px] flex justify-center py-[5.5px] !rounded-md hover:bg-primary hover:text-white transition-all duration-300;
   }
@@ -106,7 +116,7 @@
     @apply cursor-pointer fill-neutral-400 hover:fill-primary max-w-[1.5rem] transition-colors;
   }
 
-  /* Modal */
+  /** Modal **/
   .action-button {
     @apply !rounded-md px-4.5 py-1.5;
   }

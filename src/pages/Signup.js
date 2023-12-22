@@ -1,23 +1,22 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useCreateUserMutation, openModal } from "../store";
 import Button from "../components/Button";
 import Input from "../components/Input";
-import Modal from "../components/Modal";
-import { useCreateUserMutation } from "../store";
 
 const Signup = () => {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [createUser] = useCreateUserMutation(); // createUser(email, password, name, phone)
 
   useEffect(() => {
     document.title = "Register | 還沒有名字";
   }, []);
 
-  const [isOpen, setIsOpen] = useState(false); // Modal
-  const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
-  const [name, setName] = useState(null);
-  const [phone, setPhone] = useState(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [error, setError] = useState(null);
 
   const handleEmail = (event) => {
@@ -40,43 +39,37 @@ const Signup = () => {
     event.preventDefault();
     createUser({ email, password, name, phone: phone || "" })
       .unwrap()
-      .then(() => setIsOpen(true))
+      .then((res) => {
+        dispatch(openModal({ title: "註冊成功", description: res?.message, actionButton: "Login" }));
+        setError(null);
+
+        // 清除註冊資料
+        setEmail("");
+        setPassword("");
+        setName("");
+        setPhone("");
+      })
       .catch((err) => setError({ field: err.data?.field, message: err.data?.message }));
   };
 
   const form = (
     <form className="flex flex-col pt-3 md:pt-8" onSubmit={handleSubmit}>
-      <Input id="name" type="text" autoComplete="name" onChange={handleName} required>
+      <Input id="name" type="text" autoComplete="name" value={name} onChange={handleName} required>
         姓名
       </Input>
-      <Input id="email" type="email" autoComplete="email" onChange={handleEmail} required>
+      <Input id="email" type="email" autoComplete="email" value={email} onChange={handleEmail} required>
         電子信箱
       </Input>
-      <Input id="password" type="password" autoComplete="password" onChange={handlePassword} required>
+      <Input id="password" type="password" autoComplete="password" value={password} onChange={handlePassword} required>
         密碼
       </Input>
-      <Input id="phone" type="text" autoComplete="tel" onChange={handlePhone}>
+      <Input id="phone" type="text" autoComplete="tel" value={phone} onChange={handlePhone}>
         電話號碼
       </Input>
       <Button primary className="mt-8 normal-case rounded">
         註冊
       </Button>
     </form>
-  );
-
-  // Modal
-  const actionButton = (
-    <Button tertiary className="action-button w-80" onClick={() => navigate("/login")}>
-      登入
-    </Button>
-  );
-  const modal = (
-    <Modal isOpen={isOpen} setIsOpen={setIsOpen} action actionButton={actionButton} className="modal-content">
-      <div className="flex flex-col items-center gap-2">
-        <p className="text-xl font-medium">註冊成功</p>
-        <p>感謝您加入會員，請登入開始選購喜歡的商品</p>
-      </div>
-    </Modal>
   );
 
   return (
@@ -96,7 +89,6 @@ const Signup = () => {
           </div>
         </div>
       </div>
-      {modal}
     </div>
   );
 };

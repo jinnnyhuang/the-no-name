@@ -1,17 +1,28 @@
 import { useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { closeModal } from "../store";
 import Icons from "../components/Icons";
 import Button from "../components/Button";
 
-const Modal = ({ children, isOpen, setIsOpen, action, actionButton, className }) => {
+// 若 Props 傳入 children，表示該 Modal 不由 redux 的 modalSlice 控制
+const Modal = ({ children, isOpen, setIsOpen, action, className }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { modal } = useSelector((state) => state.modal);
   const classes = classNames(className, `z-20 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-x-auto shadow-lg animate-fadeIn`);
 
-  const onClose = () => setIsOpen(false);
+  const onClose = () => {
+    setIsOpen && setIsOpen(false);
+    dispatch(closeModal());
+  };
 
   const modalRef = useRef(null);
   useEffect(() => {
-    if (isOpen) {
+    if (!modalRef.current) return;
+    if (modal || isOpen) {
       const modalElement = modalRef.current;
       // Modal 所有可聚焦的元素
       const focusableElements = modalElement.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
@@ -33,7 +44,12 @@ const Modal = ({ children, isOpen, setIsOpen, action, actionButton, className })
           }
         }
       };
-      const handleEscKey = (event) => event.keyCode === 27 && setIsOpen(false);
+      const handleEscKey = (event) => {
+        if (event.keyCode === 27) {
+          setIsOpen && setIsOpen(false);
+          dispatch(closeModal());
+        }
+      };
 
       document.body.classList.add("overflow-hidden");
       modalElement.addEventListener("keydown", handleTabKey);
@@ -44,18 +60,49 @@ const Modal = ({ children, isOpen, setIsOpen, action, actionButton, className })
         modalElement.removeEventListener("keydown", handleEscKey);
       };
     }
-  }, [isOpen, setIsOpen]);
+  }, [modal, dispatch, isOpen, setIsOpen]);
 
-  const defaultActionButton = (
-    <Button secondary transition className="action-button w-[9.7rem]" onClick={onClose}>
-      OK
-    </Button>
+  const setActionButton = () => {
+    const handleButton = (page) => {
+      page && navigate(page);
+      dispatch(closeModal());
+    };
+    switch (modal?.actionButton) {
+      case "Login":
+        return (
+          <Button tertiary className="action-button w-80" onClick={() => handleButton("/login")}>
+            登入
+          </Button>
+        );
+      case "Checkout":
+        return (
+          <Button tertiary transition className="action-button w-[9.7rem]" onClick={() => handleButton("/cart")}>
+            Checkout
+          </Button>
+        );
+      default:
+        return (
+          <Button secondary transition className="action-button w-[9.7rem]" onClick={() => handleButton()}>
+            OK
+          </Button>
+        );
+    }
+  };
+
+  const content = (
+    <>
+      <div className="flex flex-col items-center gap-2">
+        <p className={modal?.description ? "text-xl font-medium" : "text-lg"}>{modal?.title}</p>
+        {modal?.description && <p>{modal.description}</p>}
+      </div>
+      {action && <div className="mt-4.5">{setActionButton()}</div>}
+    </>
   );
 
   // createPortal: 將第一個參數新增到 html class modal-container
   // Fix 父元素設定定位
   return (
-    isOpen &&
+    (modal || isOpen) &&
     ReactDOM.createPortal(
       <div ref={modalRef}>
         <div className="z-10 fixed inset-0 bg-black opacity-40" onClick={onClose}></div>
@@ -65,10 +112,7 @@ const Modal = ({ children, isOpen, setIsOpen, action, actionButton, className })
               <Icons.Close className="w-4.5 h-4.5 close-button-icon" />
             </button>
           )}
-          <div className={`flex flex-col justify-center items-center ${action ? "mr-1" : ""}`}>
-            {children}
-            {action && <div className="mt-4.5">{actionButton ? actionButton : defaultActionButton}</div>}
-          </div>
+          <div className={`flex flex-col justify-center items-center ${action ? "mr-1" : ""}`}>{children ? children : content}</div>
         </div>
       </div>,
       document.querySelector(".modal-container")

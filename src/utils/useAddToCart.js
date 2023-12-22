@@ -1,53 +1,23 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useAddToCartMutation } from "../store";
-import Modal from "../components/Modal";
-import Button from "../components/Button";
+import { useSelector, useDispatch } from "react-redux";
+import { useAddToCartMutation, openModal } from "../store";
 
 const useAddToCart = () => {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
-
-  const [isOpen, setIsOpen] = useState(false);
-  const [message, setMessage] = useState(null);
   const [addToCart] = useAddToCartMutation(); // addToCart(_id) // productId
 
   const handleAddToCart = (product) => {
     if (userInfo) {
       addToCart(product._id)
         .unwrap()
-        .then((res) => {
-          setIsOpen(true);
-          res?.message && setMessage(res?.message);
-        });
+        // res.code = 200 = 已加入購物車
+        .then((res) => res?.message && dispatch(openModal({ title: res?.message, actionButton: res.code === 200 ? "Checkout" : undefined })));
     } else {
-      setIsOpen(true);
+      dispatch(openModal({ title: "請先登入" }));
     }
   };
 
-  // Modal
-  const handleClick = () => {
-    message !== "已加入購物車" ? setIsOpen(false) : navigate("/cart");
-  };
-  const actionButton = (
-    <Button
-      tertiary={message === "已加入購物車"}
-      secondary={message !== "已加入購物車"}
-      transition
-      className="action-button w-[9.7rem]"
-      onClick={handleClick}
-    >
-      {message !== "已加入購物車" ? "OK" : "Checkout"}
-    </Button>
-  );
-  const modal = (
-    <Modal isOpen={isOpen} setIsOpen={setIsOpen} action actionButton={actionButton} className="modal-content">
-      <p className="text-lg">{!userInfo ? "請先登入" : message}</p>
-    </Modal>
-  );
-
-  return { modal, handleAddToCart };
+  return { handleAddToCart };
 };
 
 export default useAddToCart;

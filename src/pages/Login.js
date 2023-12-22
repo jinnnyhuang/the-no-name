@@ -18,8 +18,12 @@ const Login = () => {
     userInfo && navigate("/");
   }, [userInfo, navigate]);
 
-  const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
+  useEffect(() => {
+    error && setPassword("");
+  }, [error]);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleEmail = (event) => {
     setEmail(event.target.value);
@@ -36,10 +40,10 @@ const Login = () => {
 
   const form = (
     <form className="flex flex-col pt-3 md:pt-8" onSubmit={handleSubmit}>
-      <Input id="email" type="email" autoComplete="email" onChange={handleEmail}>
+      <Input id="email" type="email" autoComplete="email" value={email} onChange={handleEmail}>
         電子信箱
       </Input>
-      <Input id="password" type="password" autoComplete="password" onChange={handlePassword}>
+      <Input id="password" type="password" autoComplete="password" value={password} onChange={handlePassword}>
         密碼
       </Input>
       <Button primary className="mt-8 normal-case rounded">

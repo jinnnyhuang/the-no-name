@@ -30,8 +30,8 @@ const Category = () => {
   }
 
   return (
-    <div className="container m-auto">
-      <h2 className="font-medium text-lg uppercase tracking-wide m-5 lg:mx-24 lg:mb-12">{category}</h2>
+    <div className="products-container container m-auto main-height">
+      <h2 className="font-medium text-lg uppercase tracking-wide mx-5 mb-5 lg:mx-24 lg:mb-12">{category}</h2>
       <div className="products">{content}</div>
       <Pagination currentPages={page} total={data?.total || 0} onClick={(page) => setPage(page)} />
     </div>
