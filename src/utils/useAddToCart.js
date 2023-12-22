@@ -3,11 +3,11 @@ import { useAddToCartMutation, openModal } from "../store";
 
 const useAddToCart = () => {
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.auth);
+  const { isLogin } = useSelector((state) => state.auth);
   const [addToCart] = useAddToCartMutation(); // addToCart(_id) // productId
 
   const handleAddToCart = (product) => {
-    if (userInfo) {
+    if (isLogin) {
       addToCart(product._id)
         .unwrap()
         // res.code = 200 = 已加入購物車

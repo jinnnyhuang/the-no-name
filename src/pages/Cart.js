@@ -13,9 +13,9 @@ const Cart = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.auth);
+  const { isLogin } = useSelector((state) => state.auth);
 
-  const { currentData, data, error, isFetching } = useFetchCartQuery(undefined, { skip: !userInfo });
+  const { currentData, data, error, isFetching } = useFetchCartQuery(undefined, { skip: !isLogin });
   const [updateQuantity, results] = useUpdateQuantityMutation(); // updateQuantity(item, operation, value)
   const [removeItem] = useRemoveItemMutation(); // removeItem(item)
 
@@ -77,7 +77,7 @@ const Cart = () => {
   if (error) {
     content = <div>Error Loading Cart.</div>;
   } else {
-    const cartItems = userInfo ? (isFetching ? currentData || [] : data) : [];
+    const cartItems = isLogin ? (isFetching ? currentData || [] : data) : [];
     if (cartItems?.length > 0) {
       const total = cartItems.filter((item) => item.productId._id).reduce((prev, curr) => prev + curr.productId.price * curr.quantity, 0);
       content = (

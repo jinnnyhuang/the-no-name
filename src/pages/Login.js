@@ -7,7 +7,7 @@ import useAuth from "../utils/useAuth";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { userInfo } = useSelector((state) => state.auth);
+  const { isLogin } = useSelector((state) => state.auth);
   const { error, setError, handleLogin } = useAuth();
 
   useEffect(() => {
@@ -15,8 +15,8 @@ const Login = () => {
   }, []);
 
   useEffect(() => {
-    userInfo && navigate("/");
-  }, [userInfo, navigate]);
+    isLogin && navigate("/");
+  }, [isLogin, navigate]);
 
   useEffect(() => {
     error && setPassword("");

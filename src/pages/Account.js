@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { useUpdateUserMutation, setCredentials, openModal } from "../store";
+import { useUpdateUserMutation, openModal, useFetchUserQuery } from "../store";
 import useAddToCart from "../utils/useAddToCart";
 import useCollection from "../utils/useCollection";
 import Products from "../components/Products";
@@ -10,27 +10,27 @@ import Button from "../components/Button";
 const Account = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.auth);
+  const { isLogin } = useSelector((state) => state.auth);
   const [updateUser] = useUpdateUserMutation(); // updateUser(id, update)
-  /* // isLogin
-  const { data, error, isFetching } = useFetchUserQuery(undefined, { skip: !userInfo });
-  const userInfo = userInfo && !error && !isFetching && data.response; */
+
+  const { data, error, isFetching } = useFetchUserQuery(undefined, { skip: !isLogin });
+  const userData = isLogin && !error && !isFetching && data.response;
 
   useEffect(() => {
     document.title = "Account | 還沒有名字";
   }, []);
 
   useEffect(() => {
-    !userInfo && navigate("/login");
-  }, [userInfo, navigate]);
+    !isLogin && navigate("/login");
+  }, [isLogin, navigate]);
 
   const { handleAddToCart } = useAddToCart();
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   // Edit
   const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState(userInfo?.name || "");
-  const [phone, setPhone] = useState(userInfo?.phone || "");
+  const [name, setName] = useState(userData?.name || "");
+  const [phone, setPhone] = useState(userData?.phone || "");
   const [updateError, setUpdateError] = useState(null);
   const handleTab = (index) => {
     setActiveTabIndex(index);
@@ -46,23 +46,20 @@ const Account = () => {
   const handleUpdateUser = (id, update) => {
     updateUser({ id, update })
       .unwrap()
-      .then((res) => {
-        dispatch(setCredentials({ ...res }));
-        dispatch(openModal({ title: "修改成功" }));
-      })
+      .then(() => dispatch(openModal({ title: "修改成功" })))
       .catch((err) => setUpdateError({ field: err.data?.field, message: err.data?.message }));
   };
 
   useEffect(() => {
     if (updateError) {
-      setName(userInfo.name);
-      setPhone(userInfo.phone);
+      setName(userData?.name || "");
+      setPhone(userData?.phone || "");
     }
-  }, [updateError, userInfo]);
+  }, [updateError, userData]);
 
   const handleEdit = (event) => {
     event.preventDefault();
-    handleUpdateUser(userInfo._id, { name, phone });
+    handleUpdateUser(userData._id, { name, phone });
     setIsEditing(false);
   };
 
@@ -95,7 +92,7 @@ const Account = () => {
   });
 
   const settingData = [
-    { label: "帳號", type: "email", id: "email", value: userInfo?.email || "", readonly: true },
+    { label: "帳號", type: "email", id: "email", value: userData?.email || "", readonly: true },
     { label: "姓名", type: "text", id: "name", value: name, readonly: false, onChange: handleName },
     { label: "電話號碼", type: "text", id: "phone", value: phone, readonly: false, onChange: handlePhone },
   ];

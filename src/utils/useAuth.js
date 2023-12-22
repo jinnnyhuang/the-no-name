@@ -13,9 +13,9 @@ const useAuth = () => {
   const handleLogin = (email, password) => {
     loginUser({ email, password })
       .unwrap()
-      .then((res) => {
+      .then(() => {
         setError(null);
-        dispatch(setCredentials({ ...res }));
+        dispatch(setCredentials());
       })
       .catch((err) => setError({ field: err.data?.field, message: err.data?.message }));
   };

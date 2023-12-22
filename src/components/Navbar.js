@@ -14,7 +14,7 @@ const Navbar = () => {
   const [term, setTerm] = useState("");
 
   const navigate = useNavigate();
-  const { userInfo } = useSelector((state) => state.auth);
+  const { isLogin } = useSelector((state) => state.auth);
   const { handleLogout } = useAuth();
 
   // Cart, Account, Login, Signup, Notfound Page 不顯示 Logo
@@ -60,7 +60,7 @@ const Navbar = () => {
   };
   const handleSecondary = () => {
     handleClose();
-    userInfo ? handleLogout() : navigate("/signup");
+    isLogin ? handleLogout() : navigate("/signup");
   };
 
   // tab
@@ -181,8 +181,8 @@ const Navbar = () => {
     );
   };
 
-  const { currentData, data, error, isFetching } = useFetchCartQuery(undefined, { skip: !userInfo });
-  const cartItems = userInfo && !error ? (isFetching ? currentData || [] : data) : [];
+  const { currentData, data, error, isFetching } = useFetchCartQuery(undefined, { skip: !isLogin });
+  const cartItems = isLogin && !error ? (isFetching ? currentData || [] : data) : [];
 
   const logout = (
     <div
@@ -216,7 +216,7 @@ const Navbar = () => {
         <Link to="/account" className="hidden hover-hover:block navbar-icon transition duration-200">
           <Icons.User />
         </Link>
-        {userInfo && logout}
+        {isLogin && logout}
       </div>
     </nav>
   );
@@ -242,10 +242,10 @@ const Navbar = () => {
         <div className="mt-auto">
           <div className="pt-6">
             <Button primary transition className="w-full normal-case my-1.5" onClick={handlePrimary}>
-              {userInfo ? "會員專區" : "登入"}
+              {isLogin ? "會員專區" : "登入"}
             </Button>
             <Button secondary className="w-full normal-case my-1.5" onClick={handleSecondary}>
-              {userInfo ? "登出" : "註冊"}
+              {isLogin ? "登出" : "註冊"}
             </Button>
           </div>
           <p className="my-4 text-sm text-center text-neutral-400">The No Name Yet &copy; 2023</p>
