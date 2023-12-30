@@ -70,19 +70,19 @@ const Modal = ({ children, isOpen, setIsOpen, action, className }) => {
     switch (modal?.actionButton) {
       case "Login":
         return (
-          <Button tertiary className="action-button w-80" onClick={() => handleButton("/login")}>
+          <Button tertiary className="action-button w-80 mt-4.5" onClick={() => handleButton("/login")}>
             登入
           </Button>
         );
       case "Checkout":
         return (
-          <Button tertiary transition className="action-button w-[9.7rem]" onClick={() => handleButton("/cart")}>
+          <Button tertiary transition className="action-button w-[9.7rem] mt-4.5" onClick={() => handleButton("/cart")}>
             Checkout
           </Button>
         );
       default:
         return (
-          <Button secondary transition className="action-button w-[9.7rem]" onClick={() => handleButton()}>
+          <Button secondary transition className="action-button w-[9.7rem] mt-4.5" onClick={() => handleButton()}>
             OK
           </Button>
         );
@@ -95,7 +95,7 @@ const Modal = ({ children, isOpen, setIsOpen, action, className }) => {
         <p className={modal?.description ? "text-xl font-medium" : "text-lg"}>{modal?.title}</p>
         {modal?.description && <p>{modal.description}</p>}
       </div>
-      {action && <div className="mt-4.5">{setActionButton()}</div>}
+      {action && setActionButton()}
     </>
   );
 
@@ -105,14 +105,14 @@ const Modal = ({ children, isOpen, setIsOpen, action, className }) => {
     (modal || isOpen) &&
     ReactDOM.createPortal(
       <div ref={modalRef}>
-        <div className="z-10 fixed inset-0 bg-black opacity-40" onClick={onClose}></div>
+        <div className="backdrop z-10 fixed inset-0 bg-black opacity-40" onClick={onClose}></div>
         <div className={classes}>
           {action && (
             <button onClick={onClose} className="close-button group p-[7px] absolute top-3 right-2.5" tabIndex={0}>
               <Icons.Close className="w-4.5 h-4.5 close-button-icon" />
             </button>
           )}
-          <div className={`flex flex-col justify-center items-center ${action ? "mr-1" : ""}`}>{children ? children : content}</div>
+          <div className={`modal-content flex flex-col justify-center items-center${action ? " mr-1" : ""}`}>{children ? children : content}</div>
         </div>
       </div>,
       document.querySelector(".modal-container")

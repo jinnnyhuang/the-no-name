@@ -18,17 +18,17 @@ const Product = () => {
   const { collectionIndex, handleCollection } = useCollection(product);
 
   useEffect(() => {
-    !isFetching && !product && navigate("/product-not-found");
-    document.title = product && `${product.title} | 還沒有名字`;
-  }, [isFetching, navigate, product]);
+    !isFetching && error && error?.status !== "FETCH_ERROR" && navigate("/product-not-found");
+    document.title = `${product?.title || "The No Name Yet"} | 還沒有名字`;
+  }, [error, isFetching, navigate, product]);
 
   let content;
   let breadcrumb;
-  if (error) {
-    content = <div className="text-center">Error Loading Product.</div>;
-  } else if (!isFetching && data.length !== 0) {
+  if (!isFetching && error && error?.status === "FETCH_ERROR") {
+    content = <p className="text-center">Error Loading Product.</p>;
+  } else if (product) {
     breadcrumb = (
-      <div className="mx-6 mb-8 lg:mx-24 lg:grid lg:grid-cols-2">
+      <section className="breadcrumb mx-6 mb-8 lg:mx-24 lg:grid lg:grid-cols-2">
         <div className="flex gap-x-3 justify-center items-center">
           <Link to="/" className="text-neutral-400 tracking-wide uppercase">
             Home
@@ -40,39 +40,42 @@ const Product = () => {
           <Icons.Next className="fill-neutral-400 max-w-[1.5rem]" />
           <span className="text-primary truncate">{product.title}</span>
         </div>
-      </div>
+      </section>
     );
 
     const items = [
       {
-        heading: "DETAILS",
+        label: "DETAILS",
         content: product.description,
       },
       {
-        heading: "SIZE",
+        label: "SIZE",
         content: product.size,
       },
     ];
 
     const info = (
-      <div className="w-[24rem] mx-auto">
-        <div className="flex justify-between">
-          <h1 className="text-lg">{product.title}</h1>
-          <button onClick={handleCollection} className="!rounded">
-            <Icons.Collection
-              className={`cursor-pointer stroke-[5rem] shrink-0 transition-colors ${
-                collectionIndex >= 0 ? "fill-primary stroke-transparent" : "fill-white stroke-primary"
-              }`}
-            />
-          </button>
-        </div>
-        <div className="mt-3.5 text-lg">
-          <span className={product.stock === 0 ? "line-through" : ""}>NT$ {product.price.toLocaleString()}</span>
-        </div>
+      <div className="product-info w-[24rem] mx-auto relative">
+        <h1 className="product-name text-lg">{product.title}</h1>
+        <button onClick={handleCollection} className="collection !rounded absolute top-0 right-0">
+          <Icons.Collection
+            className={`cursor-pointer stroke-[5rem] shrink-0 transition-colors${
+              collectionIndex >= 0 ? " fill-primary stroke-transparent" : " fill-white stroke-primary"
+            }`}
+          />
+        </button>
+        <h3 className="product-price mt-3.5 text-lg">
+          <span className={`original-price${product.stock === 0 || product.discountPercentage < 100 ? " line-through text-neutral-400" : ""}`}>
+            NT$ {product.price.toLocaleString()}
+          </span>
+          {product.discountPercentage < 100 && (
+            <span className="discount-price ml-2">NT$ {(product.price * (product.discountPercentage / 100)).toLocaleString()}</span>
+          )}
+        </h3>
         {product.stock < 5 && product.stock !== 0 && (
-          <div>
+          <h4 className="product-stock">
             <span className="text-sm label-neutral">剩餘庫存 {product.stock}</span>
-          </div>
+          </h4>
         )}
         {product.stock === 0 ? (
           <Button className="cursor-not-allowed w-button mt-4 tracking-wider" tabIndex={-1}>
@@ -83,23 +86,23 @@ const Product = () => {
             加入購物車
           </Button>
         )}
-        <Accordion items={items} className="mt-12 text-sm w-full" />
+        <Accordion items={items} className="product-description mt-12 text-sm w-full" />
       </div>
     );
 
     content = (
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-14 items-start lg:mx-24">
-        <Silder items={product.images} />
+      <section className="main-content grid grid-cols-1 lg:grid-cols-2 gap-y-14 items-start lg:mx-24">
+        <Silder items={product} />
         {info}
-      </div>
+      </section>
     );
   }
 
   return (
-    <div className="container m-auto h-lg:min-h-contentHeight h-xl:main-height">
+    <main className="container m-auto h-lg:min-h-contentHeight h-xl:main-height">
       {breadcrumb}
       {content}
-    </div>
+    </main>
   );
 };
 

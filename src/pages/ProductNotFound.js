@@ -10,10 +10,10 @@ const ProductNotFound = () => {
   }, []);
 
   return (
-    <div className="min-h-contentHeight text-center pt-32">
-      <div className="text-3xl font-bold">查無此商品</div>
-      <div className="uppercase mt-2 font-display">Product Not Found.</div>
-      <div className="uppercase mt-2 mb-12">抱歉，我們找不到您要的商品</div>
+    <main className="min-h-contentHeight text-center pt-32">
+      <p className="text-3xl font-bold">查無此商品</p>
+      <p className="uppercase mt-2 font-display">Product Not Found.</p>
+      <p className="uppercase mt-2 mb-12">抱歉，我們找不到您要的商品</p>
       <Button
         primary
         transition
@@ -25,7 +25,7 @@ const ProductNotFound = () => {
       >
         Back To Home
       </Button>
-    </div>
+    </main>
   );
 };
 

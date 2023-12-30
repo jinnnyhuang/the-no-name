@@ -10,10 +10,10 @@ const Notfound = () => {
   }, []);
 
   return (
-    <div className="font-display min-h-contentHeight text-center pt-32">
-      <div className="text-5.4 font-bold">404</div>
-      <div className="uppercase mt-2">Oops! Page Not Found.</div>
-      <div className="uppercase mt-2 mb-12 font-noto">抱歉，我們找不到您指定的頁面</div>
+    <main className="font-display min-h-contentHeight text-center pt-32">
+      <p className="text-5.4 font-bold">404</p>
+      <p className="uppercase mt-2">Oops! Page Not Found.</p>
+      <p className="uppercase mt-2 mb-12 font-noto">抱歉，我們找不到您指定的頁面</p>
       <Button
         primary
         transition
@@ -25,7 +25,7 @@ const Notfound = () => {
       >
         Back To Home
       </Button>
-    </div>
+    </main>
   );
 };
 

@@ -39,7 +39,7 @@ const Login = () => {
   };
 
   const form = (
-    <form className="flex flex-col pt-3 md:pt-8" onSubmit={handleSubmit}>
+    <form className="login-form flex flex-col pt-3 md:pt-8" onSubmit={handleSubmit}>
       <Input id="email" type="email" autoComplete="email" value={email} onChange={handleEmail}>
         電子信箱
       </Input>
@@ -53,12 +53,12 @@ const Login = () => {
   );
 
   return (
-    <div className="container m-auto">
-      <div className="flex flex-col items-center caption-content">
+    <main className="container m-auto">
+      <div className="page-content flex flex-col items-center">
         <div className="w-[20.5rem] md:w-[32rem]">
-          <h1 className="caption">Welcome</h1>
+          <h1 className="page-title">Welcome</h1>
           {form}
-          <div className="mt-7 flex flex-col items-center gap-3.5">
+          <div className="register-prompt mt-7 flex flex-col items-center gap-3.5">
             {error && <p className="text-red-400">{error.message}</p>}
             <p className="text-neutral-500">
               還沒有帳號嗎？
@@ -69,7 +69,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

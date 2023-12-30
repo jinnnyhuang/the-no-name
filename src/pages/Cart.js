@@ -36,18 +36,27 @@ const Cart = () => {
     {
       label: "產品",
       render: (item) => (
-        <Link to={`/products/${item.productId._id}`} className="block">
-          <img src={item.productId.thumbnail} alt={item.productId.title} className="w-[7rem]" />
-        </Link>
+        <div className="cartItem-image">
+          <Link to={`/products/${item.productId._id}`} className="block">
+            <img src={item.productId.thumbnail} alt={item.productId.title} className="w-[7rem]" />
+          </Link>
+        </div>
       ),
       class: "text-left w-[7rem]",
     },
     {
       label: "",
       render: (item) => (
-        <div className="pl-3 pr-2 sm:pl-6 text-left">
-          <p>{item.productId.title}</p>
-          <p>NT$ {item.productId.price}</p>
+        <div className="cartItem-info pl-3 pr-2 sm:pl-6 text-left">
+          <h2 className="cartItem-name">{item.productId.title}</h2>
+          <div className="cartItem-price">
+            <span className={`original-price${item.productId.discountPercentage < 100 ? " line-through text-neutral-300" : ""}`}>
+              NT$ {item.productId.price.toLocaleString()}
+            </span>
+            {item.productId.discountPercentage < 100 && (
+              <span className="discount-price ml-2">NT$ {(item.productId.price * (item.productId.discountPercentage / 100)).toLocaleString()}</span>
+            )}
+          </div>
         </div>
       ),
       class: "",
@@ -55,9 +64,12 @@ const Cart = () => {
     {
       label: "數量",
       render: (item) => (
-        <div className="flex flex-col items-center">
+        <div className="cartItem-quantity flex flex-col items-center">
           <Counter value={item} onChange={handleUpdateQuantity} isLoading={results.isLoading} isUpdated={results.isSuccess && !isFetching} />
-          <button className="cursor-pointer text-xs mt-3 text-neutral-400 underline-offset-4 hover:underline" onClick={() => handleRemove(item)}>
+          <button
+            className="cartItem-remove cursor-pointer text-xs mt-3 text-neutral-400 underline-offset-4 hover:underline"
+            onClick={() => handleRemove(item)}
+          >
             移除
           </button>
         </div>
@@ -67,7 +79,9 @@ const Cart = () => {
     {
       label: "小計",
       render: (item) => (
-        <div className="text-right hidden md:block md:min-w-[5rem]">NT$ {(item.quantity * item.productId.price).toLocaleString()}</div>
+        <div className="cartItem-subtotal text-right hidden md:block md:min-w-[5rem]">
+          NT$ {(item.quantity * (item.productId.price * (item.productId.discountPercentage / 100))).toLocaleString()}
+        </div>
       ),
       class: "text-right hidden md:table-cell",
     },
@@ -75,17 +89,19 @@ const Cart = () => {
 
   let content;
   if (error) {
-    content = <div>Error Loading Cart.</div>;
+    content = <p>Error Loading Cart.</p>;
   } else {
     const cartItems = isLogin ? (isFetching ? currentData || [] : data) : [];
     if (cartItems?.length > 0) {
-      const total = cartItems.filter((item) => item.productId._id).reduce((prev, curr) => prev + curr.productId.price * curr.quantity, 0);
+      const total = cartItems
+        .filter((item) => item.productId._id)
+        .reduce((prev, curr) => prev + curr.productId.price * (curr.productId.discountPercentage / 100) * curr.quantity, 0);
       content = (
         <>
-          <h1 className="caption">購物車</h1>
-          <Table data={cartItems} config={tableConfig} keyValue={(item) => item._id} />
-          <div className="text-xl sm:text-lg caption-content-width mt-7 text-right text-neutral-500">總額: NT$ {total.toLocaleString()}</div>
-          <div className="caption-content-width flex flex-col gap-y-3 mt-7 sm:flex-row sm:justify-between sm:items-center">
+          <h1 className="page-title">購物車</h1>
+          <Table data={cartItems} config={tableConfig} keyValue={(item) => item._id} className="cartItems" />
+          <p className="cart-total w-full text-xl sm:text-lg mt-7 text-right text-neutral-500">總額: NT$ {total.toLocaleString()}</p>
+          <div className="cart-buttons w-full flex flex-col gap-y-3 mt-7 sm:flex-row sm:justify-between sm:items-center">
             <Button primary transition className="px-5">
               前往結帳
             </Button>
@@ -98,7 +114,7 @@ const Cart = () => {
     } else {
       content = (
         <>
-          <p className="tracking-wide text-2xl">購物車內尚無商品</p>
+          <p className="tracking-wide text-2xl">購物車目前尚無商品</p>
           <Button primary transition className="w-button mt-7.5" onClick={() => navigate("/")}>
             開始選購
           </Button>
@@ -108,9 +124,9 @@ const Cart = () => {
   }
 
   return (
-    <div className="container m-auto">
-      <div className="flex flex-col items-center caption-content">{content}</div>
-    </div>
+    <main className="container m-auto">
+      <div className="page-content page-content-width mx-auto flex flex-col items-center">{content}</div>
+    </main>
   );
 };
 

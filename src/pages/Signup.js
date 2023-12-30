@@ -53,7 +53,7 @@ const Signup = () => {
   };
 
   const form = (
-    <form className="flex flex-col pt-3 md:pt-8" onSubmit={handleSubmit}>
+    <form className="signup-form flex flex-col pt-3 md:pt-8" onSubmit={handleSubmit}>
       <Input id="name" type="text" autoComplete="name" value={name} onChange={handleName} required>
         姓名
       </Input>
@@ -73,12 +73,12 @@ const Signup = () => {
   );
 
   return (
-    <div className="container m-auto">
-      <div className="flex flex-col items-center caption-content">
+    <main className="container m-auto">
+      <div className="page-content flex flex-col items-center">
         <div className="w-[20.5rem] md:w-[32rem]">
-          <h1 className="caption">建立帳號</h1>
+          <h1 className="page-title">建立帳號</h1>
           {form}
-          <div className="mt-7 flex flex-col items-center gap-3.5">
+          <div className="login-prompt mt-7 flex flex-col items-center gap-3.5">
             {error && <p className="text-red-400">{error.message}</p>}
             <p className="text-neutral-500">
               已經有帳號了嗎？
@@ -89,7 +89,7 @@ const Signup = () => {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

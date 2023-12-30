@@ -1,4 +1,4 @@
-const Table = ({ data, config, keyValue }) => {
+const Table = ({ data, config, keyValue, className }) => {
   const renderedRow = data.map((rowData) => {
     const renderedCells = config.map((column) => {
       return (
@@ -20,7 +20,7 @@ const Table = ({ data, config, keyValue }) => {
   });
 
   return (
-    <table className="caption-content-width text-neutral-500">
+    <table className={`${className} w-full text-neutral-500`}>
       <thead>
         <tr>{renderedTableHeaders}</tr>
       </thead>

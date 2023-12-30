@@ -12,11 +12,13 @@ const Slider = ({ items }) => {
   };
 
   // 將 Modal 移至下方: Fix 多張圖片產生多個 Modal
-  const value = items.map((item, index) => (
-    <swiper-slide key={index}>
-      <img src={item} alt="slider" className={`${sm && `cursor-zoom-in`} object-fit max-h-[31.25rem]`} onClick={handleModalOpen} />
-    </swiper-slide>
-  ));
+  const slider = items.images.map((item, index) => {
+    return (
+      <swiper-slide key={index}>
+        <img src={item} alt={items.title} className={`${sm && `cursor-zoom-in`} object-fit max-h-[31.25rem]`} onClick={handleModalOpen} />
+      </swiper-slide>
+    );
+  });
 
   return (
     <swiper-container
@@ -34,10 +36,10 @@ const Slider = ({ items }) => {
       pagination-clickable="true"
       loop="true"
     >
-      {value}
+      {slider}
       {isOpen && (
-        <Modal isOpen={isOpen} setIsOpen={setIsOpen} className="w-[90%] max-w-[750px]">
-          <img src={modalImage} alt="modal" className="rounded-lg" />
+        <Modal isOpen={isOpen} setIsOpen={setIsOpen} className="modal-image w-[90%] max-w-[750px]">
+          <img src={modalImage} alt={items.title} className="rounded-lg" />
         </Modal>
       )}
     </swiper-container>

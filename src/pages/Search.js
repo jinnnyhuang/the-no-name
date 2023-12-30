@@ -15,29 +15,29 @@ const Search = () => {
   const { data, error, isFetching } = useGetProductsQuery({ q: term, _page: page, _limit: process.env.REACT_APP_DEFAULT_PER_PAGE });
 
   const empty = (
-    <div className="flex flex-col items-center tracking-base">
-      <div className="text-xl mb-1.5">抱歉，找不到任何結果</div>
-      <div>{`0 Results for ${term}`}</div>
+    <div className="no-results flex flex-col items-center tracking-base">
+      <h1 className="no-results-heading text-xl mb-1.5">抱歉，找不到任何結果</h1>
+      <p>{`0 Results for ${term}`}</p>
     </div>
   );
 
   let content;
   let heading;
   if (error) {
-    content = <div>Error Loading Products.</div>;
+    content = <p className="col-span-full">Error Loading Products.</p>;
   } else if (!isFetching) {
     content = data?.products?.map((product) => {
       return <Products product={product} key={product._id} />;
     });
-    heading = (data?.total > 0 && <div className="mx-5 mb-1.5 lg:mx-24 text-lg tracking-base">{`${data?.total} Results for ${term}`}</div>) || empty;
+    heading = <p className="content-heading mx-5 mb-5 lg:mx-24 lg:mb-12 text-lg tracking-base">{`${data?.total} Results for ${term}`}</p>;
   }
 
   return (
-    <div className="products-container container m-auto main-height">
-      {heading}
-      <div className="products">{content}</div>
+    <main className="products-container container m-auto main-height">
+      {data?.total !== 0 && heading}
+      {data?.total !== 0 ? <div className="products">{content}</div> : empty}
       <Pagination currentPages={page} total={data?.total || 0} onClick={(page) => setPage(page)} />
-    </div>
+    </main>
   );
 };
 

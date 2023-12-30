@@ -11,10 +11,10 @@ const Account = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isLogin } = useSelector((state) => state.auth);
-  const [updateUser] = useUpdateUserMutation(); // updateUser(id, update)
+  const [updateUser, results] = useUpdateUserMutation(); // updateUser(id, update)
 
-  const { data, error, isFetching } = useFetchUserQuery(undefined, { skip: !isLogin });
-  const userData = isLogin && !error && !isFetching && data.response;
+  const { data, error, isFetching, isLoading } = useFetchUserQuery(undefined, { skip: !isLogin });
+  const userData = isLogin && !error && !isFetching ? data?.response : undefined;
 
   useEffect(() => {
     document.title = "Account | 還沒有名字";
@@ -29,8 +29,9 @@ const Account = () => {
 
   // Edit
   const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState(userData?.name || "");
-  const [phone, setPhone] = useState(userData?.phone || "");
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [updateError, setUpdateError] = useState(null);
   const handleTab = (index) => {
     setActiveTabIndex(index);
@@ -51,11 +52,15 @@ const Account = () => {
   };
 
   useEffect(() => {
-    if (updateError) {
+    if (userData) {
       setName(userData?.name || "");
       setPhone(userData?.phone || "");
     }
   }, [updateError, userData]);
+
+  useEffect(() => {
+    isLogin && !isLoading && !error && setEmail(data?.response?.email || "");
+  }, [isLogin, isLoading, error, data]);
 
   const handleEdit = (event) => {
     event.preventDefault();
@@ -92,13 +97,13 @@ const Account = () => {
   });
 
   const settingData = [
-    { label: "帳號", type: "email", id: "email", value: userData?.email || "", readonly: true },
+    { label: "帳號", type: "email", id: "email", value: email, readonly: true },
     { label: "姓名", type: "text", id: "name", value: name, readonly: false, onChange: handleName },
     { label: "電話號碼", type: "text", id: "phone", value: phone, readonly: false, onChange: handlePhone },
   ];
 
   const setting = (
-    <form id="account-settings" name="account-settings" autoComplete="off" onSubmit={handleEdit} ref={formRef}>
+    <form id="account" name="account" autoComplete="off" onSubmit={handleEdit} ref={formRef}>
       {settingData.map((input, index) => {
         return (
           <div key={index} className="block mb-5 last-of-type:mb-10">
@@ -108,9 +113,9 @@ const Account = () => {
             <input
               type={input.type}
               id={input.id}
-              className={`px-3 py-2 border shadow-sm border-neutral-300 placeholder-neutral-400 block w-full rounded focus:outline-none ${
-                input.readonly || !isEditing ? `bg-neutral-200` : `bg-white focus:border-primary focus:ring-primary focus:ring-1`
-              }`}
+              className={`px-3 py-2 border shadow-sm border-neutral-300 placeholder-neutral-400 block w-full rounded focus:outline-none${
+                input.readonly || !isEditing ? ` bg-neutral-200` : ` bg-white focus:border-primary focus:ring-primary focus:ring-1`
+              }${isLoading || results.isLoading ? " animate-pulse" : ""}`}
               readOnly={input.readonly || !isEditing}
               value={input.value}
               onChange={input?.onChange}
@@ -140,7 +145,7 @@ const Account = () => {
     },
     {
       label: ["訂單查詢", "Orders"],
-      content: "尚無訂單",
+      content: <p>尚無訂單</p>,
     },
     {
       label: ["願望清單", "Wish List"],
@@ -152,7 +157,7 @@ const Account = () => {
     return (
       <button
         key={index}
-        className={`cursor-pointer inline-block py-1.5 px-3 text-neutral-700 ${index === activeTabIndex ? "font-medium" : ""}`}
+        className={`cursor-pointer inline-block py-1.5 px-3 text-neutral-700${index === activeTabIndex ? " font-medium" : ""}`}
         onClick={() => handleTab(index)}
       >
         {item.label[0]}
@@ -161,21 +166,19 @@ const Account = () => {
   });
 
   const content = (
-    <div className="flex flex-col items-center caption-content">
-      <h1 className="caption">會員專區</h1>
-      <div className="flex flex-col xl:flex-row justify-between gap-x-7 min-h-[42vh] caption-content-width">
-        <div className="flex flex-row mb-2.5 xl:flex-col xl:w-[9.5rem]">{list}</div>
-        <div className="flex-1 bg-neutral-50 rounded p-7">
-          <div>
-            <h2 className="text-xl font-medium mb-8 font-display">{tabs[activeTabIndex].label[1]}</h2>
-            <div>{tabs[activeTabIndex].content}</div>
-          </div>
+    <div className="page-content flex flex-col items-center">
+      <h1 className="page-title">會員專區</h1>
+      <div className="page-content-width flex flex-col xl:flex-row justify-between gap-x-7 min-h-[42vh]">
+        <div className="account-buttons flex flex-row mb-2.5 xl:flex-col xl:w-[9.5rem]">{list}</div>
+        <div className={`${tabs[activeTabIndex].label[1].replace(" ", "-").toLowerCase()} flex-1 bg-neutral-50 rounded p-7`}>
+          <h2 className="content-heading text-xl mb-8">{tabs[activeTabIndex].label[1]}</h2>
+          {tabs[activeTabIndex].content}
         </div>
       </div>
     </div>
   );
 
-  return <div className="container m-auto">{content}</div>;
+  return <main className="container m-auto">{content}</main>;
 };
 
 export default Account;

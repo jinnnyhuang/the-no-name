@@ -50,19 +50,23 @@
 
   /** Navbar **/
   /* nav */
-  .link {
+  .nav-link {
     @apply uppercase tracking-widest block py-1.5 hover-hover:p-0;
+  }
+
+  .nav-item {
+    @apply mb-1 hover-hover:mb-0;
   }
 
   .label-neutral {
     @apply text-white bg-neutral-400 rounded-[3px] px-2.5 py-1;
   }
 
-  .navbar-icon {
+  .nav-icon {
     @apply p-2.5 !rounded-md hover:bg-neutral-200 focus-visible:bg-neutral-200 focus-visible:shadow-none;
   }
 
-  .navbar-icon-notification {
+  .nav-icon-notification {
     @apply absolute top-[5px] right-[5px] sm:top-1 sm:right-1 rounded-full w-0.8 h-0.8 bg-neutral-400 border-2 border-white group-focus-visible:border-neutral-200 group-hover:border-neutral-200 transition;
   }
 
@@ -92,28 +96,28 @@
     margin: 0;
   }
 
-  /* Tabel, Account */
-  .caption-content-width {
+  /* Cart, Account */
+  .page-content-width {
     @apply w-[88%] lg:w-3/4;
   }
 
   /* Cart, Account, Login, Signup */
-  .caption-content {
-    @apply pt-10 sm:px-24 min-h-contentHeight;
+  .page-content {
+    @apply pt-10 min-h-contentHeight;
   }
 
-  /* Heading - Cart, Account, Login, Signup */
-  .caption {
+  /* Cart, Account, Login, Signup */
+  .page-title {
     @apply text-2xl tracking-wider text-center mb-14;
   }
 
   /** Pagination **/
-  .pagination {
+  .pagination-items {
     @apply cursor-pointer min-w-[32px] flex justify-center py-[5.5px] !rounded-md hover:bg-primary hover:text-white transition-all duration-300;
   }
 
   .pagination-icon {
-    @apply cursor-pointer fill-neutral-400 hover:fill-primary max-w-[1.5rem] transition-colors;
+    @apply cursor-pointer fill-neutral-400 hover:fill-primary transition-colors;
   }
 
   /** Modal **/
@@ -121,7 +125,7 @@
     @apply !rounded-md px-4.5 py-1.5;
   }
 
-  .modal-content {
+  .modal-action {
     @apply min-w-fit rounded-lg pl-10.5 pr-9.5 pb-7.5 pt-12 bg-white;
     /* @apply min-w-fit rounded-lg px-12 py-8 bg-white; */
   }
@@ -133,5 +137,9 @@
 
   .close-button-icon {
     @apply fill-[#C8C8C8] group-hover:fill-neutral-400 group-focus:fill-neutral-400 transition;
+  }
+
+  .content-heading {
+    @apply font-medium font-display;
   }
 }

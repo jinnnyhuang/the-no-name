@@ -23,25 +23,23 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/products/:id" element={<Product />} />
-          <Route path="/product-not-found" element={<ProductNotFound />} />
-          <Route path="/category/:category" element={<Category />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route exact path="/search" element={<Search />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/account" element={<Account />} />
-          <Route path="*" element={<Notfound />} />
-        </Routes>
-        <Modal className="modal-content" action />
-        <Footer />
-      </BrowserRouter>
-    </div>
+    <BrowserRouter>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/products/:id" element={<Product />} />
+        <Route path="/product-not-found" element={<ProductNotFound />} />
+        <Route path="/category/:category" element={<Category />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route exact path="/search" element={<Search />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/account" element={<Account />} />
+        <Route path="*" element={<Notfound />} />
+      </Routes>
+      <Modal className="modal-action" action />
+      <Footer />
+    </BrowserRouter>
   );
 }
 

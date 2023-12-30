@@ -39,8 +39,8 @@ const Counter = ({ value, onChange, isLoading, isUpdated }) => {
       </button>
       <input
         type="number"
-        className={`cursor-default focus:outline-none text-center w-full flex items-center transition-colors duration-300 ${
-          isLoading ? "text-gray-200" : "text-neutral-500 hover:text-neutral-600 focus:text-neutral-600"
+        className={`cursor-default focus:outline-none text-center w-full flex items-center transition-colors duration-300${
+          isLoading ? " text-gray-200" : " text-neutral-500 hover:text-neutral-600 focus:text-neutral-600"
         }`}
         name="custom-input-number"
         onChange={handleChange}
@@ -48,7 +48,7 @@ const Counter = ({ value, onChange, isLoading, isUpdated }) => {
         readOnly={isLoading}
       ></input>
       <button
-        className={`decrement transition-colors ${value.productId.stock <= value.quantity || isLoading ? "" : "hover:bg-neutral-200"}`}
+        className={`increment transition-colors${value.productId.stock <= value.quantity || isLoading ? "" : " hover:bg-neutral-200"}`}
         onClick={handleIncrement}
       >
         <Icons.Plus className={value.productId.stock <= value.quantity || isLoading ? "loading-counter-icon" : "counter-icon"} />

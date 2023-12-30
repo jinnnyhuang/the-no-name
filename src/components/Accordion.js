@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import Icons from "../components/Icons";
 
 const Accordion = ({ items, className }) => {
@@ -12,16 +12,16 @@ const Accordion = ({ items, className }) => {
     const icon = <span className="ml-auto">{isExpanded ? <Icons.Minus className="svg-icon" /> : <Icons.Plus className="svg-icon" />}</span>;
 
     return (
-      <div key={index}>
+      <Fragment key={index}>
         <button
           onClick={() => handleClick(index)}
           className="w-full tracking-wider cursor-pointer flex items-center border-b border-primary focus-visible:border-transparent p-3"
         >
-          {item.heading}
+          {item.label}
           {icon}
         </button>
         {isExpanded && <div className="tracking-wider border-b border-primary px-2 py-5 whitespace-pre-line">{item.content}</div>}
-      </div>
+      </Fragment>
     );
   });
 

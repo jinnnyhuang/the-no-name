@@ -14,7 +14,7 @@ const Home = () => {
 
   let content;
   if (error) {
-    content = <div>Error Loading Products.</div>;
+    content = <p className="col-span-full">Error Loading Products.</p>;
   } else if (isFetching) {
     content = <Skeleton times={+process.env.REACT_APP_DEFAULT_PER_PAGE}></Skeleton>;
   } else if (!isFetching) {
@@ -24,10 +24,10 @@ const Home = () => {
   }
 
   return (
-    <div className="products-container container m-auto main-height">
+    <main className="products-container container m-auto main-height">
       <div className="products">{content}</div>
       <Pagination currentPages={page} total={data?.total || 0} onClick={(page) => setPage(page)} />
-    </div>
+    </main>
   );
 };
 
