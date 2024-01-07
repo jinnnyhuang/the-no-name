@@ -39,7 +39,7 @@ const Login = () => {
   };
 
   const form = (
-    <form className="login-form flex flex-col pt-3 md:pt-8" onSubmit={handleSubmit}>
+    <form id="login-form" className="login-form flex flex-col pt-3 md:pt-8" onSubmit={handleSubmit}>
       <Input id="email" type="email" autoComplete="email" value={email} onChange={handleEmail}>
         電子信箱
       </Input>

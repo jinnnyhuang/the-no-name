@@ -103,7 +103,7 @@ const Account = () => {
   ];
 
   const setting = (
-    <form id="account" name="account" autoComplete="off" onSubmit={handleEdit} ref={formRef}>
+    <form id="account-form" autoComplete="off" onSubmit={handleEdit} ref={formRef}>
       {settingData.map((input, index) => {
         return (
           <div key={index} className="block mb-5 last-of-type:mb-10">

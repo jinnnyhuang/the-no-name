@@ -53,7 +53,7 @@ const Signup = () => {
   };
 
   const form = (
-    <form className="signup-form flex flex-col pt-3 md:pt-8" onSubmit={handleSubmit}>
+    <form id="signup-form" name="signup" className="signup-form flex flex-col pt-3 md:pt-8" onSubmit={handleSubmit}>
       <Input id="name" type="text" autoComplete="name" value={name} onChange={handleName} required>
         姓名
       </Input>

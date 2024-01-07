@@ -202,13 +202,7 @@ const Navbar = () => {
   const nav = (
     <nav className="z-10 h-navHeight w-full fixed top-0 px-6 py-4 flex justify-between items-center bg-white" ref={navRef}>
       <ul className="navbar-list hidden hover-hover:flex hover-hover:mr-auto hover-hover:gap-x-5">{list}</ul>
-      <form
-        method="get"
-        action="/search"
-        className="navbar-search-form hidden hover-hover:block relative w-max"
-        id="search-product"
-        name="search-product"
-      >
+      <form method="get" action="/search" className="navbar-search-form hidden hover-hover:block relative w-max" id="navbar-search-form">
         {searchInput("navbar-search-input")}
       </form>
       <div className="nav-cart">
@@ -243,7 +237,7 @@ const Navbar = () => {
         <button className="sidenav-close close-button group p-[5px] absolute top-7 right-7" onClick={handleClose}>
           <Icons.Close className="close-button-icon" />
         </button>
-        <form method="get" action="/search" className="sidenav-search-form relative mb-4">
+        <form method="get" action="/search" className="sidenav-search-form relative mb-4" id="sidenav-search-form">
           {searchInput("sidenav-search-input")}
         </form>
         <ul className="sidenav-list">{list}</ul>

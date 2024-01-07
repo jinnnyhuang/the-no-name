@@ -38,7 +38,13 @@ const Cart = () => {
       render: (item) => (
         <div className="cartItem-image">
           <Link to={`/products/${item.productId._id}`} className="block">
-            <img src={item.productId.thumbnail} alt={item.productId.title} className="w-[7rem]" />
+            <img
+              src={item.productId.thumbnail}
+              srcSet={`${item.productId.images[0].small} 500w, ${item.productId.thumbnail} 156w`}
+              sizes="98px"
+              alt={item.productId.title}
+              className="w-[7rem]"
+            />
           </Link>
         </div>
       ),

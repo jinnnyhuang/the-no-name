@@ -17,15 +17,21 @@ const Products = ({ product, handleAddToCart }) => {
             <div className="group overflow-hidden relative">
               <img
                 className={hover ? "group-hover:opacity-0 transition-opacity duration-300 ease-in-out absolute" : ""}
-                src={product.images[0]}
+                src={product.images[0].medium}
+                srcSet={`${product.images[0].large} 1000w, ${product.images[0].medium} 750w, ${product.images[0].small} 500w`}
+                // grid-cols-2 lg:grid-cols-4 + container max-width = 1536px
+                sizes="(min-width: 1024px) 330px, 50vw"
                 alt={product.title}
               />
               {hover && (
                 <img
                   className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out"
-                  src={product.images[1]}
+                  src={product.images[1].medium}
+                  srcSet={`${product.images[1].large} 1000w, ${product.images[1].medium} 750w, ${product.images[1].small} 500w`}
+                  // grid-cols-2 lg:grid-cols-4 + container max-width = 1536px
+                  sizes="(min-width: 1024px) 330px, 50vw"
                   alt={product.title}
-                ></img>
+                />
               )}
             </div>
           </Link>
@@ -37,7 +43,10 @@ const Products = ({ product, handleAddToCart }) => {
               <img
                 // group hover 或是 group 內有 button 聚焦時改變圖片亮度
                 className="group-hover:brightness-[0.6] group-[&:has(button:focus-visible)]:brightness-[0.6] transition"
-                src={product.images[0]}
+                src={product.images[0].medium}
+                srcSet={`${product.images[0].medium} 750w, ${product.images[0].small} 500w`}
+                // Account: page-content-width (w-[88%] lg:w-3/4) + grid-cols-2 lg:grid-cols-3 = 75vw/3 / 88vw /2
+                sizes="(min-width: 1024px) 25vw, 44vw"
                 alt={product.title}
               />
             </Link>

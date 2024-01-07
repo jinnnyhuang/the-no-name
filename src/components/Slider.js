@@ -15,7 +15,7 @@ const Slider = ({ items }) => {
   const slider = items.images.map((item, index) => {
     return (
       <swiper-slide key={index}>
-        <img src={item} alt={items.title} className={`${sm && `cursor-zoom-in`} object-fit max-h-[31.25rem]`} onClick={handleModalOpen} />
+        <img src={item.medium} alt={items.title} className={`${sm && `cursor-zoom-in`} object-fit max-h-[31.25rem]`} onClick={handleModalOpen} />
       </swiper-slide>
     );
   });
