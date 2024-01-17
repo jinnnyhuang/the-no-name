@@ -5,6 +5,7 @@ import { useFetchCartQuery, useUpdateQuantityMutation, useRemoveItemMutation, op
 import Button from "../components/Button";
 import Table from "../components/Table";
 import Counter from "../components/Counter";
+import ErrorLoading from "../components/ErrorLoading";
 
 const Cart = () => {
   useEffect(() => {
@@ -43,7 +44,7 @@ const Cart = () => {
               srcSet={`${item.productId.images[0].small} 500w, ${item.productId.thumbnail} 156w`}
               sizes="98px"
               alt={item.productId.title}
-              className="w-[7rem]"
+              className="w-[7rem] h-[7rem]"
             />
           </Link>
         </div>
@@ -95,7 +96,7 @@ const Cart = () => {
 
   let content;
   if (error) {
-    content = <p>Error Loading Cart.</p>;
+    content = <ErrorLoading data="購物車" />;
   } else {
     const cartItems = isLogin ? (isFetching ? currentData || [] : data) : [];
     if (cartItems?.length > 0) {
@@ -121,7 +122,7 @@ const Cart = () => {
       content = (
         <>
           <p className="tracking-wide text-2xl">購物車目前尚無商品</p>
-          <Button primary transition className="w-button mt-7.5" onClick={() => navigate("/")}>
+          <Button primary transition rounded className="w-button mt-7.5" onClick={() => navigate("/")}>
             開始選購
           </Button>
         </>

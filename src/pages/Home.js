@@ -3,6 +3,7 @@ import { useGetProductsQuery } from "../store";
 import Products from "../components/Products";
 import Pagination from "../components/Pagination";
 import Skeleton from "../components/Skeleton";
+import ErrorLoading from "../components/ErrorLoading";
 
 const Home = () => {
   const [page, setPage] = useState(1);
@@ -14,7 +15,7 @@ const Home = () => {
 
   let content;
   if (error) {
-    content = <p className="col-span-full">Error Loading Products.</p>;
+    content = <ErrorLoading />;
   } else if (isFetching) {
     content = <Skeleton times={+process.env.REACT_APP_DEFAULT_PER_PAGE}></Skeleton>;
   } else if (!isFetching) {

@@ -10,6 +10,7 @@ import { ReactComponent as Prev } from "../image/prev.svg";
 import { ReactComponent as Next } from "../image/next.svg";
 import { ReactComponent as Collection } from "../image/collection.svg";
 import { ReactComponent as Close } from "../image/close.svg";
+import { ReactComponent as Upward } from "../image/arrow_upward.svg";
 
 const Icons = {
   Menu,
@@ -24,6 +25,7 @@ const Icons = {
   Next,
   Collection,
   Close,
+  Upward,
 };
 
 export default Icons;

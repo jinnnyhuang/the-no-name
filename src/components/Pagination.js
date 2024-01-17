@@ -1,7 +1,7 @@
 import Icons from "./Icons";
 
 const Pagination = ({ currentPages, total, onClick }) => {
-  const pageCount = Math.ceil(total / process.env.REACT_APP_DEFAULT_PER_PAGE);
+  const pageCount = Math.ceil(total / (process.env.REACT_APP_DEFAULT_PER_PAGE || 20));
   // const pages = [];
   // for (let i = 1; i <= pageCount; i++) {
   //   page.push(<div>key={i}</div>);
@@ -12,7 +12,7 @@ const Pagination = ({ currentPages, total, onClick }) => {
     .map((_, i) => {
       i++;
       return (
-        <button key={i} className={`pagination-items${currentPages === i ? ` text-white bg-primary` : ""}`} onClick={() => onClick(i)}>
+        <button key={i} className={`pagination-items${currentPages === i ? ` text-white bg-neutral-500` : ""}`} onClick={() => onClick(i)}>
           {i}
         </button>
       );

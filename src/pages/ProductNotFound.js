@@ -10,10 +10,10 @@ const ProductNotFound = () => {
   }, []);
 
   return (
-    <main className="min-h-contentHeight text-center pt-32">
+    <main className="min-h-contentHeight text-center uppercase pt-32 [&>:not(:first-child)]:mt-2">
       <p className="text-3xl font-bold">查無此商品</p>
-      <p className="uppercase mt-2 font-display">Product Not Found.</p>
-      <p className="uppercase mt-2 mb-12">抱歉，我們找不到您要的商品</p>
+      <p className="font-display">Product Not Found.</p>
+      <p className="mb-10">抱歉，我們找不到您要的商品</p>
       <Button
         primary
         transition

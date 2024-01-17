@@ -9,12 +9,13 @@ const Products = ({ product, handleAddToCart }) => {
   const hover = useMediaQuery("(hover: hover) and (min-width: 640px) and (pointer: fine)") && product.images.length > 1;
   const inStock = product.stock !== 0;
   const discount = product.discountPercentage;
+
   const content = (
     <>
       {!handleAddToCart ? (
         <div className="item-images">
           <Link to={`/products/${product._id}`} className="block">
-            <div className="group overflow-hidden relative">
+            <div className="group overflow-hidden relative bg-neutral-100">
               <img
                 className={hover ? "group-hover:opacity-0 transition-opacity duration-300 ease-in-out absolute" : ""}
                 src={product.images[0].medium}
@@ -22,6 +23,8 @@ const Products = ({ product, handleAddToCart }) => {
                 // grid-cols-2 lg:grid-cols-4 + container max-width = 1536px
                 sizes="(min-width: 1024px) 330px, 50vw"
                 alt={product.title}
+                width="750px"
+                height="750px"
               />
               {hover && (
                 <img
@@ -31,6 +34,8 @@ const Products = ({ product, handleAddToCart }) => {
                   // grid-cols-2 lg:grid-cols-4 + container max-width = 1536px
                   sizes="(min-width: 1024px) 330px, 50vw"
                   alt={product.title}
+                  width="750px"
+                  height="750px"
                 />
               )}
             </div>

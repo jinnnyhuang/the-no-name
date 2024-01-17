@@ -5,13 +5,14 @@ import Button from "../components/Button";
 import Accordion from "../components/Accordion";
 import Silder from "../components/Slider";
 import Icons from "../components/Icons";
+import ErrorLoading from "../components/ErrorLoading";
 import useAddToCart from "../utils/useAddToCart";
 import useCollection from "../utils/useCollection";
 
 const Product = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { data, error, isFetching } = useGetProductByIdQuery(id);
+  let { data, error, isFetching } = useGetProductByIdQuery(id);
 
   const product = !error && !isFetching && data[0];
   const { handleAddToCart } = useAddToCart();
@@ -25,7 +26,7 @@ const Product = () => {
   let content;
   let breadcrumb;
   if (!isFetching && error && error?.status === "FETCH_ERROR") {
-    content = <p className="text-center">Error Loading Product.</p>;
+    content = <ErrorLoading className="main-height" />;
   } else if (product) {
     breadcrumb = (
       <section className="breadcrumb mx-6 mb-8 lg:mx-24 lg:grid lg:grid-cols-2">
@@ -91,7 +92,7 @@ const Product = () => {
     );
 
     content = (
-      <section className="main-content grid grid-cols-1 lg:grid-cols-2 gap-y-14 items-start lg:mx-24">
+      <section className="main-content product-height h-md:min-h-[65vh] h-lg:product-height grid grid-cols-1 lg:grid-cols-2 gap-y-14 items-start lg:mx-24">
         <Silder items={product} />
         {info}
       </section>
@@ -99,7 +100,7 @@ const Product = () => {
   }
 
   return (
-    <main className="container m-auto h-lg:min-h-contentHeight h-xl:main-height">
+    <main className="container m-auto">
       {breadcrumb}
       {content}
     </main>

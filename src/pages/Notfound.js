@@ -10,10 +10,10 @@ const Notfound = () => {
   }, []);
 
   return (
-    <main className="font-display min-h-contentHeight text-center pt-32">
+    <main className="font-display min-h-contentHeight text-center uppercase pt-32 [&>:not(:first-child)]:mt-2">
       <p className="text-5.4 font-bold">404</p>
-      <p className="uppercase mt-2">Oops! Page Not Found.</p>
-      <p className="uppercase mt-2 mb-12 font-noto">抱歉，我們找不到您指定的頁面</p>
+      <p>Oops! Page Not Found.</p>
+      <p className="mb-10 font-noto">抱歉，我們找不到您指定的頁面</p>
       <Button
         primary
         transition

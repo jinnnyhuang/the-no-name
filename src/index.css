@@ -44,6 +44,10 @@
     /* @apply min-h-[calc(100dvh-(theme(spacing.navHeight)*2)-theme(spacing.footerHeight)-(0.125rem+178.78px))] lg:min-h-[calc(100dvh-(theme(spacing.navHeight)*2)-theme(spacing.footerHeight)-(0.125rem+298px))]; */
   }
 
+  .product-height {
+    @apply min-h-[calc(100dvh-theme(spacing.navHeight)-theme(spacing.footerHeight)-(5.125rem+178.78px)-(24px+2rem))] lg:min-h-[calc(100dvh-theme(spacing.navHeight)-theme(spacing.footerHeight)-(5.125rem+298px)-(24px+2rem))];
+  }
+
   .svg-icon {
     @apply max-w-[2rem] px-1;
   }

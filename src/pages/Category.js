@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Products from "../components/Products";
 import Pagination from "../components/Pagination";
 import Skeleton from "../components/Skeleton";
+import ErrorLoading from "../components/ErrorLoading";
 
 const Category = () => {
   const [page, setPage] = useState(1);
@@ -20,7 +21,7 @@ const Category = () => {
 
   let content;
   if (error) {
-    content = <p className="col-span-full">Error Loading Products.</p>;
+    content = <ErrorLoading />;
   } else if (isFetching) {
     content = <Skeleton times={4}></Skeleton>;
   } else if (!isFetching) {
@@ -31,7 +32,7 @@ const Category = () => {
 
   return (
     <main className="products-container container m-auto main-height">
-      <h1 className="content-heading text-lg uppercase tracking-wide mx-5 mb-5 lg:mx-24 lg:mb-12">{category}</h1>
+      {!error && <h1 className="content-heading text-lg uppercase tracking-wide mx-5 mb-5 lg:mx-24 lg:mb-12">{category}</h1>}
       <div className="products">{content}</div>
       <Pagination currentPages={page} total={data?.total || 0} onClick={(page) => setPage(page)} />
     </main>

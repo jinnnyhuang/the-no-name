@@ -18,12 +18,12 @@ const Navbar = () => {
   const { handleLogout } = useAuth();
 
   // Cart, Account, Login, Signup, Notfound Page 不顯示 Logo
-  const location = useLocation();
-  let showLogo = location.pathname === "/";
+  const { pathname } = useLocation();
+  let showLogo = pathname === "/";
   const matchPath = ["products/", "category/", "search"];
   for (let i = 0; i < matchPath.length; i++) {
     if (showLogo) break;
-    let isMatch = location.pathname.includes(matchPath[i]);
+    let isMatch = pathname.includes(matchPath[i]);
     showLogo = !isMatch ? false : true;
   }
 
@@ -250,7 +250,7 @@ const Navbar = () => {
               {isLogin ? "登出" : "註冊"}
             </Button>
           </div>
-          <p className="sidenav-copyright my-4 text-sm text-center text-neutral-400">The No Name Yet &copy; 2023</p>
+          {/* <p className="sidenav-copyright my-4 text-sm text-center text-neutral-400">The No Name Yet &copy; 2023</p> */}
         </div>
       </div>
     </div>

@@ -13,6 +13,7 @@ import Category from "./pages/Category";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Modal from "./components/Modal";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   // Fix Safari/iOS textbox auto zoom
@@ -38,6 +39,7 @@ function App() {
         <Route path="*" element={<Notfound />} />
       </Routes>
       <Modal className="modal-action" action />
+      <ScrollToTop />
       <Footer />
     </BrowserRouter>
   );

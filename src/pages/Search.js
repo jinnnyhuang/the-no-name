@@ -3,6 +3,7 @@ import { useGetProductsQuery } from "../store";
 import { useSearchParams } from "react-router-dom";
 import Products from "../components/Products";
 import Pagination from "../components/Pagination";
+import ErrorLoading from "../components/ErrorLoading";
 
 const Search = () => {
   useEffect(() => {
@@ -24,7 +25,7 @@ const Search = () => {
   let content;
   let heading;
   if (error) {
-    content = <p className="col-span-full">Error Loading Products.</p>;
+    content = <ErrorLoading />;
   } else if (!isFetching) {
     content = data?.products?.map((product) => {
       return <Products product={product} key={product._id} />;
