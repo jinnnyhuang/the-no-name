@@ -41,7 +41,6 @@
   /* min-height = 100dvh - Nav Height - Footer Height - Logo! */
   .main-height {
     @apply min-h-[calc(100dvh-theme(spacing.navHeight)-theme(spacing.footerHeight)-(5.125rem+178.78px))] lg:min-h-[calc(100dvh-theme(spacing.navHeight)-theme(spacing.footerHeight)-(5.125rem+298px))];
-    /* @apply min-h-[calc(100dvh-(theme(spacing.navHeight)*2)-theme(spacing.footerHeight)-(0.125rem+178.78px))] lg:min-h-[calc(100dvh-(theme(spacing.navHeight)*2)-theme(spacing.footerHeight)-(0.125rem+298px))]; */
   }
 
   .product-height {
@@ -55,7 +54,7 @@
   /** Navbar **/
   /* nav */
   .nav-link {
-    @apply uppercase tracking-widest block py-1.5 hover-hover:p-0;
+    @apply uppercase tracking-widest block py-1.5 px-2 hover-hover:py-1 focus-visible:shadow-none focus-visible:bg-neutral-50;
   }
 
   .nav-item {

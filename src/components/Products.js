@@ -4,7 +4,7 @@ import Icons from "../components/Icons";
 import useCollection from "../utils/useCollection";
 import useMediaQuery from "../utils/useMediaQuery";
 
-const Products = ({ product, handleAddToCart }) => {
+const Products = ({ product, onAddToCart }) => {
   const { collectionIndex, handleCollection, handleRemoveCollection } = useCollection(product);
   const hover = useMediaQuery("(hover: hover) and (min-width: 640px) and (pointer: fine)") && product.images.length > 1;
   const inStock = product.stock !== 0;
@@ -12,7 +12,7 @@ const Products = ({ product, handleAddToCart }) => {
 
   const content = (
     <>
-      {!handleAddToCart ? (
+      {!onAddToCart ? (
         <div className="item-images">
           <Link to={`/products/${product._id}`} className="block">
             <div className="group overflow-hidden relative bg-neutral-100">
@@ -25,6 +25,7 @@ const Products = ({ product, handleAddToCart }) => {
                 alt={product.title}
                 width="750px"
                 height="750px"
+                loading="lazy"
               />
               {hover && (
                 <img
@@ -36,6 +37,7 @@ const Products = ({ product, handleAddToCart }) => {
                   alt={product.title}
                   width="750px"
                   height="750px"
+                  loading="lazy"
                 />
               )}
             </div>
@@ -79,12 +81,12 @@ const Products = ({ product, handleAddToCart }) => {
           )}
           {!inStock && <span className="sold-out inline-block text-xs tracking-wider label-neutral font-display">SOLD OUT</span>}
         </div>
-        {handleAddToCart ? (
+        {onAddToCart ? (
           <Button
             secondary={inStock}
             focus={inStock}
             className={`p-1.5 !rounded-md${!inStock ? " cursor-not-allowed fill-neutral-400" : " border-neutral-600"}`}
-            onClick={() => inStock && handleAddToCart(product)}
+            onClick={() => inStock && onAddToCart(product)}
             tabIndex={inStock ? "0" : "-1"}
           >
             <Icons.Cart className="h-6" />

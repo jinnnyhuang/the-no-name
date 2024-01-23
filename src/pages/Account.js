@@ -93,7 +93,7 @@ const Account = () => {
 
   const { collectionItems } = useCollection();
   const wishList = collectionItems?.map((product) => {
-    return <Products product={product} handleAddToCart={handleAddToCart} key={product._id} />;
+    return <Products product={product} onAddToCart={handleAddToCart} key={product._id} />;
   });
 
   const settingData = [

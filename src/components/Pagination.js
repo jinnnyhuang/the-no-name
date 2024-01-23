@@ -2,11 +2,6 @@ import Icons from "./Icons";
 
 const Pagination = ({ currentPages, total, onClick }) => {
   const pageCount = Math.ceil(total / (process.env.REACT_APP_DEFAULT_PER_PAGE || 20));
-  // const pages = [];
-  // for (let i = 1; i <= pageCount; i++) {
-  //   page.push(<div>key={i}</div>);
-  // }
-
   const pages = Array(pageCount)
     .fill(0)
     .map((_, i) => {

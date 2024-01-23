@@ -45,6 +45,7 @@ const Cart = () => {
               sizes="98px"
               alt={item.productId.title}
               className="w-[7rem] h-[7rem]"
+              loading="lazy"
             />
           </Link>
         </div>
