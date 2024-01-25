@@ -6,6 +6,7 @@ import { ReactComponent as Minus } from "../image/minus.svg";
 import { ReactComponent as Search } from "../image/search.svg";
 import { ReactComponent as Facebook } from "../image/facebook.svg";
 import { ReactComponent as Instagram } from "../image/instagram.svg";
+import { ReactComponent as Google } from "../image/google.svg";
 import { ReactComponent as Prev } from "../image/prev.svg";
 import { ReactComponent as Next } from "../image/next.svg";
 import { ReactComponent as Collection } from "../image/collection.svg";
@@ -21,6 +22,7 @@ const Icons = {
   Search,
   Facebook,
   Instagram,
+  Google,
   Prev,
   Next,
   Collection,

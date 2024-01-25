@@ -3,12 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Button from "../components/Button";
 import Input from "../components/Input";
+import Icons from "../components/Icons";
 import useAuth from "../utils/useAuth";
 
 const Login = () => {
   const navigate = useNavigate();
   const { isLogin } = useSelector((state) => state.auth);
-  const { error, setError, handleLogin } = useAuth();
+  const { error, setError, handleLogin, handleGoogleLogin } = useAuth();
 
   useEffect(() => {
     document.title = "Login | 還沒有名字";
@@ -67,6 +68,18 @@ const Login = () => {
               </Link>
             </p>
           </div>
+          <div className="flex items-center my-10 font-light font-display text-neutral-400 overflow-hidden after:h-[1px] after:bg-neutral-300 after:inline-block after:flex-1 after:ml-3 before:h-[1px] before:bg-neutral-300 before:inline-block before:flex-1 before:mr-3">
+            Or
+          </div>
+          <Button
+            secondary
+            transition
+            className="w-full flex items-center justify-center gap-2 normal-case rounded tracking-normal"
+            onClick={handleGoogleLogin}
+          >
+            <Icons.Google className="w-4" />
+            使用 Google 繼續
+          </Button>
         </div>
       </div>
     </main>
