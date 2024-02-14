@@ -17,8 +17,11 @@ const Cart = () => {
   const { isLogin } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    !isLogin && navigate("/login");
-  }, [isLogin, navigate]);
+    if (!isLogin) {
+      dispatch(openModal({ title: "請先登入" }));
+      !isLogin && navigate("/login");
+    }
+  }, [isLogin, dispatch, navigate]);
 
   const { currentData, data, error, isFetching } = useFetchCartQuery(undefined, { skip: !isLogin });
   const [updateQuantity, results] = useUpdateQuantityMutation(); // updateQuantity(item, operation, value)

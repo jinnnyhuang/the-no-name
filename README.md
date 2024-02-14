@@ -34,5 +34,7 @@ It follows a frontend-backend separation architecture.
 - Product Categories
 - Product Details
 - Search Products
+- Sign up/Sign in
+- Sign in with Google
 - Shopping Cart
 - Wish list
